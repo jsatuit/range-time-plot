@@ -6,6 +6,9 @@ Python package for showing a range-time-plot for an ISR experiment. Try first EI
 
 
 
+
 # Running
 python3 -m src/rtp.py 
-
+## Dependencies
+numpy 
+matplotlib
