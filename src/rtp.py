@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 
 µs = 1e-6
+km = 1e3
 
 "Speed of light"
 c = 3e8
@@ -45,21 +46,27 @@ class Experiment:
         self.transmits += [time]
     # TODO: Add receiver channels. But here we will have more than one.
 
-def plot_transmit(tx_interval, plot_interval, h_radar=0, elevation = 90):
+def plot_transmit(tx_interval, plot_interval, **kwargs):
+    plot_t_r(tx_interval, plot_interval, v=c, color='blue', **kwargs)
     
-    plt.figure()
+def plot_receive(rx_interval, plot_interval, **kwargs):
+    plot_t_r(rx_interval, plot_interval, v=c, d = -1, color='red', **kwargs)
+    
+def plot_t_r(signal_interval, plot_interval, h_radar=0, v=c, d = 1, **kwargs):
     # Nodes of first line
-    line1x = tx_interval.begin + np.array((0 , plot_interval.length))
-    line1y = h_radar + np.array((0 , np.sin(np.deg2rad(elevation))*plot_interval.length*c))
+    line1x = signal_interval.begin + np.array((0 , d*plot_interval.length))
+    line1y = h_radar + np.array((0 , plot_interval.length*v))
     
-    line2x = tx_interval.end + np.array((0 , plot_interval.length))
-    line2y = h_radar + np.array((0 , np.sin(np.deg2rad(elevation))*plot_interval.length*c))
-    print(line1y-line2y)
+    line2x = signal_interval.end + np.array((0 , d*plot_interval.length))
+    line2y = h_radar + np.array((0 , plot_interval.length*v))
     # Plot beginning of pulse
-    plt.plot(line1x, line1y, 'b-')
+    plt.plot(line1x, line1y/km, **kwargs)
     # Plot end of pulse
-    plt.plot(line2x, line2y, 'b-')
+    plt.plot(line2x, line2y/km, **kwargs)
     plt.xlim(plot_interval.as_tuple)
+    plt.xlabel("Time [µs]")
+    plt.ylabel("Range [km]")
+    
 
 
 if __name__ == '__main__':
@@ -68,5 +75,7 @@ if __name__ == '__main__':
     receive = TimeInterval(1037, 5357)*µs
     cycle = TimeInterval(0,5580)*µs
     
+    plt.figure()
     plot_transmit(transmit, cycle)
+    plot_receive(receive, cycle)
     
