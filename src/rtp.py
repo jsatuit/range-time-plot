@@ -46,6 +46,57 @@ class Experiment:
         self.transmits += [time]
     # TODO: Add receiver channels. But here we will have more than one.
 
+
+def calc_nearest_range(tx_interval, rx_interval, baud_length, v=c):
+    """
+    Calculates the nearest range the experiment can measure. Since only one baud 
+    will be measured at this range, the performance at this range will be low.
+    
+    :param tx_interval: Transmit interval
+    :type tx_interval: TimeInterval
+    :param rx_interval: Receive interval
+    :type rx_interval: TimeInterval
+    :param baud_length: baud length of experiment
+    :type baud_length: int or float
+    :param v: Speed of beam, default speed of light
+    :type v: int or float
+    :return: Nearest range gate. 
+    :rtype: float
+    """
+    
+    # Traveltime to nearest range gate
+    dt = rx_interval.begin-tx_interval.end+baud_length
+    
+    # Time travelled is the time light uses back and forth
+    r = c*dt/2
+    
+    return r
+
+def calc_furthest_range(tx_interval, rx_interval, baud_length, v=c):
+    """
+    Calculates the furthest range the experiment measures. This is the last range
+    where the receiver «sees» the whole transmit passing through.
+    
+    :param tx_interval: Transmit interval
+    :type tx_interval: TimeInterval
+    :param rx_interval: Receive interval
+    :type rx_interval: TimeInterval
+    :param baud_length: baud length of experiment
+    :type baud_length: int or float
+    :param v: Speed of beam, default speed of light
+    :type v: int or float
+    :return: Furthest range gate. 
+    :rtype: float
+    """
+    
+    # Traveltime to nearest range gate
+    dt = rx_interval.end-tx_interval.end-baud_length
+    
+    # Time travelled is the time light uses back and forth
+    r = c*dt/2
+    
+    return r
+
 def plot_transmit(tx_interval, plot_interval, **kwargs):
     """
     Plots transmit beam position
@@ -103,8 +154,13 @@ if __name__ == '__main__':
     transmit = TimeInterval(82,722)*µs
     receive = TimeInterval(1037, 5357)*µs
     cycle = TimeInterval(0,5580)*µs
+    Tb = 10*µs
+    rmin = calc_nearest_range(transmit, receive, Tb)
+    rmax = calc_furthest_range(transmit, receive, Tb)
+    print(rmin," ",rmax)
     
     plt.figure()
+    plt.grid()
     plot_transmit(transmit, cycle)
     plot_receive(receive, cycle)
     
