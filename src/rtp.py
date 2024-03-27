@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 µs = 1e-6
 km = 1e3
 
-"Speed of light"
 c = 3e8
+"Speed of light [m/s]"
 
 class TimeInterval:
     """
@@ -47,18 +47,49 @@ class Experiment:
     # TODO: Add receiver channels. But here we will have more than one.
 
 def plot_transmit(tx_interval, plot_interval, **kwargs):
+    """
+    Plots transmit beam position
+    
+    Parameters
+    ----------
+    
+    :param signal_interval: Interval of signal being transmitted
+    :type signal_interval: TimeInterval
+    :param plot_interval TimeInterval: Axis limits of time axis
+    
+    Other keyword arguments go to plotting punctions
+    
+    """
     plot_t_r(tx_interval, plot_interval, v=c, color='blue', **kwargs)
     
 def plot_receive(rx_interval, plot_interval, **kwargs):
+    """
+    Plots receive beam position
+    
+    # Parameters
+    :param signal_interval TimeInterval: Interval of signal being received
+    :param plot_interval TimeInterval: Axis limits of time axis
+    Other keyword arguments go to plotting punctions
+    """
     plot_t_r(rx_interval, plot_interval, v=c, d = -1, color='red', **kwargs)
     
-def plot_t_r(signal_interval, plot_interval, h_radar=0, v=c, d = 1, **kwargs):
+def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
+    """
+    Plots transmit or receive beam position
+    
+    # Parameters
+    :param signal_interval TimeInterval: Interval of signal being transmitted/received
+    :param plot_interval TimeInterval: Axis limits of time axis
+    :param v: Velocity of beam
+    :param d: Direction of beam. +1 Transmit, -1 receive
+    Other keyword arguments go to plotting punctions
+    """#Returns#Raises
     # Nodes of first line
     line1x = signal_interval.begin + np.array((0 , d*plot_interval.length))
-    line1y = h_radar + np.array((0 , plot_interval.length*v))
+    line1y = np.array((0 , plot_interval.length*v))
     
     line2x = signal_interval.end + np.array((0 , d*plot_interval.length))
-    line2y = h_radar + np.array((0 , plot_interval.length*v))
+    line2y = np.array((0 , plot_interval.length*v))
     # Plot beginning of pulse
     plt.plot(line1x, line1y/km, **kwargs)
     # Plot end of pulse
