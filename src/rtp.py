@@ -50,12 +50,9 @@ def plot_transmit(tx_interval, plot_interval, **kwargs):
     """
     Plots transmit beam position
     
-    Parameters
-    ----------
-    
     :param signal_interval: Interval of signal being transmitted
     :type signal_interval: TimeInterval
-    :param plot_interval TimeInterval: Axis limits of time axis
+    :param TimeInterval plot_interval: Axis limits of time axis
     
     Other keyword arguments go to plotting punctions
     
@@ -66,10 +63,11 @@ def plot_receive(rx_interval, plot_interval, **kwargs):
     """
     Plots receive beam position
     
-    # Parameters
-    :param signal_interval TimeInterval: Interval of signal being received
-    :param plot_interval TimeInterval: Axis limits of time axis
+    :param TimeInterval signal_interval: Interval of signal being received
+    :param TimeInterval plot_interval: Axis limits of time axis
+    
     Other keyword arguments go to plotting punctions
+    
     """
     plot_t_r(rx_interval, plot_interval, v=c, d = -1, color='red', **kwargs)
     
@@ -77,12 +75,13 @@ def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     """
     Plots transmit or receive beam position
     
-    # Parameters
-    :param signal_interval TimeInterval: Interval of signal being transmitted/received
-    :param plot_interval TimeInterval: Axis limits of time axis
-    :param v: Velocity of beam
-    :param d: Direction of beam. +1 Transmit, -1 receive
+    :param TimeInterval signal_interval: Interval of signal being transmitted/received
+    :param TimeInterval plot_interval: Axis limits of time axis
+    :param float or int, optional v: Velocity of beam, default light speed
+    :param float or int, optional d: Direction of beam. +1 Transmit, -1 receive, default transmit
+    
     Other keyword arguments go to plotting punctions
+    
     """#Returns#Raises
     # Nodes of first line
     line1x = signal_interval.begin + np.array((0 , d*plot_interval.length))
@@ -98,7 +97,6 @@ def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     plt.xlabel("Time [µs]")
     plt.ylabel("Range [km]")
     
-
 
 if __name__ == '__main__':
     # Using Beata UHF as example
