@@ -3,7 +3,7 @@ Med vår programleder, pianist og professor!
 
 ```{eval-rst}
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
    :caption: Contents:
    
    api.md

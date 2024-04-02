@@ -19,10 +19,15 @@ release = '0.0.1'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    'autoapi.extension',
+    'sphinx.ext.autodoc.typehints',
     'myst_parser',
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
 ]
+autoapi_dirs = ['../../src']
+autodoc_typehints = 'description'
+
 
 templates_path = ['_templates']
 exclude_patterns = []
