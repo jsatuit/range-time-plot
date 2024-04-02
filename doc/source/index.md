@@ -9,6 +9,10 @@ Med vår programleder, pianist og professor!
    api.md
 ```
 
+:::{note}
+This text is **standard** _Markdown_
+:::
+
 # Indices and tables
 ```{eval-rst}
 * :ref:`genindex`

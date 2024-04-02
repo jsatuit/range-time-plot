@@ -62,6 +62,8 @@ def calc_nearest_range(tx_interval, rx_interval, baud_length, v=c):
     :type v: int or float
     :return: Nearest range gate. 
     :rtype: float
+    
+
     """
     
     # Traveltime to nearest range gate

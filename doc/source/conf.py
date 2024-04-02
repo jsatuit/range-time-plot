@@ -28,11 +28,16 @@ extensions = [
 autoapi_dirs = ['../../src']
 autodoc_typehints = 'description'
 
-#myst_enable_extensions = ["colon_fence"]
+myst_enable_extensions = ["colon_fence"]
 templates_path = ['_templates']
 exclude_patterns = []
 
-
+def skip_util_classes(app, what, name, obj, skip, options):
+    if what == "data" and "start_name_main_block" in name:
+        skip = True
+    return skip
+def setup(sphinx):
+   sphinx.connect("autoapi-skip-member", skip_util_classes)
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
