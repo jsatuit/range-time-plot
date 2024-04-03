@@ -1,6 +1,7 @@
-# Velkommen til språksjov!
+# Range-time-plot
 
-Med vår programleder, pianist og professor!
+A python package to plot range-time graphs of incoherent scatter radar experiments
+
 
 ```{eval-rst}
 .. toctree::

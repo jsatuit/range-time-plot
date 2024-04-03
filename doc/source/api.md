@@ -2,4 +2,3 @@
 
 ## RTP module
 
-## Til ettertanke
