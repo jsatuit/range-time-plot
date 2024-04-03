@@ -30,7 +30,7 @@ autodoc_typehints = 'description'
 
 myst_enable_extensions = ["colon_fence"]
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 def skip_util_classes(app, what, name, obj, skip, options):
     if what == "data" and "start_name_main_block" in name:
