@@ -1,6 +1,6 @@
 # API reference
 
-## Example
+## RTP module
 
 ```{eval-rst}
 ..  automodule:: rtp

@@ -47,21 +47,19 @@ class Experiment:
     # TODO: Add receiver channels. But here we will have more than one.
 
 
-def calc_nearest_range(tx_interval, rx_interval, baud_length, v=c):
+def calc_nearest_range(tx_interval: TimeInterval, rx_interval: TimeInterval, 
+                       baud_length: float, v: float = c) -> float:
     """
     Calculates the nearest range the experiment can measure. Since only one baud 
     will be measured at this range, the performance at this range will be low.
     
     :param tx_interval: Transmit interval
-    :type tx_interval: TimeInterval
     :param rx_interval: Receive interval
-    :type rx_interval: TimeInterval
     :param baud_length: baud length of experiment
-    :type baud_length: int or float
     :param v: Speed of beam, default speed of light
-    :type v: int or float
     :return: Nearest range gate. 
-    :rtype: float
+    
+
     """
     
     # Traveltime to nearest range gate
@@ -72,21 +70,17 @@ def calc_nearest_range(tx_interval, rx_interval, baud_length, v=c):
     
     return r
 
-def calc_furthest_range(tx_interval, rx_interval, baud_length, v=c):
+def calc_furthest_range(tx_interval: TimeInterval, rx_interval: TimeInterval, 
+                        baud_length: float, v: float = c) -> float:
     """
     Calculates the furthest range the experiment measures. This is the last range
     where the receiver «sees» the whole transmit passing through.
     
     :param tx_interval: Transmit interval
-    :type tx_interval: TimeInterval
     :param rx_interval: Receive interval
-    :type rx_interval: TimeInterval
     :param baud_length: baud length of experiment
-    :type baud_length: int or float
     :param v: Speed of beam, default speed of light
-    :type v: int or float
     :return: Furthest range gate. 
-    :rtype: float
     """
     
     # Traveltime to nearest range gate
@@ -97,13 +91,12 @@ def calc_furthest_range(tx_interval, rx_interval, baud_length, v=c):
     
     return r
 
-def plot_transmit(tx_interval, plot_interval, **kwargs):
+def plot_transmit(tx_interval: TimeInterval, plot_interval: TimeInterval, **kwargs):
     """
     Plots transmit beam position
     
     :param signal_interval: Interval of signal being transmitted
-    :type signal_interval: TimeInterval
-    :param TimeInterval plot_interval: Axis limits of time axis
+    :param plot_interval: Axis limits of time axis
     
     Other keyword arguments go to plotting punctions
     
@@ -129,7 +122,7 @@ def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     :param TimeInterval signal_interval: Interval of signal being transmitted/received
     :param TimeInterval plot_interval: Axis limits of time axis
     :param float or int, optional v: Velocity of beam, default light speed
-    :param float or int, optional d: Direction of beam. +1 Transmit, -1 receive, default transmit
+    :param float or int, optional d: Direction of beam. +1 Transmit, -1 receive, defaults to transmit
     
     Other keyword arguments go to plotting punctions
     
@@ -147,11 +140,24 @@ def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     plt.xlim(plot_interval.as_tuple)
     plt.xlabel("Time [µs]")
     plt.ylabel("Range [km]")
+
+def plot_add_range(r, label = ""):
+    """
+    Adds a label to a certain range.
+    
+    :param r: range [m]
+    :type r: float
+    :param label: Label text. If empty, range in km is used. Defaults to range in km
+    :type label: str, optional
+
+    """
+    pass
     
 
 if __name__ == '__main__':
     # Using Beata UHF as example
     transmit = TimeInterval(82,722)*µs
+    "Transmit interval of beata UHF experiment"
     receive = TimeInterval(1037, 5357)*µs
     cycle = TimeInterval(0,5580)*µs
     Tb = 10*µs
