@@ -8,7 +8,6 @@ A python package to plot range-time graphs of incoherent scatter radar experimen
    :maxdepth: 5
    :caption: Contents:
    
-   api.md
 ```
 
 
