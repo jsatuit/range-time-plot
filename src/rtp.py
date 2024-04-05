@@ -69,7 +69,7 @@ class TimeInterval:
         :rtype: bool
 
         """
-        if self.overlaps_bool(other):
+        if self.overlaps_with(other):
             raise OverlapError
         
 class Experiment:
