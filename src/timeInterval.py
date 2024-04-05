@@ -59,7 +59,7 @@ class TimeInterval:
         return self.end-self.begin
     
     @property
-    def as_tuple(self) -> tuple(float, float):
+    def as_tuple(self) -> tuple[float, float]:
         return (self.begin, self.end)
     
     def overlaps_with(self, other: Self) -> bool:

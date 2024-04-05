@@ -2,7 +2,10 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from timeInterval import TimeInterval
+if __name__ == '__main__':
+    import sys
+    sys.path.append("..") # Adds current directory to python modules path.
+from src.timeInterval import TimeInterval
 
 µs = 1e-6
 km = 1e3

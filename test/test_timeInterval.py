@@ -10,9 +10,9 @@ def test_invalid_generation():
     with pytest.raises(ValueError):
         TimeInterval(1,0)
     with pytest.raises(TypeError):
-        TimeInterval("wert",6)
+        TimeInterval("qwert",6)
         
-def test_repr(ti):
+def rec_test_repr(ti):
     assert eval(repr(ti)) == ti
     
 def test_empty_interval():
@@ -34,7 +34,7 @@ def test_interval():
     assert tia*0 == null
     
     for ti in [tia, tib, tic, null]:
-        test_repr(ti)
+        rec_test_repr(ti)
         
     assert tia.length == 1
     assert tib.length == 4
