@@ -1,79 +1,15 @@
 
-from typing import Self
+
 import numpy as np
 import matplotlib.pyplot as plt
-
+from timeInterval import TimeInterval
 
 µs = 1e-6
 km = 1e3
 
 c = 3e8
 "Speed of light [m/s]"
-class OverlapError(Exception):
-    """
-    Exception raised when transmit and receive TimeIntervals overlap.
-    """
-    def __init__(self, *args):
-        super().__init__("The radar transmits while receiving!", args)
 
-class TimeInterval:
-    """
-    
-    Handling one begin and end of the time the transmitter/receiver channel is on.
-    """
-    def __init__(self, begin: float = 0.0, end:float = 0):
-        if end < begin:
-            raise ValueError("Start of interval must come before end")
-        self.begin = begin
-        self.end = end
-
-    def __mul__(self,other):
-        return TimeInterval(self.begin*other, self.end*other)
-        
-    def __repr__(self):
-        return f"TimeInterval({self.begin}, {self.end})"
-    
-    @property
-    def length(self):
-        return self.end-self.begin
-    
-    @property
-    def as_tuple(self):
-        return (self.begin, self.end)
-    
-    def overlaps_with(self, other: Self) -> bool:
-        """
-        Checks if TimeInterval overlaps with other TimeInterval
-        
-        :param other: TimeInterval to check overlap with
-        :type other: TimeInterval
-        :return: If the intervals overlap
-        :rtype: bool
-
-        """
-
-        overlap: bool = True
-        if self.begin <= other.end and self.end <= other.begin:
-            overlap = False
-        elif other.begin <= self.end and other.end <= self.begin:
-            overlap = False
-        
-        
-        return overlap
-    def check_overlap(self, other: Self):
-        """
-        Checks if TimeInterval overlaps with other TimeInterval. If so, 
-        an OverlapError is raised
-        
-        :param other: TimeInterval to check overlap with
-        :type other: TimeInterval
-        :raises OverlapError: When intervals overlap
-        :rtype: bool
-
-        """
-        if self.overlaps_with(other):
-            raise OverlapError
-        
 class Experiment:
     """
     Handling timings for transmitter and receiver channels

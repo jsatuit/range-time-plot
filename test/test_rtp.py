@@ -3,9 +3,10 @@
 """
 Created on Fri Apr  5 08:48:01 2024
 
-@author: jst072
+@author: jsatuit
 """
 from src import rtp
+from src.timeInterval import OverlapError
 import pytest
 
 def test_calc_nearest_range():
@@ -32,10 +33,10 @@ def test_calc_nearest_range():
                                   rtp.TimeInterval(1,2),1,100) == 50
     
     # Test Overlapping intervals
-    with pytest.raises(rtp.OverlapError):
+    with pytest.raises(OverlapError):
         rtp.calc_nearest_range(rtp.TimeInterval(0,1), 
                                rtp.TimeInterval(0,1),1)
-    with pytest.raises(rtp.OverlapError):
+    with pytest.raises(OverlapError):
         rtp.calc_nearest_range(rtp.TimeInterval(0,1), 
                                   rtp.TimeInterval(0,1),0.1)
     
@@ -63,9 +64,9 @@ def test_calc_furthest_full_range():
                                         rtp.TimeInterval(1,2),1,100) == 50
     
     # Test Overlapping intervals
-    with pytest.raises(rtp.OverlapError):
+    with pytest.raises(OverlapError):
         rtp.calc_furthest_full_range(rtp.TimeInterval(0,1), 
                                      rtp.TimeInterval(0,1),1)
-    with pytest.raises(rtp.OverlapError):
+    with pytest.raises(OverlapError):
         rtp.calc_furthest_full_range(rtp.TimeInterval(0,1), 
                                      rtp.TimeInterval(0,1),0.1)
