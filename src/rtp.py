@@ -114,11 +114,11 @@ def calc_nearest_range(tx_interval: TimeInterval, rx_interval: TimeInterval,
     
     return r
 
-def calc_furthest_range(tx_interval: TimeInterval, rx_interval: TimeInterval, 
+def calc_furthest_full_range(tx_interval: TimeInterval, rx_interval: TimeInterval, 
                         baud_length: float, v: float = c) -> float:
     """
     Calculates the furthest range the experiment measures. This is the last range
-    where the receiver «sees» the whole transmit passing through.
+    where the receiver «sees» the *whole* transmit passing through.
     
     :param tx_interval: Transmit interval
     :param rx_interval: Receive interval
@@ -130,7 +130,7 @@ def calc_furthest_range(tx_interval: TimeInterval, rx_interval: TimeInterval,
     rx_interval.check_overlap(tx_interval)
     
     # Traveltime to furtherst range gate
-    dt = rx_interval.end-tx_interval.end-baud_length
+    dt = rx_interval.end-tx_interval.end
     
     # Time travelled is the time light uses back and forth
     r = v*dt/2
@@ -208,7 +208,7 @@ if __name__ == '__main__':
     cycle = TimeInterval(0,5580)*µs
     Tb = 10*µs
     rmin = calc_nearest_range(transmit, receive, Tb)
-    rmax = calc_furthest_range(transmit, receive, Tb)
+    rmax = calc_furthest_full_range(transmit, receive, Tb)
     print(rmin," ",rmax)
     
     plt.figure()
