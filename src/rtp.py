@@ -21,7 +21,9 @@ class TimeInterval:
     
     Handling one begin and end of the time the transmitter/receiver channel is on.
     """
-    def __init__(self, begin=0.0, end=0):
+    def __init__(self, begin: float = 0.0, end:float = 0):
+        if end < begin:
+            raise ValueError("Start of interval must come before end")
         self.begin = begin
         self.end = end
 
@@ -51,9 +53,9 @@ class TimeInterval:
         """
 
         overlap: bool = True
-        if self.begin < other.end and self.end < other.begin:
+        if self.begin <= other.end and self.end <= other.begin:
             overlap = False
-        elif other.begin < self.end and other.end < self.begin:
+        elif other.begin <= self.end and other.end <= self.begin:
             overlap = False
         
         
