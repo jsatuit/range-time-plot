@@ -1,5 +1,5 @@
 
-
+from typing import Self
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -9,6 +9,12 @@ km = 1e3
 
 c = 3e8
 "Speed of light [m/s]"
+class OverlapError(Exception):
+    """
+    Exception raised when transmit and receive TimeIntervals overlap.
+    """
+    def __init__(self, *args):
+        super().__init__("The radar transmits while receiving!", args)
 
 class TimeInterval:
     """
@@ -32,6 +38,39 @@ class TimeInterval:
     @property
     def as_tuple(self):
         return (self.begin, self.end)
+    
+    def overlaps_bool(self, other: Self) -> bool:
+        """
+        Checks if TimeInterval overlaps with other TimeInterval
+        
+        :param other: TimeInterval to check overlap with
+        :type other: TimeInterval
+        :return: If the intervals overlap
+        :rtype: bool
+
+        """
+
+        overlap: bool = True
+        if self.begin < other.end and self.end < other.begin:
+            overlap = False
+        elif other.begin < self.end and other.end < self.begin:
+            overlap = False
+        
+        
+        return overlap
+    def overlaps(self, other: Self):
+        """
+        Checks if TimeInterval overlaps with other TimeInterval. If so, 
+        an OverlapError is raised
+        
+        :param other: TimeInterval to check overlap with
+        :type other: TimeInterval
+        :raises OverlapError: When intervals overlap
+        :rtype: bool
+
+        """
+        if self.overlaps_bool(other):
+            raise OverlapError
         
 class Experiment:
     """
@@ -61,6 +100,8 @@ def calc_nearest_range(tx_interval: TimeInterval, rx_interval: TimeInterval,
     
 
     """
+    if rx_interval.begin < tx_interval.end:
+        raise OverlapError
     
     # Traveltime to nearest range gate
     dt = rx_interval.begin-tx_interval.end+baud_length
@@ -82,6 +123,8 @@ def calc_furthest_range(tx_interval: TimeInterval, rx_interval: TimeInterval,
     :param v: Speed of beam, default speed of light
     :return: Furthest range gate. 
     """
+    if rx_interval.begin < tx_interval.end:
+        raise OverlapError
     
     # Traveltime to furtherst range gate
     dt = rx_interval.end-tx_interval.end-baud_length
