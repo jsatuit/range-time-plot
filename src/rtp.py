@@ -39,7 +39,7 @@ class TimeInterval:
     def as_tuple(self):
         return (self.begin, self.end)
     
-    def overlaps_bool(self, other: Self) -> bool:
+    def overlaps_with(self, other: Self) -> bool:
         """
         Checks if TimeInterval overlaps with other TimeInterval
         
@@ -58,7 +58,7 @@ class TimeInterval:
         
         
         return overlap
-    def overlaps(self, other: Self):
+    def check_overlap(self, other: Self):
         """
         Checks if TimeInterval overlaps with other TimeInterval. If so, 
         an OverlapError is raised
@@ -100,8 +100,9 @@ def calc_nearest_range(tx_interval: TimeInterval, rx_interval: TimeInterval,
     
 
     """
-    if rx_interval.begin < tx_interval.end:
-        raise OverlapError
+    
+    rx_interval.check_overlap(tx_interval)
+    
     
     # Traveltime to nearest range gate
     dt = rx_interval.begin-tx_interval.end+baud_length
@@ -123,8 +124,8 @@ def calc_furthest_range(tx_interval: TimeInterval, rx_interval: TimeInterval,
     :param v: Speed of beam, default speed of light
     :return: Furthest range gate. 
     """
-    if rx_interval.begin < tx_interval.end:
-        raise OverlapError
+    
+    rx_interval.check_overlap(tx_interval)
     
     # Traveltime to furtherst range gate
     dt = rx_interval.end-tx_interval.end-baud_length
