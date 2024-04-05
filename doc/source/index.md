@@ -1,6 +1,7 @@
 # Range-time-plot
 
-A python package to plot range-time graphs of incoherent scatter radar experiments
+A python package to plot range-time graphs of incoherent scatter radar experiments. 
+A monostatic radar is assumed.
 
 
 ```{eval-rst}
