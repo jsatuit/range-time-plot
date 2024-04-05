@@ -66,7 +66,7 @@ def calc_nearest_range(tx_interval: TimeInterval, rx_interval: TimeInterval,
     dt = rx_interval.begin-tx_interval.end+baud_length
     
     # Time travelled is the time light uses back and forth
-    r = c*dt/2
+    r = v*dt/2
     
     return r
 
@@ -83,11 +83,11 @@ def calc_furthest_range(tx_interval: TimeInterval, rx_interval: TimeInterval,
     :return: Furthest range gate. 
     """
     
-    # Traveltime to nearest range gate
+    # Traveltime to furtherst range gate
     dt = rx_interval.end-tx_interval.end-baud_length
     
     # Time travelled is the time light uses back and forth
-    r = c*dt/2
+    r = v*dt/2
     
     return r
 
