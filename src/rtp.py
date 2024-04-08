@@ -126,17 +126,16 @@ def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     plt.xlabel("Time [µs]")
     plt.ylabel("Range [km]")
 
-def plot_add_range(r, label = ""):
+def plot_add_range_label(r):
     """
-    Adds a label to a certain range.
+    Adds a label to a certain range as a minor tick
     
-    :param r: range [m]
-    :type r: float
-    :param label: Label text. If empty, range in km is used. Defaults to range in km
-    :type label: str, optional
+    :param float r: range [m]
 
     """
-    pass
+    ax = plt.gca()
+    t = ax.get_yticks(minor = True)
+    ax.set_yticks(np.hstack([t, r/km]), minor = True)
     
 
 if __name__ == '__main__':
@@ -151,7 +150,14 @@ if __name__ == '__main__':
     print(rmin," ",rmax)
     
     plt.figure()
-    plt.grid()
+    plt.grid(which = 'both')
     plot_transmit(transmit, cycle)
     plot_receive(receive, cycle)
+    plot_add_range_label(rmin)
+    plot_add_range_label(rmax)
+    
+    ax = plt.gca()
+    ax.yaxis.set_minor_formatter("{x:.0f}")
+    ax.tick_params(which = 'major', pad = 15)
+    ax.tick_params(which = 'minor', grid_linewidth = 2, pad = 0)
     
