@@ -42,6 +42,17 @@ class TimeInterval:
         """
         
         return TimeInterval(self.begin*num, self.end*num)
+    
+    def __truediv__(self, num: int | float) -> Self:
+        """
+        Divides interval begin and end times with num.
+        
+        :param num: Number to divide with
+        :return: TimeInterval(begin/num, end/num)
+
+        """
+        
+        return TimeInterval(self.begin/num, self.end/num)
         
     def __repr__(self) -> str:
 

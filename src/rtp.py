@@ -119,13 +119,19 @@ def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     line2x = signal_interval.end + np.array((0 , d*plot_interval.length))
     line2y = np.array((0 , plot_interval.length*v))
     # Plot beginning of pulse
-    plt.plot(line1x, line1y/km, **kwargs)
+    plt.plot(line1x/µs, line1y/km, **kwargs)
     # Plot end of pulse
-    plt.plot(line2x, line2y/km, **kwargs)
-    plt.xlim(plot_interval.as_tuple)
+    plt.plot(line2x/µs, line2y/km, **kwargs)
+    
+    plt.xlim((plot_interval/µs).as_tuple)
     plt.xlabel("Time [µs]")
     plt.ylabel("Range [km]")
 
+    ax = plt.gca()
+    ax.yaxis.set_minor_formatter("{x:.0f}")
+    ax.xaxis.set_minor_formatter("{x:.0f}")
+    ax.tick_params(which = 'major', pad = 15)
+    ax.tick_params(which = 'minor', grid_linewidth = 2, pad = 0)
 def plot_add_range_label(r):
     """
     Adds a label to a certain range as a minor tick
@@ -134,9 +140,18 @@ def plot_add_range_label(r):
 
     """
     ax = plt.gca()
-    t = ax.get_yticks(minor = True)
-    ax.set_yticks(np.hstack([t, r/km]), minor = True)
+    mt = ax.get_yticks(minor = True)
+    ax.set_yticks(np.hstack([mt, r/km]), minor = True)
+def plot_add_time_label(t):
+    """
+    Adds a label to a certain time as a minor tick
     
+    :param float t: time [s]
+
+    """
+    ax = plt.gca()
+    mt = ax.get_xticks(minor = True)
+    ax.set_xticks(np.hstack([mt, t/µs]), minor = True) 
 
 if __name__ == '__main__':
     # Using Beata UHF as example
@@ -150,14 +165,14 @@ if __name__ == '__main__':
     print(rmin," ",rmax)
     
     plt.figure()
-    plt.grid(which = 'both')
+    plt.grid(which = 'major')
     plot_transmit(transmit, cycle)
     plot_receive(receive, cycle)
     plot_add_range_label(rmin)
     plot_add_range_label(rmax)
     
-    ax = plt.gca()
-    ax.yaxis.set_minor_formatter("{x:.0f}")
-    ax.tick_params(which = 'major', pad = 15)
-    ax.tick_params(which = 'minor', grid_linewidth = 2, pad = 0)
+    plot_add_time_label(transmit.begin)
+    plot_add_time_label(transmit.end)
+    plot_add_time_label(receive.begin)
+    plot_add_time_label(receive.end)
     

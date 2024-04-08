@@ -32,6 +32,9 @@ def test_interval():
     assert tia == tia
     assert tia*2 == tic
     assert tia*0 == null
+    assert tic/2 == tia
+    with pytest.raises(ZeroDivisionError):
+        tia/0
     
     for ti in [tia, tib, tic, null]:
         rec_test_repr(ti)
@@ -60,8 +63,6 @@ def test_interval():
     tia.check_overlap(null)
     
     
-    with pytest.raises(TypeError):
-        tia/3
 
 # Test «normal» interval
 
