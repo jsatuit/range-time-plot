@@ -5,8 +5,11 @@ class TarlanError(Exception):
     """
     Exception raised when there are errors in parsing a tarlan file
     """
-    def __init__(self, line, msg):
-        super().__init__("The .tlan file has errors in line", line, ":", msg)
+    def __init__(self, msg: str, line_number: int = 0):
+        if line_number > 0:
+            super().__init__("The .tlan file has errors in line", line_number, ":", msg)
+        else:
+            super().__init__("The TARLAN command has errors:", msg)
 
 
 class Tarlan():
@@ -19,7 +22,7 @@ class Tarlan():
         "RFOFF": "Disable RF output, bit 11 low"
         }  #  etc.
     
-    def __init__(self, file_name: str):
+    def __init__(self, file_name: str = ""):
     
         # Times (microseconds) where RF is turned on or off
         self.RF = []
@@ -27,7 +30,11 @@ class Tarlan():
         # Times where channels are tunred on or off
         self.CHS = {}
         
-        self.tarlan_parser(file_name)
+        # We are not reading a file right now
+        self.reading_line = 0
+        
+        if len(file_name) > 0:
+            self.tarlan_parser(file_name)
         
     def RFON(self, time: str):
         """
@@ -44,7 +51,7 @@ class Tarlan():
             t = float(time)
             self.RF.append(t)
         else:
-            raise TarlanError(self.reading_line, "RF output is already on / Transmitter is transmitting already!")
+            raise TarlanError("RF output is already on / Transmitter is transmitting already!", self.reading_line)
             
     def RFOFF(self, time: str):
         """
@@ -61,53 +68,68 @@ class Tarlan():
             t = float(time)
             self.RF.append(t)
         else:
-            raise TarlanError(self.reading_line, "RF output is off!")
+            raise TarlanError("RF output is off!", self.reading_line)
     
-    def parse_params(self, params: list[str]) -> None:
-        N = len(params) 
-        if N < 2:
-            raise RuntimeError("The line must contain of 'AT', timepoint and command(s), in that order!")
+    def parse_args(self, args: list[str]) -> None:
+        """
+        Parses TARLAN arguments by running the function in the Tarlan class with the same name.
+        
+        There must be at least two arguments. The first is the time the command is executed, the second atre 
+        
+        :param args: list of arguments
+        :type args: list[str]
+        :raises TarlanError: If there are too few arguments
+        :rtype: None
+
+        """
+        
+        # Argument must contain at least time and commands
+        if len(args) < 2:
+            raise TarlanError("The line must contain of 'AT', timepoint and command(s), in that order!", self.reading_line)
         
                                    
-        time = params[0]
+        time = args[0]
+        cmds = []
+        for arg in args:
+            for cmd in arg.split(","):
+                cmds.append(cmd)
         
-        cmds = params[1].split(",")
         for cmd in cmds:
-            # pass
-            # if cmd in tarlan_commands.keys():
-                # print(tarlan_commands[cmd].split(",")[0], "at", time, "µs")
+            # «Run» the commands
             if hasattr(self,cmd):
                 f = getattr(self, cmd)
                 f(time)
         
-    
+    def parse_line(self, line: str):
+        # Filter away comments
+        codeline = line.split("%")[0]
+        
+        # Unpack arguments
+        args = codeline.split()
+        
+        if len(args) == 0:
+            pass
+        elif args[0] == "AT":
+            # The radar hardware is doing something!
+            self.parse_args(args[1:])
+            
+        elif args[0] == "SETTCR":
+            # Set time control ?
+            if float(args[1]) > 0:
+                # Jump over the rest, now we need only one pulse
+                raise StopIteration
+        else:
+            raise TarlanError("Line must start with 'AT' or 'SRTTCR'. Use '%' for comments.", self.reading_line)
+            
     def tarlan_parser(self, filename: str = ""):
         
         with open(filename) as file:
             for il, line in enumerate(file):
-                self.reading_line = il
-                # Filter away comments
-                codeline = line.split("%")[0]
-                
-                
-                strs = codeline.split()
-                
-                # If empty line
-                if len(strs) == 0:
-                    continue
-                
-                if strs[0] == "AT":
-                    # The radar hardware is doing something!
-                    params = strs[1:]
-                    
-                    self.parse_params(params)
-                    
-                elif strs[0] == "SETTCR":
-                    # Set time control ?
-                    if float(strs[1]) > 0:
-                        # Jump over the rest, now we need only one pulse
-                        break
-                    
-                else:
-                    raise RuntimeError("Was not able to parse tarlan line! {line}")
-            delattr(self, "reading_line")
+                self.reading_line = il + 1
+
+                try:
+                    self.parse_line(line)
+                except StopIteration:
+                    break
+
+            self.reading_line = 0
