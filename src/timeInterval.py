@@ -79,7 +79,7 @@ class TimeInterval:
         
         :param other: TimeInterval to check overlap with
         :type other: TimeInterval
-        :return: If the intervals overlap
+        :return: True if the intervals overlap, else False
         :rtype: bool
 
         """
@@ -100,7 +100,6 @@ class TimeInterval:
         :param other: TimeInterval to check overlap with
         :type other: TimeInterval
         :raises OverlapError: When intervals overlap
-        :rtype: bool
 
         """
         if self.overlaps_with(other):
