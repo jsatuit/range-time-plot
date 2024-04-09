@@ -6,12 +6,8 @@ if __name__ == '__main__':
     import sys
     sys.path.append("..") # Adds current directory to python modules path.
 from src.timeInterval import TimeInterval
+from src.const import km, µs, c
 
-µs = 1e-6
-km = 1e3
-
-c = 3e8
-"Speed of light [m/s]"
 
 class Experiment:
     """
