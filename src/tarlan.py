@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # from collections import OrderedDict
+if __name__ == '__main__':
+    import sys
+    sys.path.append("..") # Adds current directory to python modules path.
+from src.experiment import Experiment
+from src.timeInterval import TimeInterval
+
+from src.const import km, µs, c
 
 
 class TarlanError(Exception):
@@ -17,6 +24,14 @@ class TarlanError(Exception):
 
 
 class Tarlan():
+    """
+    Class for parsing and handling TARLAN commands
+    
+    TARLAN commands have function that are written as in the file. When they are run,
+        they need argument `time` as a string. This is the time in time control
+        and time after start of the file (not the time written in the command)
+        that is for SETTCR 0.
+    """
     tarlan_commands = {
         "CHQPULS": "High output on bit 31 for 2 us, used for synchronization with external hardware.",
         "RXPROT": "Enable receiver protector, bit 12 high",
@@ -27,18 +42,41 @@ class Tarlan():
         }  #  etc.
     
     def __init__(self, file_name: str = ""):
-    
-        # Times (microseconds) where RF is turned on or off
-        self.RF = []
         
-        # Times where channels are tunred on or off
-        self.CHS = {}
+        # List of when radio frequency transmitting is toggled
+        self._RF = []
+        self.end_time = 0
         
-        # We are not reading a file right now
-        self.reading_line = 0
+        if file_name:
+            self.from_tlan(file_name)
+            
+
+    def to_exp(self) -> Experiment:
+        exp = Experiment()
+        exp.add_stop_time(self.end_time)
         
-        if len(file_name) > 0:
-            self.tarlan_parser(file_name)
+        if len(self._RF)%2 != 0:
+            raise TarlanError("RF is not turned off at end of instructions!")
+        if len(self._RF) > 0:
+            for i_rf in range(len(self._RF) // 2):
+                exp.add_transmit_time(
+                    TimeInterval(self._RF[i_rf * 2], 
+                                 self._RF[i_rf * 2 + 1]))
+        else:
+            raise RuntimeWarning("RF is neither turned on or off in the instructions!")
+        return exp
+        
+    def from_tlan(self, file_name: str = ""):
+        cycles = tarlan_parser(file_name)
+        
+        for subcycle_start_time, cycle in cycles.items():
+            for subcycle_time, commands in cycle.items():
+                for cmd in commands:
+                    if hasattr(self, cmd):
+                        f = getattr(self, cmd)
+                        
+                        # «Execute» tarlan command
+                        f(subcycle_start_time + subcycle_time)
         
     def RFON(self, time: str):
         """
@@ -49,13 +87,12 @@ class Tarlan():
         :raises TarlanError: If transmitter is on
 
         """
-        print("Enable RF output")
         # If is even
-        if len(self.RF)%2 == 0:
-            t = float(time)
-            self.RF.append(t)
+        if len(self._RF)%2 == 0:
+            t = float(time) * µs
+            self._RF.append(t)
         else:
-            raise TarlanError("RF output is already on / Transmitter is transmitting already!", self.reading_line)
+            raise TarlanError("RF output is already on / Transmitter is transmitting already!")
             
     def RFOFF(self, time: str):
         """
@@ -66,13 +103,18 @@ class Tarlan():
         :raises TarlanError: If transmitter is off
 
         """
-        print("Disable RF output")
         # If is even
-        if len(self.RF)%2 == 1:
-            t = float(time)
-            self.RF.append(t)
+        if len(self._RF)%2 == 1:
+            t = float(time) * µs
+            self._RF.append(t)
         else:
-            raise TarlanError("RF output is off!", self.reading_line)
+            raise TarlanError("RF output is off!")
+    
+    def REP(self, time: str):
+        """
+        End of TARLAN file / Repeat commands over again.
+        """
+        self.end_time = float(time) * µs
     
     
 def parse_line(line: str, line_number: int = 0) -> tuple[float, list[str]]:
