@@ -75,7 +75,19 @@ class Tarlan():
             raise TarlanError("RF output is off!", self.reading_line)
     
     
-def parse_line(line: str, line_number: int = 0) -> None | tuple[float, list[str]]:
+def parse_line(line: str, line_number: int = 0) -> tuple[float, list[str]]:
+    """
+    Parse single line of Tarlan code.
+    
+    :param line: line of code
+    :type line: str
+    :param line_number: line number in file, used for error handling only, defaults to 0
+    :type line_number: int, optional
+    :raises TarlanError: for invalid commands
+    :return: time and list of commands
+    :rtype: tuple[float, list[str]]
+
+    """
     time = 0
     commands = []
     
@@ -124,8 +136,6 @@ def tarlan_parser(filename: str = "") -> dict[float,dict[float,list[str]]]:
                     subcycle_start_time = t
                     if subcycle_start_time not in cycle_commands.keys():
                         cycle_commands[subcycle_start_time] = {}
-                    # else:
-                    #     break
                 else:
                     cur_subcycle = cycle_commands[subcycle_start_time]
                     cur_subcycle[t] = cmds

@@ -1,30 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from src.tarlan import Tarlan, TarlanError
+from src.tarlan import parse_line, TarlanError
 
 import pytest
 
-def test_tarlan_parsing():
-    tlan = Tarlan()
+def test_parse_line():
     
-    # Check that object is correctly set up
-    assert tlan.RF == []
-    assert tlan.CHS == {}
-    
-    tlan.parse_line("AT 0 RFON")
-    assert tlan.RF == [0.0]
-    
-    with pytest.raises(TarlanError):
-        tlan.parse_line("AT 1 RFON")
-    
-    tlan.parse_line("AT 1 RFOFF")
-    assert tlan.RF == [0.0, 1.0]
-    
-    with pytest.raises(TarlanError):
-        tlan.parse_line("AT 1 RFOFF")
-        
-        
     erroneus_lines =  [
         "1 AT RFON",
         "RFON at 3"
@@ -34,5 +16,8 @@ def test_tarlan_parsing():
     for line in erroneus_lines:
         if len(line) == 0: continue
         with pytest.raises(TarlanError):
-            tlan.parse_line(line)
+            parse_line(line)
+    
+    cmds = ["CHQPULS", "RXSYNC", "NCOSEL0", "AD2L", "AD2R", "STFIR"]
+    assert parse_line("AT 0.9 "+ ",".join(cmds)) == (0.9, cmds)
     
