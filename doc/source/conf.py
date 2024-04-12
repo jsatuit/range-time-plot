@@ -27,6 +27,8 @@ extensions = [
 ]
 autoapi_dirs = ['../../src']
 autodoc_typehints = 'description'
+autoapi_python_class_content = 'class'
+
 
 myst_enable_extensions = ["colon_fence"]
 templates_path = ['_templates']

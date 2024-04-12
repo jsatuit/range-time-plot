@@ -17,8 +17,18 @@ class TarlanError(Exception):
     Exception raised when there are errors in parsing a tarlan file
     """
     def __init__(self, msg: str, line_number: int = 0):
+        """
+        
+        :param msg: Error message
+        :type msg: str
+        :param line_number: Line number in tlam file. Zero for no line / single 
+            command 
+        :type line_number: int
+
+        """
         if line_number > 0:
-            super().__init__("The .tlan file has errors in line", line_number, ":", msg)
+            super().__init__("The .tlan file has errors in line", line_number, 
+                             ":", msg)
         else:
             super().__init__("The TARLAN command has errors:", msg)
 
@@ -30,21 +40,22 @@ class Command:
     
     :param float t: Subcycle time in seconds when command is executed.
     :param str cmd: Command as written in the .tlan file
+    :param int line: Line in tlan file. Used for error messages
     
     """
     
-    def __init__(self, time: float, cmd: str, line: int = 0):
+    def __init__(self, t: float, cmd: str, line: int = 0):
         """
         
-        :param time: Subcycle time in seconds when command is executed.
-        :type time: float
+        :param t: Subcycle time in seconds when command is executed.
+        :type t: float
         :param cmd: Command as written in the .tlan file
         :type cmd: str
         :param line: Line in tlan file. Used for error messages, defaults to 0.
         :type line: int
 
         """
-        self.t = time
+        self.t = t
         self.cmd = cmd
         self.line = line
         
