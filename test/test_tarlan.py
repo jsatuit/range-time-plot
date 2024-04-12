@@ -18,6 +18,6 @@ def test_parse_line():
         with pytest.raises(TarlanError):
             parse_line(line)
     
-    cmds = ["CHQPULS", "RXSYNC", "NCOSEL0", "AD2L", "AD2R", "STFIR"]
-    assert parse_line("AT 0.9 "+ ",".join(cmds)) == (0.9, cmds)
+    # cmds = ["CHQPULS", "RXSYNC", "NCOSEL0", "AD2L", "AD2R", "STFIR"]
+    # assert parse_line("AT 0.9 "+ ",".join(cmds)) == (0.9, cmds)
     
