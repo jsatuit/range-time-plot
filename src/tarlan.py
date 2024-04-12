@@ -70,14 +70,16 @@ class Subcycle:
     Lists commands in single subcycle. Commands are sorted after execution time
     """
     
-    def __init__(self, start_subcycle: float = 0) -> None:
+    def __init__(self, start_subcycle: float = 0, line: int = 0) -> None:
         """
         
         :param start_subcycle: start of subcycle in seconds, defaults to 0
         :type start_subcycle: float, optional
+        :param int, optional line: Codeline where subcycle starts
 
         """
         self.start = start_subcycle
+        self.startline = line
         self.commands = []
         
     def add_command(self, cmd: str) -> None:
@@ -258,8 +260,10 @@ class Tarlan():
         :type file_name: str, optional
 
         """
+        self.cycle = DataStreams("CYCLE")
+        self.subcycles = DataStreams("SUBCYCLE")
         
-        streams = ["RF", "CYCLE", "SUBCYCLE"]
+        streams = ["RF"]
         for i in range(1,7):
             streams.append(f"CH{i}")
             
@@ -294,7 +298,7 @@ class Tarlan():
 
         """
         exp = Experiment()
-        exp.add_stop_time(self.streams["CYCLE"].last_turn_off)
+        exp.add_stop_time(self.cycle.last_turn_off)
         
         # RF stream
         if self.streams["RF"].is_on:
@@ -314,13 +318,12 @@ class Tarlan():
                 for interval in self.streams[CH].intervals:
                     exp.add_receive_time(CH, interval)
         
-        for interval in self.streams["SUBCYCLE"].intervals:
+        for interval in self.subcycles.intervals:
             exp.add_subcycle(interval)
         
         return exp
     
     
-        
     def from_tlan(self, file_name: str = "") -> None:
         """
         Parse tlan file and run Tarlan.eec_cmd() for all commands.
@@ -330,12 +333,30 @@ class Tarlan():
 
         """
         cycle = tarlan_parser(file_name)
-        self.streams["CYCLE"].turn_on(0, 0)
+        
+        self.cycle.turn_on(cycle[0], cycle[0].startline)
+        self.subcycles.turn_on(cycle[0].start, cycle[0].startline)
+        
         for subcycle in cycle:
+            
+            # First subcycle has already been started. No need to restart.
+            # Last reset of timecontrol is to close subcycle, but not to start 
+            # a new one. Also here, SETTCR 0 is called.
+            if subcycle.start != 0:
+                # Close last subcycle
+                self.subcycles.turn_off(subcycle.start, subcycle.startline)
+                # Open next subcycle
+                self.subcycles.turn_on(subcycle.start, subcycle.startline)
+                
             for cmd in subcycle.commands:
-                # print(cmd)
+                if cmd.cmd == "REP":
+                    break
                 self.exec_cmd(cmd)
-    
+        if cmd.cmd != "REP":
+            raise TarlanError("The program stopped with other command than 'REP'", cmd.line)
+        self.subcycles.turn_off(cmd.t, cmd.line)
+        self.cycle.turn_off(cmd.t, cmd.line)
+        
     def exec_cmd(self, cmd: Command):
         """
         «Execute» TARLAN command / import command to experiment
@@ -348,10 +369,7 @@ class Tarlan():
         if cmd.cmd == "RFON":
             self.streams["RF"].turn_on(self.TCR + cmd.t, cmd.line)
         elif cmd.cmd == "RFOFF":
-            self.streams["RF"].turn_off(self.TCR + cmd.t, cmd.line)
-        elif cmd.cmd == "REP":
-            self.streams["CYCLE"].turn_off(self.TCR + cmd.t, cmd.line)
-            self.streams["SUBCYCLE"].turn_off(self.TCR + cmd.t, cmd.line)
+            self.streams["RF"].turn_off(self.TCR + cmd.t, cmd.line)    
         elif cmd.cmd == "CH1":
             self.streams["CH1"].turn_on(self.TCR + cmd.t, cmd.line)
         elif cmd.cmd == "CH1OFF":
@@ -361,12 +379,6 @@ class Tarlan():
                 CH = "CH"+str(i)
                 if self.streams[CH].is_on:
                     self.streams[CH].turn_off(self.TCR + cmd.t, cmd.line)
-        elif cmd.cmd == "SETTCR":
-            self.TCR = cmd.t
-            if self.streams["SUBCYCLE"].is_on and cmd.t != 0:
-                self.streams["SUBCYCLE"].turn_off(cmd.t, cmd.line)
-            if self.streams["SUBCYCLE"].is_off:
-                self.streams["SUBCYCLE"].turn_on(cmd.t, cmd.line)
         
 def parse_line(line: str, line_number: int = 0) -> list[Command]:
     """
@@ -441,7 +453,7 @@ def tarlan_parser(filename: str) -> list[Subcycle]:
                         cycle.append(subcycle)
                     except NameError:
                         pass
-                    subcycle = Subcycle(cmd.t)
+                    subcycle = Subcycle(cmd.t, cmd.line)
                 subcycle.add_command(cmd)
                 if cmd.cmd == "REP":
                     cycle.append(subcycle)
