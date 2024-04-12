@@ -6,12 +6,8 @@ if __name__ == '__main__':
     import sys
     sys.path.append("..") # Adds current directory to python modules path.
 from src.timeInterval import TimeInterval
+from src.const import km, µs, c
 
-µs = 1e-6
-km = 1e3
-
-c = 3e8
-"Speed of light [m/s]"
 
 class Experiment:
     """
@@ -98,7 +94,10 @@ def plot_receive(rx_interval, plot_interval, **kwargs):
     Other keyword arguments go to plotting punctions
     
     """
-    plot_t_r(rx_interval, plot_interval, v=c, d = -1, color='red', **kwargs)
+    if not "color" in kwargs:
+        kwargs["color"] = "red"
+    
+    plot_t_r(rx_interval, plot_interval, v=c, d = -1, **kwargs)
     
 def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     """

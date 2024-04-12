@@ -104,4 +104,19 @@ class TimeInterval:
         """
         if self.overlaps_with(other):
             raise OverlapError
+            
+    def within(self, other: Self) -> bool:
+        """
+        Return True if this interval is within the other interval. 
+        
+        Intervals are allowed to share boundaries. Numberical errors are not 
+            taken into account
+            
+        :param other: Outer TimeInterval
+        :type other: Self
+        :return: whwether this interval is within the other one.
+        :rtype: bool
+
+        """
+        return other.begin <= self.begin and self.end <= other.end
         

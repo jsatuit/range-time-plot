@@ -62,6 +62,13 @@ def test_interval():
     tia.check_overlap(tic)
     tia.check_overlap(null)
     
+    assert tia.within(tia)
+    assert tia.within(tib)
+    assert not tia.within(tic)
+    assert not tic.within(tia)
+    assert tic.within(tib)
+    assert tic.within(tic)
+    
     
 
 # Test «normal» interval
