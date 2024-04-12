@@ -28,39 +28,54 @@ class Command:
     """
     Tarlan command.
     
-    :param float t: Subcycle time when command is executed.
+    :param float t: Subcycle time in seconds when command is executed.
     :param str cmd: Command as written in the .tlan file
     
     """
     
-    def __init__(self, time: float, cmd: str):
+    def __init__(self, time: float, cmd: str, line: int = 0):
         """
         
-        :param time: Subcycle time when command is executed.
+        :param time: Subcycle time in seconds when command is executed.
         :type time: float
         :param cmd: Command as written in the .tlan file
         :type cmd: str
+        :param line: Line in tlan file. Used for error messages, defaults to 0.
+        :type line: int
 
         """
         self.t = time
         self.cmd = cmd
+        self.line = line
         
     def __lt__(self, other: Self) -> bool:
         return self.t < other.t
     
     def __repr__(self):
-        return f"Command({self.t}, {self.cmd})"
+        return f"Command({self.line}: {self.t}, {self.cmd})"
     
 class Subcycle:
     """
-    Not used at the moment
+    Lists commands in single subcycle. Commands are sorted after execution time
     """
     
-    def __init__(self, start_subcycle: float = 0):
+    def __init__(self, start_subcycle: float = 0) -> None:
+        """
+        
+        :param start_subcycle: start of subcycle in seconds, defaults to 0
+        :type start_subcycle: float, optional
+
+        """
         self.start = start_subcycle
         self.commands = []
         
     def add_command(self, cmd: str) -> None:
+        """
+        Add command to subcycle. 
+        :param cmd: command
+        :type cmd: str
+
+        """
         insort_left(self.commands, cmd)
         
 class DataStreams:
@@ -308,41 +323,39 @@ class Tarlan():
         for subcycle in cycle:
             for cmd in subcycle.commands:
                 # print(cmd)
-                self.exec_cmd(cmd, 0)
+                self.exec_cmd(cmd)
     
-    def exec_cmd(self, cmd: Command, line: int):
+    def exec_cmd(self, cmd: Command):
         """
         «Execute» TARLAN command / import command to experiment
         
         :param cmd: command as pasrsed from the file.
         :type cmd: Command
-        :param line: line of where the command is in the file.
-        :type line: int
 
         """
         
         if cmd.cmd == "RFON":
-            self.streams["RF"].turn_on(self.TCR + cmd.t, line)
+            self.streams["RF"].turn_on(self.TCR + cmd.t, cmd.line)
         elif cmd.cmd == "RFOFF":
-            self.streams["RF"].turn_off(self.TCR + cmd.t, line)
+            self.streams["RF"].turn_off(self.TCR + cmd.t, cmd.line)
         elif cmd.cmd == "REP":
-            self.streams["CYCLE"].turn_off(self.TCR + cmd.t, line)
-            self.streams["SUBCYCLE"].turn_off(self.TCR + cmd.t, line)
+            self.streams["CYCLE"].turn_off(self.TCR + cmd.t, cmd.line)
+            self.streams["SUBCYCLE"].turn_off(self.TCR + cmd.t, cmd.line)
         elif cmd.cmd == "CH1":
-            self.streams["CH1"].turn_on(self.TCR + cmd.t, line)
+            self.streams["CH1"].turn_on(self.TCR + cmd.t, cmd.line)
         elif cmd.cmd == "CH1OFF":
-            self.streams["CH1"].turn_off(self.TCR + cmd.t, line)
+            self.streams["CH1"].turn_off(self.TCR + cmd.t, cmd.line)
         elif cmd.cmd == "ALLOFF":
             for i in range(1,7):
                 CH = "CH"+str(i)
                 if self.streams[CH].is_on:
-                    self.streams[CH].turn_off(self.TCR + cmd.t, line)
+                    self.streams[CH].turn_off(self.TCR + cmd.t, cmd.line)
         elif cmd.cmd == "SETTCR":
             self.TCR = cmd.t
             if self.streams["SUBCYCLE"].is_on and cmd.t != 0:
-                self.streams["SUBCYCLE"].turn_off(cmd.t, line)
+                self.streams["SUBCYCLE"].turn_off(cmd.t, cmd.line)
             if self.streams["SUBCYCLE"].is_off:
-                self.streams["SUBCYCLE"].turn_on(cmd.t, line)
+                self.streams["SUBCYCLE"].turn_on(cmd.t, cmd.line)
         
 def parse_line(line: str, line_number: int = 0) -> list[Command]:
     """
@@ -377,14 +390,14 @@ def parse_line(line: str, line_number: int = 0) -> list[Command]:
         
         for arg in args[2:]:
             for cmd in arg.split(","):
-                commands.append(Command(time, cmd))
+                commands.append(Command(time, cmd, line_number))
         
         
     elif args[0] == "SETTCR":
         # Set time control ?
         time = float(args[1])*µs
         
-        commands = [Command(time, "SETTCR")]
+        commands = [Command(time, "SETTCR", line_number)]
 
     else:
         raise TarlanError("Line must start with 'AT' or 'SRTTCR'. Use '%' for comments.", line_number)
@@ -399,7 +412,7 @@ def tarlan_parser(filename: str) -> list[Subcycle]:
     :param filename: Path to tlan file, defaults to ""
     :type filename: str
     :raises FileNotFoundError: when file is not found / does not exist
-    :return: commands grouped in Sybcycles.
+    :return: commands grouped in Subcycles.
     :rtype: list[Subcycle]
 
     """
