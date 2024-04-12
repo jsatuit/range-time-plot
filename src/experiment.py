@@ -12,29 +12,50 @@ class Experiment:
     """
     def __init__(self):
         self.transmits = []
-        self.receive_channels = []
+        self.receive = {}
         self.instruction_cycle = TimeInterval(0,0)
+        self.subcycles = []
         
         
     def add_transmit_time(self, time: TimeInterval):
         # TODO: Check for overlapping 
         # TODO: Sort
-        self.transmits += [time]
+        self.transmits.append(time)
     # TODO: Add receiver channels. But here we will have more than one.
+    
+    def add_receive_time(self, channel: str, time: TimeInterval):
+        if channel not in self.receive:
+            self.receive[channel] = []
+            
+        self.receive[channel].append(time)
+    def add_subcycle(self, time: TimeInterval):
+        self.subcycles.append(time)
     
     def add_stop_time(self, time: float):
         self.instruction_cycle.end = time
     
-    def plot(self):
+    def plot(self, subcycle: int = 1):
+        
+        if subcycle <= 0 and subcycle > len(self.subcycles):
+            raise ValueError("Select a subcycle between 1 and {len(self.subcycles)}, not {subcycle}")
+        
+        plot_interval = self.subcycles[subcycle-1]
         
         plt.figure()
         plt.grid(which = 'major')
         for transmit in self.transmits:
-            rtp.plot_transmit(transmit, self.instruction_cycle)
+            if transmit.within(plot_interval):
+                rtp.plot_transmit(transmit, plot_interval)
+        
+        cols = ["black", "red", "green", "orange", "brown", "grey"]
+        for i, receives in enumerate(self.receive.values()):
+            for receive in receives:
+                if receive.within(plot_interval):
+                    rtp.plot_receive(receive, plot_interval, color=cols[i])
             
-        # Hard-coded, not good, but as long as we have no recetion, we cant do better...
+        # Hard-coded, not good, but as long as we have no reception, 
+        # we cant do better...
         plt.ylim(0, 1000)
-        plt.xlim(0, self.transmits[1].begin/µs)
         # for ch in self.receive_channels:
         #     for receive in ch:
         #             plot_receive(receive, self.instruction_cycle)
