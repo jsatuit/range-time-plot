@@ -94,7 +94,10 @@ def plot_receive(rx_interval, plot_interval, **kwargs):
     Other keyword arguments go to plotting punctions
     
     """
-    plot_t_r(rx_interval, plot_interval, v=c, d = -1, color='red', **kwargs)
+    if not "color" in kwargs:
+        kwargs["color"] = "red"
+    
+    plot_t_r(rx_interval, plot_interval, v=c, d = -1, **kwargs)
     
 def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     """
