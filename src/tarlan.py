@@ -276,15 +276,17 @@ class Tarlan():
         if self.subcycles.is_off:
             raise TarlanError("No subcycle has been started yet!", cmd.line)
             
-        
+        #### Implement TARLAN commands from here ####
         execute_command = {
             "RFON": self.streams["RF"].turn_on,
             "RFOFF": self.streams["RF"].turn_off,
             "ALLOFF": self.ALLOFF,
             }
+        # Add receiver channel commands
         for ch in self.channels:
             execute_command[ch] = self.streams[ch].turn_on
             execute_command[ch+"OFF"] = self.streams[ch].turn_off
+            
         ''' 
         Silent warnings on setting single bits 4 or 5 in tarnsmit and receive 
         controllers. These go to ADC samplegate, but are not of interest here.
@@ -293,7 +295,7 @@ class Tarlan():
             for d in ["R", "T"]:
                 execute_command[f"B{d}X{i}"] = do_nothing
                 execute_command[f"B{d}X{i}OFF"] = do_nothing
-            
+        #### Implement TARLAN commands to here ####    
         
         
         
