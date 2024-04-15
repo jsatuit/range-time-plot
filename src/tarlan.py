@@ -11,13 +11,21 @@ from src.tarlanIntervals import IntervalList
 from src.tarlanError import TarlanError
 from src.const import km, µs, c
 
+def kst_channels():
+    "List of available channels"
+    
+    chs = []
+    for i in range(1,7):
+        chs.append(f"CH{i}") 
+    return chs
+
+
 
 def do_nothing(*args):
     """Dont delete. This function is needed for executing tarlan commands that 
        cant be simulated/transferred or where is would not make sense to 
        implement the function here."""
     pass
-
 
 class Command:
     """
@@ -102,10 +110,13 @@ class Tarlan():
     """
     
     
-    channels = []
-    "List of available channels"
-    for i in range(1,7):
-        channels.append(f"CH{i}")
+    
+        
+    frequencies = []
+    """List of avalilable frequencies
+    
+    TODO: Frequencies vary between radars. Must that be implemented?
+    """
         
     commands = {
         "CHQPULS": "High output on bit 31 for 2 us, used for synchronization "+
@@ -137,10 +148,10 @@ class Tarlan():
         }
     for i in range(16):
         commands["F" + str(i)] = "Set transmitter frequency, bit 0-3 high"
-    for i in range(1,7):
-        commands["CH" + str(i)] = \
+    for ch in kst_channels():
+        commands[ch] = \
             f"Open sampling gate on the referenced channel board, bit {i+9} high"
-        commands["CH" + str(i) + "OFF"] = \
+        commands[ch + "OFF"] = \
             f"Close sampling gate on the referenced channel board, bit {i+9} low"
     
     def __init__(self, file_name: str = ""):
@@ -155,7 +166,7 @@ class Tarlan():
         self.cycle = IntervalList("CYCLE")
         self.subcycles = IntervalList("SUBCYCLE")
         
-        streams = ["RF", "RXPROT", "LOPROT"]
+        streams = ["RF", "RXPROT", "LOPROT", "CAL", "BEAM", "+", "-"]
         # for ch in Tarlan.channels:
         #     streams.append(ch)
         for i in range(1,7):
@@ -199,15 +210,32 @@ class Tarlan():
             raise RuntimeWarning("RF is neither turned on nor off in the instructions!")
         
         # Channel streams
-        for CH in self.channels:
-            if self.streams[CH].is_on:
-                raise RuntimeError(CH + " is not turned off at end of experiment!")
-            if len(self.streams[CH]) > 0:
-                for interval in self.streams[CH].intervals:
-                    exp.add_receive_time(CH, interval)
+        for ch in kst_channels():
+            if self.streams[ch].is_on:
+                raise RuntimeError(ch + " is not turned off at end of experiment!")
+            if len(self.streams[ch]) > 0:
+                for interval in self.streams[ch].intervals:
+                    exp.add_receive_time(ch, interval)
         
         for interval in self.subcycles.intervals:
             exp.add_subcycle(interval)
+        
+        for stream in self.streams:
+            # Transmit and receive streams have been handeled already
+            if stream in ["RF", "+", "-"] or stream.startswith("CH"):
+                continue
+            
+            if self.streams[stream].is_on:
+                raise RuntimeError(
+                    f"{stream} is not turned off at end of instructions!"
+                    )
+            
+            if len(stream) == 0:
+                continue
+            for interval in self.streams[stream].intervals:
+                exp.add_setting_time(stream, interval)
+            
+                
         
         return exp
     
@@ -260,7 +288,22 @@ class Tarlan():
             if self.streams[CH].is_on:
                 self.streams[CH].turn_off(time, line)
     
-    
+    def PHA0(self, time: float, line: int):
+        "Set phase shift of oscillator to 0°"
+        if self.streams["+"].is_off:
+            self.streams["+"].turn_on(time, line)
+            
+        if self.streams["-"].is_on:
+            self.streams["-"].turn_off(time, line)
+            
+    def PHA180(self, time: float, line: int):
+        "Set phase shift of oscillator to 0°"
+        if self.streams["+"].is_on:
+            self.streams["+"].turn_off(time, line)
+            
+        if self.streams["-"].is_off:
+            self.streams["-"].turn_on(time, line)
+        
                 
     def exec_cmd(self, cmd: Command):
         """
@@ -280,13 +323,32 @@ class Tarlan():
         execute_command = {
             "RFON": self.streams["RF"].turn_on,
             "RFOFF": self.streams["RF"].turn_off,
+            "RXPROT": self.streams["RXPROT"].turn_on,
+            "RXPOFF": self.streams["RXPROT"].turn_off,
+            "LOPROT": self.streams["LOPROT"].turn_on,
+            "LOPOFF": self.streams["LOPROT"].turn_off,
+            "CALON": self.streams["CAL"].turn_on,
+            "CALOFF": self.streams["CAL"].turn_off,
+            "BEAMON": self.streams["BEAM"].turn_on,
+            "BEAMOFF": self.streams["BEAM"].turn_off,
+            "PHA0": self.PHA0,
+            "PHA180": self.PHA180,
             "ALLOFF": self.ALLOFF,
+            "SETTCR": do_nothing,  # Is not handeled here?
+            "BUFLIP": do_nothing,  # Too technical here
+            "STC": do_nothing,  # Too technical here
             }
         # Add receiver channel commands
-        for ch in self.channels:
+        for ch in kst_channels():
             execute_command[ch] = self.streams[ch].turn_on
             execute_command[ch+"OFF"] = self.streams[ch].turn_off
             
+        # Handling Frequencies is not yet implemented
+        # TODO: handle frequencies
+        for f in range(16):
+            freq = f"F{f}"
+            execute_command[freq] = do_nothing
+        
         ''' 
         Silent warnings on setting single bits 4 or 5 in tarnsmit and receive 
         controllers. These go to ADC samplegate, but are not of interest here.
