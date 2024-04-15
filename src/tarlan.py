@@ -12,7 +12,11 @@ from src.tarlanError import TarlanError
 from src.const import km, µs, c
 
 
-
+def do_nothing(*args):
+    """Dont delete. This function is needed for executing tarlan commands that 
+       cant be simulated/transferred or where is would not make sense to 
+       implement the function here."""
+    pass
 
 
 class Command:
@@ -135,9 +139,9 @@ class Tarlan():
         commands["F" + str(i)] = "Set transmitter frequency, bit 0-3 high"
     for i in range(1,7):
         commands["CH" + str(i)] = \
-            "Open sampling gate on the referenced channel board, bit 10-15 high"
+            f"Open sampling gate on the referenced channel board, bit {i+9} high"
         commands["CH" + str(i) + "OFF"] = \
-            "Close sampling gate on the referenced channel board, bit 10-15 low"
+            f"Close sampling gate on the referenced channel board, bit {i+9} low"
     
     def __init__(self, file_name: str = ""):
         """
@@ -255,6 +259,8 @@ class Tarlan():
             CH = "CH"+str(i)
             if self.streams[CH].is_on:
                 self.streams[CH].turn_off(time, line)
+    
+    
                 
     def exec_cmd(self, cmd: Command):
         """
@@ -274,59 +280,30 @@ class Tarlan():
         execute_command = {
             "RFON": self.streams["RF"].turn_on,
             "RFOFF": self.streams["RF"].turn_off,
-            # "CH1": self.streams["CH1"].turn_on,
-            # "CH1OFF": self.streams["CH1"].turn_off,
             "ALLOFF": self.ALLOFF,
             }
         for ch in self.channels:
             execute_command[ch] = self.streams[ch].turn_on
             execute_command[ch+"OFF"] = self.streams[ch].turn_off
+        ''' 
+        Silent warnings on setting single bits 4 or 5 in tarnsmit and receive 
+        controllers. These go to ADC samplegate, but are not of interest here.
+        '''
+        for i in [4, 5]:
+            for d in ["R", "T"]:
+                execute_command[f"B{d}X{i}"] = do_nothing
+                execute_command[f"B{d}X{i}OFF"] = do_nothing
+            
         
         
         
         
         if cmd.cmd in execute_command.keys():
             execute_command[cmd.cmd](self.TCR + cmd.t, cmd.line)
-        # else:
-            # warnings.warn(f"In line {cmd.line}, '{cmd.cmd}' is called, but the"
-                          # f" TARLAN execution library has not implemented it.")
-        # if hasattr(self, cmd.cmd):
-        #     function = getattr(self, cmd.cmd)
-        #     function(self.TCR + cmd.t, cmd.line)
         else:
             print(f"Command {cmd.cmd}, called from line {cmd.line} ",
                   "is not implemented yet")
-        # if cmd.cmd == "RFON":
-        #     self.streams["RF"].turn_on(self.TCR + cmd.t, cmd.line)
-        # elif cmd.cmd == "RFOFF":
-        #     self.streams["RF"].turn_off(self.TCR + cmd.t, cmd.line)    
-        # elif cmd.cmd == "CH1":
-        #     self.streams["CH1"].turn_on(self.TCR + cmd.t, cmd.line)
-        # elif cmd.cmd == "CH1OFF":
-        #     self.streams["CH1"].turn_off(self.TCR + cmd.t, cmd.line)
-        # elif cmd.cmd == "ALLOFF":
-        #     self.ALLOFF(self.TCR + cmd.t, cmd.line)
-            
-
-    
-    # def RFON(self, t, l):
-    #     """Enable RF output, bit 11 high"""
-    #     self.streams["RF"].turn_on(t, l)
-    # def RFOFF(self, t, l):
-    #     "Disable RF output, bit 11 low"
-    #     self.streams["RF"].turn_off(t, l)
-    # def CH1(self, t, l):
-    #     "Open sampling gate on channel 1, bit 10 high"
-    #     self.streams["CH1"].turn_on(t, l)
-    # def CH1OFF(self, t, l):
-    #     "Open sampling gate on channel 1, bit 10 low"
-    #     self.streams["CH1"].turn_off(t, l)
-    # def RXPROT(self, t, l):
-    #     "Enable receiver protector, bit 12 high"
-    #     self.streams["RXPROT"].turn_on(t, l)
-    # def RXPOFF(self, t, l):
-    #     "Disable receiver protector, bit 12 low"
-    #     self.streams["RXPROT"].turn_off(t, l)
+ 
     
         
 def parse_line(line: str, line_number: int = 0) -> list[Command]:
