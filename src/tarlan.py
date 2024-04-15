@@ -4,33 +4,12 @@
 from bisect import insort_left
 from typing import Self
 
-if __name__ == '__main__':
-    import sys
-    sys.path.append("..") # Adds current directory to python modules path.
 from src.experiment import Experiment
-from src.timeInterval import TimeInterval
+from src.tarlanIntervals import IntervalList
+from src.tarlanError import TarlanError
 from src.const import km, µs, c
 
 
-class TarlanError(Exception):
-    """
-    Exception raised when there are errors in parsing a tarlan file
-    """
-    def __init__(self, msg: str, line_number: int = 0):
-        """
-        
-        :param msg: Error message
-        :type msg: str
-        :param line_number: Line number in tlam file. Zero for no line / single 
-            command 
-        :type line_number: int
-
-        """
-        if line_number > 0:
-            super().__init__("The .tlan file has errors in line", line_number, 
-                             ":", msg)
-        else:
-            super().__init__("The TARLAN command has errors:", msg)
 
 
 
@@ -60,10 +39,14 @@ class Command:
         self.line = line
         
     def __lt__(self, other: Self) -> bool:
+        # Is used for sorting. Therefore only the time matters
         return self.t < other.t
     
     def __repr__(self):
-        return f"Command({self.line}: {self.t}, {self.cmd})"
+        return f'Command({self.t}, "{self.cmd}", {self.line})'
+    
+    def __str__(self):
+        return f"{self.line}: {self.t/µs} {self.cmd}"
     
 class Subcycle:
     """
@@ -87,181 +70,42 @@ class Subcycle:
         Add command to subcycle. 
         :param cmd: command
         :type cmd: str
+        :raises ValueError: if command is above start of subcycle in the tlan 
+            file
 
         """
+        if cmd.line > 0 and cmd.line < self.startline:
+            raise ValueError(f"The inserted command is from line {cmd.line},"
+                             " above the start line {self.startline} of the"
+                             " subcycle!")
+
         insort_left(self.commands, cmd)
-        
-class DataStreams:
-    """
-    Contain intervals for when data streams are enabled. 
-    Intervals may be open in contrast to TimeInterval, which must contain 
-    closed intervals
-    """
-    
-    def __init__(self, name: str):
-        """
-        
-        :param name: Name of datastream
-        :type name: str
-
-        """
-        self.name = name
-        self._streams = []
-    
-    @property
-    def state(self) -> bool:
-        """
-        
-        :raises RuntimeError: if the last stream contains more than one on and 
-            off value(should never happen, but who knows...)
-        :return: state (on/off) of data stream.
-        :rtype: bool
-
-        """
-        
-        if len(self._streams) == 0:
-            on = False
-        elif len(self._streams[-1]) == 0:
-            on = False
-        elif len(self._streams[-1]) == 1:
-            on = True
-        elif len(self._streams[-1]) == 2:
-            on = False
-        else:
-            raise RuntimeError("There is something bad with the streams:"+
-                               str(self._streams))
-        return on
-    
-    @property
-    def is_off(self) -> bool:
-        """
-        If stream is turned off
-        
-        :type: bool
-
-        """
-        return not self.state
-    
-    @property
-    def is_on(self) -> bool:
-        """
-        If stream is turned on
-        
-        :type: bool
-
-        """
-        return self.state
-    
-    def turn_on(self, time: float, line: int) -> None:
-        """
-        Turns on data stream
-        
-        :param time: time at which to turn on the stream
-        :type time: float
-        :param line: line in the tlan file. Used for error handling only.
-        :type line: int
-        :raises TarlanError: if stream is on already
-
-        """
-        if self.is_off:
-            self._streams.append([time])
-        else:
-            raise TarlanError(f"Data stream {self.name} is already on!", line)
-    
-    def turn_off(self, time: float, line: int):
-        """
-        Turns off data stream
-        
-        :param time: time at which to turn off the stream
-        :type time: float
-        :param line: line in the tlan file. Used for error handling only.
-        :type line: int
-        :raises TarlanError: if stream is off already
-
-        """
-        if self.is_on:
-            self._streams[-1].append(time)
-        else:
-            raise TarlanError(f"Data stream {self.name} is already off!", line)
-            
-    @property
-    def nstreams(self) -> int:
-        """
-        Number of streams
-        
-        :type: int
-
-        """
-        return len(self._streams)
-    
-    def __len__(self) -> int:
-        """
-        Number of streams
-        
-        :type: int
-
-        """
-        return self.nstreams
-    
-    @property
-    def intervals(self) -> list[TimeInterval]:
-        """
-        Return the on-time of the streams as a list of TimeIntervals
-        
-        :type: list[TimeInterval]
-
-        """
-        if self.is_on:
-            raise RuntimeError("Stream is on. Cant return open intervals.")
-        iv = []
-        for i in range(self.nstreams):
-            iv.append(TimeInterval(*self._streams[i]))
-        return iv
-
-    @property
-    def last_turn_off(self) -> float:
-        """
-        Last time when the stream was turned off
-        
-        :raises RuntimeError: If there stream has not been turned off yet.
-        :type: float
-
-        """
-        if self.nstreams == 0:
-            raise RuntimeError("Stream has not been turned on yet!")
-        elif self.is_off:
-            return self._streams[-1][1]
-        elif self.nstreams == 1:
-            # Is on too
-            raise RuntimeError("Stream is on, but has not been turned off yet!")
-        else:
-            return self._streams[-2][1]
-            
-            
-                
-            
+                 
             
 class Tarlan():
     """
-    Class for parsing and handling TARLAN commands
+    Class for parsing and handling an TARLAN experiment
     
-    TARLAN commands have function that are written as in the file. When they are run,
-        they need argument `time` as a string. This is the time in time control
-        and time after start of the file (not the time written in the command)
-        that is for SETTCR 0.
+    :param IntervalList cycle: Begin and end of experiment cycle
+    :param IntervalList subycle: Begin and end of experiment subcycles. These
+        are defined by when SETTCR <time> is called.
+    :param dict[str, IntervalList] streams: Dictionary of all on/off times of 
+        the different settings in the radar system controller, among others
+        "RF", "CH1".
+    :param float end_time: Length of tarlan program in seconds.
     """
     
     def __init__(self, file_name: str = ""):
         """
-        Starts reading tlan file
+        Initializing Tarlan(). If .tlan file is specified, it will be loaded.
         
         :param file_name: Path of tlan file to load. No file is loaded if 
             string is empty, defaults to ""
         :type file_name: str, optional
 
         """
-        self.cycle = DataStreams("CYCLE")
-        self.subcycles = DataStreams("SUBCYCLE")
+        self.cycle = IntervalList("CYCLE")
+        self.subcycles = IntervalList("SUBCYCLE")
         
         streams = ["RF"]
         for i in range(1,7):
@@ -270,13 +114,13 @@ class Tarlan():
         # Create streams
         self.streams = dict()
         for stream in streams:
-            self.streams[stream] = DataStreams(stream)
+            self.streams[stream] = IntervalList(stream)
         
         
         # List of when radio frequency transmitting is toggled
-        self._RF = []
-        for i in range(1, 7):
-            setattr(self, f"_CH{i}", [])
+        # self._RF = []
+        # for i in range(1, 7):
+        #     setattr(self, f"_CH{i}", [])
             
         # Time control
         self.TCR = 0
@@ -326,7 +170,7 @@ class Tarlan():
     
     def from_tlan(self, file_name: str = "") -> None:
         """
-        Parse tlan file and run Tarlan.eec_cmd() for all commands.
+        Parse tlan file and run Tarlan.exec_cmd() for all commands.
         
         :param file_name: Path of tlan file to load, defaults to ""
         :type file_name: str, optional
@@ -365,7 +209,12 @@ class Tarlan():
         :type cmd: Command
 
         """
+        if self.cycle.is_off:
+            raise TarlanError("The cycle has not been started!", cmd.line)
         
+        if self.subcycles.is_off:
+            raise TarlanError("No subcycle has not been started!", cmd.line)
+            
         if cmd.cmd == "RFON":
             self.streams["RF"].turn_on(self.TCR + cmd.t, cmd.line)
         elif cmd.cmd == "RFOFF":
@@ -423,7 +272,7 @@ def parse_line(line: str, line_number: int = 0) -> list[Command]:
         commands = [Command(time, "SETTCR", line_number)]
 
     else:
-        raise TarlanError("Line must start with 'AT' or 'SRTTCR'. Use '%' for comments.", line_number)
+        raise TarlanError("Line must start with 'AT' or 'SETTCR'. Use '%' for comments.", line_number)
         
     return commands
         
@@ -447,7 +296,7 @@ def tarlan_parser(filename: str) -> list[Subcycle]:
             cmds = parse_line(line, il+1)
             for cmd in cmds:
                 
-                print(cmd)
+                # print(cmd)
                 if cmd.cmd == "SETTCR":
                     try:
                         cycle.append(subcycle)
