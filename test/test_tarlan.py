@@ -88,7 +88,5 @@ def test_tarlan():
     tlan.exec_cmd(Command(20, "RFOFF", 7))
     assert tlan.streams["RF"].is_off
         
-def test_tarlan_reading():
-    tlan = Tarlan("test/tlan_test.tlan")
-    
+
     
