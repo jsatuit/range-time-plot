@@ -15,19 +15,30 @@ class Experiment:
         self.receive = {}
         self.instruction_cycle = TimeInterval(0,0)
         self.subcycles = []
+        self.other_settings = {}
         
+    def add_setting_time(self, name: str, time: TimeInterval):
         
+        if hasattr(self, name):
+            self.name.append(time)
+        else:
+            # Add setting if not existing
+            if name not in self.other_settings:
+                self.other_settings[name] = []
+                
+            self.other_settings[name].append(time)
+            
     def add_transmit_time(self, time: TimeInterval):
         # TODO: Check for overlapping 
         # TODO: Sort
         self.transmits.append(time)
-    # TODO: Add receiver channels. But here we will have more than one.
     
     def add_receive_time(self, channel: str, time: TimeInterval):
         if channel not in self.receive:
             self.receive[channel] = []
             
         self.receive[channel].append(time)
+        
     def add_subcycle(self, time: TimeInterval):
         self.subcycles.append(time)
     
