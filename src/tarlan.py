@@ -97,6 +97,48 @@ class Tarlan():
     :param float end_time: Length of tarlan program in seconds.
     """
     
+    
+    channels = []
+    "List of available channels"
+    for i in range(1,7):
+        channels.append(f"CH{i}")
+        
+    commands = {
+        "CHQPULS": "High output on bit 31 for 2 us, used for synchronization "+
+            "with external hardware.",
+        "RXPROT": "Enable receiver protector, bit 12 high",
+        "RXPOFF": "Disable receiver protector, bit 12 low",
+        "LOPROT": "Enable local oscillator protector, bit 6 high",
+        "LOPOFF": "Disable local oscillator protector, bit 6 low",
+        "BEAMON": "Enable beam in klystron, bit 13 high",
+        "BEAMOFF": "Disable beam in klystron, bit 13 low",
+        "PHA0": "Set proper phase, bit 4 low",
+        "PHA180": "Set proper phase, bit 4 high",
+        "CALON": "Tromsø and receivers: Enable noise source for calibration, bit 15 high.",
+        "CALOFF": "Tromsø and receivers: Disable noise source, bit 15 low.",
+        "HCALON": "Remote receivers: enable noise source in only horisontal "+
+            "wave guide, high bit 1 high",
+        "HCALOFF": "Remote receivers: disable noise source in only horisontal "+
+            "wave guide, high bit 1 low",
+        "VCALON": "Remote receivers: enable noise source in only vertical "+
+            "wave guide, high bit 1 high",
+        "VCALOFF": "Remote receivers: disable noise source in only vertical "+
+            "wave guide, high bit 1 low",
+        "STC": "Send a interrupt to crate computer to signal that new data are "+
+            "available a needs to be taken care of, bit 8 high strobed.",
+        "BUFLIP": "Change side of buffer memory in channel boards, bit 17 high strobed.",
+        "ALLOFF": "Close sampling gate on all channel boards, bit 10-15 low",
+        "REP": "End of tarlan program/repeat cycle",
+        
+        }
+    for i in range(16):
+        commands["F" + str(i)] = "Set transmitter frequency, bit 0-3 high"
+    for i in range(1,7):
+        commands["CH" + str(i)] = \
+            "Open sampling gate on the referenced channel board, bit 10-15 high"
+        commands["CH" + str(i) + "OFF"] = \
+            "Close sampling gate on the referenced channel board, bit 10-15 low"
+    
     def __init__(self, file_name: str = ""):
         """
         Initializing Tarlan(). If .tlan file is specified, it will be loaded.
@@ -109,7 +151,9 @@ class Tarlan():
         self.cycle = IntervalList("CYCLE")
         self.subcycles = IntervalList("SUBCYCLE")
         
-        streams = ["RF"]
+        streams = ["RF", "RXPROT", "LOPROT"]
+        # for ch in Tarlan.channels:
+        #     streams.append(ch)
         for i in range(1,7):
             streams.append(f"CH{i}")
             
@@ -118,11 +162,6 @@ class Tarlan():
         for stream in streams:
             self.streams[stream] = IntervalList(stream)
         
-        
-        # List of when radio frequency transmitting is toggled
-        # self._RF = []
-        # for i in range(1, 7):
-        #     setattr(self, f"_CH{i}", [])
             
         # Time control
         self.TCR = 0
@@ -156,8 +195,7 @@ class Tarlan():
             raise RuntimeWarning("RF is neither turned on nor off in the instructions!")
         
         # Channel streams
-        for i in range(1, 7):
-            CH = "CH" + str(i)
+        for CH in self.channels:
             if self.streams[CH].is_on:
                 raise RuntimeError(CH + " is not turned off at end of experiment!")
             if len(self.streams[CH]) > 0:
@@ -203,7 +241,16 @@ class Tarlan():
         self.subcycles.turn_off(cmd.t, cmd.line)
         self.cycle.turn_off(cmd.t, cmd.line)
         
-    def ALLOFF(self, time, line):
+    def ALLOFF(self, time: float, line: int):
+        """
+        Turn off signal reception with all channels
+        
+        :param time: time [s]
+        :type time: float
+        :param line: line where the command is found. Used for error handling only.
+        :type line: int
+
+        """
         for i in range(1,7):
             CH = "CH"+str(i)
             if self.streams[CH].is_on:
@@ -225,18 +272,30 @@ class Tarlan():
             
         
         execute_command = {
-            "RFON": self.streams["RF"].turn_on(self.TCR + cmd.t, cmd.line),
-            "RFOFF": self.streams["RF"].turn_off(self.TCR + cmd.t, cmd.line),
-            "CH1": self.streams["CH1"].turn_on(self.TCR + cmd.t, cmd.line),
-            "CH1OFF": self.streams["CH1"].turn_off(self.TCR + cmd.t, cmd.line),
-            "ALLOFF": self.ALLOFF(self.TCR + cmd.t, cmd.line),
+            "RFON": self.streams["RF"].turn_on,
+            "RFOFF": self.streams["RF"].turn_off,
+            # "CH1": self.streams["CH1"].turn_on,
+            # "CH1OFF": self.streams["CH1"].turn_off,
+            "ALLOFF": self.ALLOFF,
             }
-        if cmd.cmd in execute_command.keys():
-            execute_command[cmd.cmd]
-        else:
-            warnings.warn(f"In line {cmd.line}, '{cmd.cmd}' is called, but the"
-                          f" TARLAN execution library has not implemented it.")
+        for ch in self.channels:
+            execute_command[ch] = self.streams[ch].turn_on
+            execute_command[ch+"OFF"] = self.streams[ch].turn_off
         
+        
+        
+        
+        if cmd.cmd in execute_command.keys():
+            execute_command[cmd.cmd](self.TCR + cmd.t, cmd.line)
+        # else:
+            # warnings.warn(f"In line {cmd.line}, '{cmd.cmd}' is called, but the"
+                          # f" TARLAN execution library has not implemented it.")
+        # if hasattr(self, cmd.cmd):
+        #     function = getattr(self, cmd.cmd)
+        #     function(self.TCR + cmd.t, cmd.line)
+        else:
+            print(f"Command {cmd.cmd}, called from line {cmd.line} ",
+                  "is not implemented yet")
         # if cmd.cmd == "RFON":
         #     self.streams["RF"].turn_on(self.TCR + cmd.t, cmd.line)
         # elif cmd.cmd == "RFOFF":
@@ -247,6 +306,28 @@ class Tarlan():
         #     self.streams["CH1"].turn_off(self.TCR + cmd.t, cmd.line)
         # elif cmd.cmd == "ALLOFF":
         #     self.ALLOFF(self.TCR + cmd.t, cmd.line)
+            
+
+    
+    # def RFON(self, t, l):
+    #     """Enable RF output, bit 11 high"""
+    #     self.streams["RF"].turn_on(t, l)
+    # def RFOFF(self, t, l):
+    #     "Disable RF output, bit 11 low"
+    #     self.streams["RF"].turn_off(t, l)
+    # def CH1(self, t, l):
+    #     "Open sampling gate on channel 1, bit 10 high"
+    #     self.streams["CH1"].turn_on(t, l)
+    # def CH1OFF(self, t, l):
+    #     "Open sampling gate on channel 1, bit 10 low"
+    #     self.streams["CH1"].turn_off(t, l)
+    # def RXPROT(self, t, l):
+    #     "Enable receiver protector, bit 12 high"
+    #     self.streams["RXPROT"].turn_on(t, l)
+    # def RXPOFF(self, t, l):
+    #     "Disable receiver protector, bit 12 low"
+    #     self.streams["RXPROT"].turn_off(t, l)
+    
         
 def parse_line(line: str, line_number: int = 0) -> list[Command]:
     """
