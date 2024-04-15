@@ -109,14 +109,6 @@ class Tarlan():
     :param float end_time: Length of tarlan program in seconds.
     """
     
-    
-    
-        
-    frequencies = []
-    """List of avalilable frequencies
-    
-    TODO: Frequencies vary between radars. Must that be implemented?
-    """
         
     commands = {
         "CHQPULS": "High output on bit 31 for 2 us, used for synchronization "+
