@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # from collections import OrderedDict
+import warnings
+
 from bisect import insort_left
 from typing import Self
 
@@ -201,6 +203,12 @@ class Tarlan():
         self.subcycles.turn_off(cmd.t, cmd.line)
         self.cycle.turn_off(cmd.t, cmd.line)
         
+    def ALLOFF(self, time, line):
+        for i in range(1,7):
+            CH = "CH"+str(i)
+            if self.streams[CH].is_on:
+                self.streams[CH].turn_off(time, line)
+                
     def exec_cmd(self, cmd: Command):
         """
         «Execute» TARLAN command / import command to experiment
@@ -213,21 +221,32 @@ class Tarlan():
             raise TarlanError("The cycle has not been started!", cmd.line)
         
         if self.subcycles.is_off:
-            raise TarlanError("No subcycle has not been started!", cmd.line)
+            raise TarlanError("No subcycle has been started yet!", cmd.line)
             
-        if cmd.cmd == "RFON":
-            self.streams["RF"].turn_on(self.TCR + cmd.t, cmd.line)
-        elif cmd.cmd == "RFOFF":
-            self.streams["RF"].turn_off(self.TCR + cmd.t, cmd.line)    
-        elif cmd.cmd == "CH1":
-            self.streams["CH1"].turn_on(self.TCR + cmd.t, cmd.line)
-        elif cmd.cmd == "CH1OFF":
-            self.streams["CH1"].turn_off(self.TCR + cmd.t, cmd.line)
-        elif cmd.cmd == "ALLOFF":
-            for i in range(1,7):
-                CH = "CH"+str(i)
-                if self.streams[CH].is_on:
-                    self.streams[CH].turn_off(self.TCR + cmd.t, cmd.line)
+        
+        execute_command = {
+            "RFON": self.streams["RF"].turn_on(self.TCR + cmd.t, cmd.line),
+            "RFOFF": self.streams["RF"].turn_off(self.TCR + cmd.t, cmd.line),
+            "CH1": self.streams["CH1"].turn_on(self.TCR + cmd.t, cmd.line),
+            "CH1OFF": self.streams["CH1"].turn_off(self.TCR + cmd.t, cmd.line),
+            "ALLOFF": self.ALLOFF(self.TCR + cmd.t, cmd.line),
+            }
+        if cmd.cmd in execute_command.keys():
+            execute_command[cmd.cmd]
+        else:
+            warnings.warn(f"In line {cmd.line}, '{cmd.cmd}' is called, but the"
+                          f" TARLAN execution library has not implemented it.")
+        
+        # if cmd.cmd == "RFON":
+        #     self.streams["RF"].turn_on(self.TCR + cmd.t, cmd.line)
+        # elif cmd.cmd == "RFOFF":
+        #     self.streams["RF"].turn_off(self.TCR + cmd.t, cmd.line)    
+        # elif cmd.cmd == "CH1":
+        #     self.streams["CH1"].turn_on(self.TCR + cmd.t, cmd.line)
+        # elif cmd.cmd == "CH1OFF":
+        #     self.streams["CH1"].turn_off(self.TCR + cmd.t, cmd.line)
+        # elif cmd.cmd == "ALLOFF":
+        #     self.ALLOFF(self.TCR + cmd.t, cmd.line)
         
 def parse_line(line: str, line_number: int = 0) -> list[Command]:
     """

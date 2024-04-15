@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import pytest
+import tempfile
+import os
 
 from src.tarlan import µs, parse_line, TarlanError, Command, Subcycle, Tarlan
 
-import pytest
 
 def test_parse_line():
     
@@ -88,5 +90,38 @@ def test_tarlan():
     tlan.exec_cmd(Command(20, "RFOFF", 7))
     assert tlan.streams["RF"].is_off
         
-
+def test_tarlan_program():
+    tarlan_program = b"""
+    SETTCR 0
+    AT 2 RXPROT,LOPROT
+    AT 30 BEAMON,F5
+    AT 40 RFON
+    AT 220 RFOFF,BEAMOFF
+    AT 230 RXPOFF
+    AT 240 LOPOFF
+    AT 350 CH1
+    AT 1500 ALLOFF
+    SETTCR 1505
+    AT 2 RXPROT,LOPROT
+    AT 30 BEAMON,F5
+    AT 40 RFON
+    AT 220 RFOFF,BEAMOFF
+    AT 230 RXPOFF
+    AT 240 LOPOFF
+    AT 350 CH1
+    AT 1500 ALLOFF
+    SETTCR 0
+    AT 3010 REP
+    """
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".tlan") as file:
+        file.write(tarlan_program)
+    
+    tlan = Tarlan(file.name)
+    os.remove(file.name)
+    
+    exp = tlan.to_exp()
+    assert exp.transmits[0].begin == 40*µs
+    assert exp.transmits[0].end == 220*µs
+    assert exp.transmits[1].begin == (40)*µs
+    assert exp.transmits[1].end == (220)*µs
     
