@@ -6,7 +6,7 @@ import warnings
 from bisect import insort_left
 from typing import Self
 
-from src.experiment import Experiment
+from src.experiment import Experiment, Subcycle
 from src.tarlanIntervals import IntervalList
 from src.tarlanError import TarlanError
 from src.const import km, µs, c
@@ -62,9 +62,10 @@ class Command:
     def __str__(self):
         return f"{self.line}: {self.t/µs} {self.cmd}"
     
-class Subcycle:
+class ParseSubcycle:
     """
-    Lists commands in single subcycle. Commands are sorted after execution time
+    Lists commands in single subcycle. Used for grouping commands from the tlan 
+    file. Commands are sorted after execution time
     """
     
     def __init__(self, start_subcycle: float = 0, line: int = 0) -> None:
@@ -190,44 +191,41 @@ class Tarlan():
 
         """
         exp = Experiment()
-        exp.add_stop_time(self.cycle.last_turn_off)
         
         # RF stream
         if self.streams["RF"].is_on:
             raise RuntimeError("RF is not turned off at end of instructions!")
-        if len(self.streams["RF"]) > 0:
-            for interval in self.streams["RF"].intervals:
-                exp.add_transmit_time(interval)
-        else:
+        if len(self.streams["RF"]) == 0:
             raise RuntimeWarning("RF is neither turned on nor off in the instructions!")
         
         # Channel streams
         for ch in kst_channels():
             if self.streams[ch].is_on:
                 raise RuntimeError(ch + " is not turned off at end of experiment!")
-            if len(self.streams[ch]) > 0:
+        
+        for subcycle_interval in self.subcycles.intervals:
+            print(subcycle_interval)
+            subcycle = Subcycle(subcycle_interval.begin, subcycle_interval.end)
+            for interval in self.streams["RF"].intervals:
+                subcycle.add_time("transmission", interval)
+            for ch in kst_channels():
                 for interval in self.streams[ch].intervals:
-                    exp.add_receive_time(ch, interval)
-        
-        for interval in self.subcycles.intervals:
-            exp.add_subcycle(interval)
-        
-        for stream in self.streams:
-            # Transmit and receive streams have been handeled already
-            if stream in ["RF", "+", "-"] or stream.startswith("CH"):
-                continue
-            
-            if self.streams[stream].is_on:
-                raise RuntimeError(
-                    f"{stream} is not turned off at end of instructions!"
-                    )
-            
-            if len(stream) == 0:
-                continue
-            for interval in self.streams[stream].intervals:
-                exp.add_setting_time(stream, interval)
-            
+                    subcycle.add_time(ch, interval)
+            for stream in self.streams:
+                # Transmit and receive streams have been handeled already
+                if stream in ["RF", "+", "-"] or stream.startswith("CH"):
+                    continue
                 
+                if self.streams[stream].is_on:
+                    raise RuntimeError(
+                        f"{stream} is not turned off at end of instructions!"
+                        )
+                
+                if len(stream) == 0:
+                    continue
+                for interval in self.streams[stream].intervals:
+                    subcycle.add_time(stream, interval)
+            exp.add_subcycle(subcycle)
         
         return exp
     
@@ -417,16 +415,16 @@ def parse_line(line: str, line_number: int = 0) -> list[Command]:
         
     return commands
         
-def tarlan_parser(filename: str) -> list[Subcycle]:
+def tarlan_parser(filename: str) -> list[ParseSubcycle]:
     """
     Parse tlan file by running parse_line for every line of code. Commands are
-        grouped in Subcycle objects
+        grouped in ParseSubcycle objects
     
     :param filename: Path to tlan file, defaults to ""
     :type filename: str
     :raises FileNotFoundError: when file is not found / does not exist
     :return: commands grouped in Subcycles.
-    :rtype: list[Subcycle]
+    :rtype: list[ParseSubcycle]
 
     """
     
@@ -443,7 +441,7 @@ def tarlan_parser(filename: str) -> list[Subcycle]:
                         cycle.append(subcycle)
                     except NameError:
                         pass
-                    subcycle = Subcycle(cmd.t, cmd.line)
+                    subcycle = ParseSubcycle(cmd.t, cmd.line)
                 subcycle.add_command(cmd)
                 if cmd.cmd == "REP":
                     cycle.append(subcycle)
