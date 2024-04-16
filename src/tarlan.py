@@ -259,7 +259,10 @@ class Tarlan():
             for cmd in subcycle.commands:
                 if cmd.cmd == "REP":
                     break
-                self.exec_cmd(cmd)
+                if cmd.cmd == "SETTCR":
+                    self.SETTCR(cmd.t, cmd.line)
+                else:
+                    self.exec_cmd(cmd)
         if cmd.cmd != "REP":
             raise TarlanError("The program stopped with other command than 'REP'", cmd.line)
         self.subcycles.turn_off(cmd.t, cmd.line)
@@ -295,6 +298,10 @@ class Tarlan():
             
         if self.streams["-"].is_off:
             self.streams["-"].turn_on(time, line)
+            
+    def SETTCR(self, time: float, line: int):
+        "Set reference time in time control"
+        self.TCR = time
         
                 
     def exec_cmd(self, cmd: Command):
@@ -326,7 +333,7 @@ class Tarlan():
             "PHA0": self.PHA0,
             "PHA180": self.PHA180,
             "ALLOFF": self.ALLOFF,
-            "SETTCR": do_nothing,  # Is not handeled here?
+            "SETTCR": do_nothing,  # Is not handeled here!
             "BUFLIP": do_nothing,  # Too technical here
             "STC": do_nothing,  # Too technical here
             }
@@ -342,7 +349,7 @@ class Tarlan():
             execute_command[freq] = do_nothing
         
         ''' 
-        Silent warnings on setting single bits 4 or 5 in tarnsmit and receive 
+        Silent warnings on setting single bits 4 or 5 in transmit and receive 
         controllers. These go to ADC samplegate, but are not of interest here.
         '''
         for i in [4, 5]:
@@ -355,6 +362,7 @@ class Tarlan():
         
         
         if cmd.cmd in execute_command.keys():
+            # print(self.TCR, cmd.t)
             execute_command[cmd.cmd](self.TCR + cmd.t, cmd.line)
         else:
             print(f"Command {cmd.cmd}, called from line {cmd.line} ",
