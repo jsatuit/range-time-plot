@@ -1,15 +1,16 @@
-# range-time-plot
+# range-time-ploter of TARLAN files
 
-or tarlan plotter?
-
-Python package for showing a range-time-plot for an ISR experiment. Try first EISCAT TARLAN files.
+Python package for showing a range-time-plot for an EISCAT experiment. Try first EISCAT TARLAN files.
 
 
 
 
 # Running
-python3 -m src/rtp.py 
+python3 src/rtp.py
+
 ## Dependencies
 - Python 3.11 or newer
 - numpy 
 - matplotlib
+
+Tests are run with pytest
