@@ -1,6 +1,6 @@
-# range-time-ploter of TARLAN files
+# range-time-plotter of TARLAN files
 
-Python package for showing a range-time-plot for an EISCAT experiment. Try first EISCAT TARLAN files.
+Python package for showing a range-time-plot for an EISCAT experiment. 
 
 
 
