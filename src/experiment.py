@@ -15,6 +15,7 @@ class Subcycle:
     def __init__(self, begin: float = 0, end: Union[float, bool] = False):
         self.transmits = []
         self.receive = {}
+        self.rx_protection = []
         self.prop = {}
         
         self._begin = begin
@@ -59,12 +60,14 @@ class Subcycle:
             if channel not in self.receive:
                 self.receive[channel] = []
             self.receive[channel].append(time)
+        elif "prot" in name:
+            self.rx_protection.append(time)
         else:
             if name not in self.prop:
                 self.prop[name] = []
             self.prop[name].append(time)
             
-    def plot(self):
+    def plot(self, show_rec_if_send: bool = True):
         
         plot_interval = TimeInterval(self.begin, self.end)
         
@@ -76,7 +79,11 @@ class Subcycle:
         cols = ["black", "red", "green", "orange", "brown", "grey"]
         for i, receives in enumerate(self.receive.values()):
             for receive in receives:
-                rtp.plot_receive(receive, plot_interval, color=cols[i])
+                if not receive.within_any(self.rx_protection):
+                    print(receive, self.rx_protection)
+                    rtp.plot_receive(receive, plot_interval, color=cols[i])
+                else:
+                    print("noplot")
             
         # Hard-coded, not good, but as long as we have no reception, 
         # we cant do better...
