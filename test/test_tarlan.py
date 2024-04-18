@@ -4,7 +4,7 @@ import pytest
 import tempfile
 import os
 
-from src.tarlan import µs, parse_line, TarlanError, Command, Subcycle, Tarlan
+from src.tarlan import µs, parse_line, TarlanError, Command, ParseSubcycle, Tarlan
 
 
 def test_parse_line():
@@ -39,7 +39,7 @@ def test_command():
     assert str(cmd2) == "39: 135.0 ALLOFF"
     
 def test_subcycle():
-    s = Subcycle(line = 2)
+    s = ParseSubcycle(line = 2)
     
     assert s.start == 0
     assert s.startline == 2
@@ -120,8 +120,8 @@ def test_tarlan_program():
     os.remove(file.name)
     
     exp = tlan.to_exp()
-    assert exp.transmits[0].begin == 40*µs
-    assert exp.transmits[0].end == 220*µs
-    assert exp.transmits[1].begin == (40)*µs
-    assert exp.transmits[1].end == (220)*µs
+    assert exp.subcycles[0].transmits[0].begin == pytest.approx(40*µs)
+    assert exp.subcycles[0].transmits[0].end == pytest.approx(220*µs)
+    assert exp.subcycles[1].transmits[0].begin == pytest.approx((40 + 1505)*µs)
+    assert exp.subcycles[1].transmits[0].end == pytest.approx((220 + 1505)*µs)
     

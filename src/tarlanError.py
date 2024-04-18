@@ -17,8 +17,8 @@ class TarlanError(Exception):
 
         """
         if line_number > 0:
-            super().__init__("The .tlan file has errors in line", line_number, 
-                             ":", msg)
+            super().__init__("The .tlan file has errors in line " \
+                             + str(line_number) + ":", msg)
         else:
             super().__init__("The TARLAN command has errors:", msg)
 

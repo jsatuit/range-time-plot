@@ -19,6 +19,9 @@ class IntervalList:
         """
         self.name = name
         self._streams = []
+        
+    def __repr__(self):
+        return str(self.__dict__)
     
     @property
     def state(self) -> bool:
@@ -124,7 +127,7 @@ class IntervalList:
 
         """
         if self.is_on:
-            raise RuntimeError("Stream is on. Cant return open intervals.")
+            raise RuntimeError(f"Stream '{self.name}' is on. Cant return open intervals.")
         iv = []
         for i in range(self.nstreams):
             iv.append(TimeInterval(*self._streams[i]))
@@ -136,7 +139,7 @@ class IntervalList:
         Last time when the stream was turned off
         
         :raises RuntimeError: If there stream has not been turned off yet.
-        :type: float
+        :rtype: float
 
         """
         if self.nstreams == 0:
@@ -148,4 +151,44 @@ class IntervalList:
             raise RuntimeError("Stream is on, but has not been turned off yet!")
         else:
             return self._streams[-2][1]
+    
+    @property
+    def last_turn_on(self) -> float:
+        """
+        Last time when the stream was turned on
+        
+        :raises RuntimeError: If there stream has not been turned on yet.
+        :rtype: float
+
+        """
+        if self.nstreams == 0:
+            raise RuntimeError("Stream has not been turned on yet!")
+        return self._streams[-1][0]
+        
+    def delete_open_interval(self):
+        """
+        Delete last interval with ontime if the stream is on.
+        """
+        if self.is_on:
+            self._streams.pop(-1)
    
+class TarlanSubcycle(IntervalList):
+    def __init__(self):
+        super().__init__("SUBCYCLE")
+        self.data_intervals = []
+    def turn_off(self, time: float, line: int, datastreams: dict):
+        # Check for open streams
+        for stream in datastreams.keys():
+            if datastreams[stream].is_on:
+                print(datastreams[stream])
+                msg = datastreams[stream].name\
+                    + " has not been turned off at end of subcycle! It was "\
+                    + "turned on at time " \
+                    + str(datastreams[stream].last_turn_on)
+                raise TarlanError(msg, line)
+        
+        super().turn_off(time, line)
+        self.data_intervals.append(datastreams)
+        
+    
+        
