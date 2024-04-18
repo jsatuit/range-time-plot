@@ -204,16 +204,7 @@ class Tarlan():
             exp.add_subcycle(subcycle)
         
         return exp
-    def cmds_from_tlan(self, filename: str = "") -> list[Command]:
-        cmd_list = []
-        with open(filename) as file:
-            for il, line in enumerate(file):
-                cmds = parse_line(line, il+1)
-                for cmd in cmds:
-                    cmd_list.append(cmd)
-                    if cmd.cmd == "REP":
-                        break
-        return cmd_list
+
                     
     def from_tlan(self, filename: str = "") -> None:
         """
@@ -223,7 +214,7 @@ class Tarlan():
         :type file_name: str, optional
         
         """
-        cmd_list = self.cmds_from_tlan(filename)
+        cmd_list = tarlan_parser(filename)
         
         for cmd in cmd_list:
             
@@ -405,35 +396,25 @@ def parse_line(line: str, line_number: int = 0) -> list[Command]:
         
     return commands
         
-def tarlan_parser(filename: str) -> list[ParseSubcycle]:
+
+def tarlan_parser(filename: str = "") -> list[Command]:
     """
-    Parse tlan file by running parse_line for every line of code. Commands are
-        grouped in ParseSubcycle objects
+    Parse tlan file. Commands are returned in the same order as they appear in 
+    the file.
     
-    :param filename: Path to tlan file, defaults to ""
+    :param filename: filename, defaults to ""
     :type filename: str
-    :raises FileNotFoundError: when file is not found / does not exist
-    :return: commands grouped in Subcycles.
-    :rtype: list[ParseSubcycle]
+    :return: list of Command objects
+    :rtype: list[Command]
 
     """
-    
-    cycle = []
-    
+    cmd_list = []
     with open(filename) as file:
         for il, line in enumerate(file):
             cmds = parse_line(line, il+1)
             for cmd in cmds:
-                
-                # print(cmd)
-                if cmd.cmd == "SETTCR":
-                    try:
-                        cycle.append(subcycle)
-                    except NameError:
-                        pass
-                    subcycle = ParseSubcycle(cmd.t, cmd.line)
-                subcycle.add_command(cmd)
+                cmd_list.append(cmd)
                 if cmd.cmd == "REP":
-                    cycle.append(subcycle)
                     break
-    return cycle
+    return cmd_list
+
