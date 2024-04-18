@@ -150,18 +150,36 @@ class TimeInterval:
         return any([self.within(iv) for iv in other])
     
 class TimeIntervalList(list):
-    def listof(self, attr):
+    """
+    A hack of base python list class for simpler calling of properties of each 
+    TimeInterval in the list.
+    """
+    def listof(self, attr: str):
+        """
+        Return list of the attribute `attr` of each TimeInterval.
+        
+        See other functions for examples.
+        """
         return [getattr(iv, attr) for iv in self]
     
     @property
-    def lengths(self):
+    def lengths(self) -> list[float]:
+        """
+        list with length of each TimeInterval
+        """
         return self.listof("length")
     
     @property
-    def begins(self):
+    def begins(self) -> list[float]:
+        """
+        list with begin of each TimeInterval
+        """
         return self.listof("begin")
         
     @property
-    def ends(self):
+    def ends(self) -> list[float]:
+        """
+        list with end of each TimeInterval
+        """
         return self.listof("end")
         

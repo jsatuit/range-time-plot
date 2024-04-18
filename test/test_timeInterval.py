@@ -3,7 +3,7 @@
 
 import pytest
 
-from src.timeInterval import TimeInterval, OverlapError
+from src.timeInterval import TimeInterval, TimeIntervalList, OverlapError
 
 
 def test_invalid_generation():
@@ -69,8 +69,16 @@ def test_interval():
     assert tic.within(tib)
     assert tic.within(tic)
     
-    
-
-# Test «normal» interval
-
 # Test overlapping
+
+def test_interval_list():
+    tia = TimeInterval(1, 2)
+    tib = TimeInterval(0, 4)
+    tic = TimeInterval(2, 4)
+    tl = TimeIntervalList((tia, tib, tic))
+    assert tl[0] == tia
+    assert tl[1] == tib
+    assert tl[2] == tic
+    assert tl.lengths == [1, 4, 2]
+    assert tl.begins == [1, 0, 2]
+    assert tl.ends == [2, 4, 4]
