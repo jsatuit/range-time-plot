@@ -234,6 +234,8 @@ class Tarlan():
                 # All other subcycles except for that SETTCR that appears 
                 # directly before REP command at the end of the file
                 elif cmd.t != 0:
+                    # Turn off phase shifts (# TODO: at RF turnoff)
+                    self.PHA_OFF(cmd.t, cmd.line)
                     self.subcycles.turn_off(cmd.t, cmd.line, self.streams)
                     
                     # Delete connection to last subcycle streams¨
@@ -242,6 +244,7 @@ class Tarlan():
                     self.subcycles.turn_on(cmd.t, cmd.line)
                 self.SETTCR(cmd.t, cmd.line)
             elif cmd.cmd == "REP":
+                self.PHA_OFF(cmd.t, cmd.line)
                 self.subcycles.turn_off(cmd.t, cmd.line, self.streams)
                 self.cycle.turn_off(cmd.t, cmd.line)
             else:
@@ -278,6 +281,15 @@ class Tarlan():
         if self.streams["-"].is_off:
             self.streams["-"].turn_on(time, line)
             
+    def PHA_OFF(self, time: float, line: int):
+        """
+        Turn off phase shifts. This is not a TARLAN command, but needed to 
+        able to plot phase shifts later.
+        """
+        for ps in ["+", "-"]:
+            if self.streams[ps].is_on:
+                self.streams[ps].turn_off(time, line)
+            
     def SETTCR(self, time: float, line: int):
         "Set reference time in time control"
         self.TCR = time
@@ -309,8 +321,8 @@ class Tarlan():
             "CALOFF": self.streams["CAL"].turn_off,
             "BEAMON": self.streams["BEAM"].turn_on,
             "BEAMOFF": self.streams["BEAM"].turn_off,
-            "PHA0": do_nothing,#self.PHA0,
-            "PHA180": do_nothing,#self.PHA180,
+            "PHA0": self.PHA0,
+            "PHA180": self.PHA180,
             "ALLOFF": self.ALLOFF,
             "SETTCR": do_nothing,  # Is not handeled here!
             "BUFLIP": do_nothing,  # Too technical here
