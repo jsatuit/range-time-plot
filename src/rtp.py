@@ -122,7 +122,7 @@ def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     # Plot end of pulse
     plt.plot(line2x/µs, line2y/km, **kwargs)
     
-    plt.xlim((plot_interval/µs).as_tuple)
+    plot_xlims(plot_interval)
     plt.xlabel("Time [µs]")
     plt.ylabel("Range [km]")
 
@@ -131,6 +131,16 @@ def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     ax.xaxis.set_minor_formatter("{x:.0f}")
     ax.tick_params(which = 'major', pad = 15)
     ax.tick_params(which = 'minor', grid_linewidth = 2, pad = 0)
+    
+def plot_xlims(plot_interval):
+    plt.xlim((plot_interval/µs).as_tuple)
+    
+def plot_setting(name, bar_lengths, bars_begin_at, plot_interval, **kwargs):
+    plt.barh(name, np.asarray(bar_lengths)/µs, left=np.asarray(bars_begin_at)/µs)
+    plot_xlims(plot_interval)
+    plt.xlabel("Time [µs]")
+
+    
 def plot_add_range_label(r):
     """
     Adds a label to a certain range as a minor tick
