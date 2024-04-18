@@ -21,7 +21,7 @@ class IntervalList:
         self._streams = []
         
     def __repr__(self):
-        return str(self.__dict__)
+        return f"IntervalList({self.name}, {self._streams})"
     
     @property
     def state(self) -> bool:
@@ -173,10 +173,26 @@ class IntervalList:
             self._streams.pop(-1)
    
 class TarlanSubcycle(IntervalList):
+    """
+    IntervalList which contains streams of each subcycle. These have to be 
+    added when stream is turned off.
+    """
     def __init__(self):
         super().__init__("SUBCYCLE")
         self.data_intervals = []
     def turn_off(self, time: float, line: int, datastreams: dict):
+        """
+        Stop subcycle
+        
+        :param time: time at which to turn off the stream
+        :type time: float
+        :param line: line in the tlan file. Used for error handling only.
+        :type line: int
+        :param datastreams: dictionary of stream name – stream IntervalList pairs
+        :type datastreams: dict
+        :raises TarlanError: if stream is off already
+
+        """
         # Check for open streams
         for stream in datastreams.keys():
             if datastreams[stream].is_on:
