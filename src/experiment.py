@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from typing import Union
 
 from src import rtp
-from src.timeInterval import TimeInterval
+from src.timeInterval import TimeInterval, TimeIntervalList
 from src.const import km, µs, c
 
 class Subcycle:
@@ -13,7 +13,7 @@ class Subcycle:
     follow?
     """
     def __init__(self, begin: float = 0, end: Union[float, bool] = False):
-        self.transmits = []
+        self.transmits = TimeIntervalList()
         self.receive = {}
         self.rx_protection = []
         self.prop = {}
@@ -58,7 +58,7 @@ class Subcycle:
             channel = int(name[2:])
             
             if channel not in self.receive:
-                self.receive[channel] = []
+                self.receive[channel] = TimeIntervalList()
             self.receive[channel].append(time)
         elif "prot" in name:
             self.rx_protection.append(time)
@@ -71,7 +71,8 @@ class Subcycle:
         
         plot_interval = TimeInterval(self.begin, self.end)
         
-        plt.figure()
+        plt.figure(layout="constrained")
+        plt.subplot(2,1,1)
         plt.grid(which = 'major')
         for transmit in self.transmits:
             rtp.plot_transmit(transmit, plot_interval)
@@ -80,19 +81,29 @@ class Subcycle:
         for i, receives in enumerate(self.receive.values()):
             for receive in receives:
                 if not receive.within_any(self.rx_protection):
-                    print(receive, self.rx_protection)
                     rtp.plot_receive(receive, plot_interval, color=cols[i])
-                else:
-                    print("noplot")
             
-        # Hard-coded, not good, but as long as we have no reception, 
+        # Hard-coded, not good, but as long as we have no baud length, 
         # we cant do better...
+        # rmins = []
+        # rmaxs = []
+        # for transmit in self.transmits:
+        #     for receives in self.receive.values():
+        #         for receive in receives:
+        #             rmins.append(rtp.calc_nearest_range(transmit, receive))
+        #             rmaxs.append(rtp.calc_furthest_range(transmit, receive))
+        # plt.ylim(0, max(rmaxs))
         plt.ylim(0, 1000)
-        # for ch in self.receive_channels:
-        #     for receive in ch:
-        #             plot_receive(receive, self.instruction_cycle)
+        
         # plot_add_range_label(rmin)
         # plot_add_range_label(rmax)
+        
+        plt.subplot(2,1,2)
+        rtp.plot_setting("RF", self.transmits.lengths, self.transmits.begins, 
+                         plot_interval)
+        for i, (ch, receives) in enumerate(self.receive.items()):
+            rtp.plot_setting("CH"+str(ch), receives.lengths, receives.begins, 
+                             plot_interval, color = cols[i])
         
 class Experiment:
     """
