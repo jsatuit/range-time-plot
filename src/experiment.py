@@ -20,6 +20,7 @@ class Subcycle:
         
         self._begin = begin
         self._end = end
+        self.name = ""
         
     @property
     def end(self):
@@ -110,15 +111,19 @@ class Subcycle:
         for name, iv in self.prop.items():
             expplot.plot_setting(name, iv.lengths, iv.begins, plot_interval)
         
+        plt.suptitle(self.name)
+        
 class Experiment:
     """
     Handling timings for transmitter and receiver channels
     """
-    def __init__(self):
+    def __init__(self, name: str = ""):
         self.subcycles = []
+        self.name = name
         
     def add_subcycle(self, subcycle: Subcycle):
         self.subcycles.append(subcycle)
+        self.subcycles[-1].name = f"{self.name}: subcycle {len(self.subcycles)}"
     
     
     # def plot(self, subcycle: int = 1):

@@ -15,6 +15,7 @@ can run. More infortmation can be found at
 https://eiscat.se/scientist/user-documentation/radar-controllers-and-programming-for-the-kst-system/
 """
 import warnings
+import os
 
 from bisect import insort_left
 from typing import Self
@@ -160,7 +161,7 @@ class Tarlan():
         commands[ch + "OFF"] = \
             f"Close sampling gate on the referenced channel board, bit {i+9} low"
     
-    def __init__(self, file_name: str = ""):
+    def __init__(self, filename: str = ""):
         """
         Initializing Tarlan(). If .tlan file is specified, it will be loaded.
         
@@ -182,8 +183,8 @@ class Tarlan():
         self.TCR = 0
         self.end_time = 0
         
-        if file_name:
-            self.from_tlan(file_name)
+        if filename:
+            self.from_tlan(filename)
     
     def _init_streams(self):
         # Create streams
@@ -202,7 +203,7 @@ class Tarlan():
         :rtype: Experiment
 
         """
-        exp = Experiment()
+        exp = Experiment(os.path.basename(self.filename).split(".")[0])
 
         for i, subcycle_interval in enumerate(self.subcycles.intervals):
             # print(subcycle_interval)
@@ -223,8 +224,8 @@ class Tarlan():
         """
         Parse tlan file and run Tarlan.exec_cmd() for all commands.
         
-        :param file_name: Path of tlan file to load, defaults to ""
-        :type file_name: str, optional
+        :param filename: Path of tlan file to load, defaults to ""
+        :type filename: str, optional
         
         """
         cmd_list = tarlan_parser(filename)
@@ -262,6 +263,7 @@ class Tarlan():
                 self.cycle.turn_off(cmd.t, cmd.line)
             else:
                 self.exec_cmd(cmd)
+        self.filename = filename
         
     def ALLOFF(self, time: float, line: int):
         """
