@@ -50,7 +50,7 @@ class Subcycle:
         name = name.casefold()
         
         
-        if name in ["transmission", "t"]:
+        if name in ["transmission", "t", "rf"]:
             self.transmits.append(time)
         elif name.startswith("ch"):
             

@@ -7,7 +7,7 @@ from bisect import insort_left
 from typing import Self
 
 from src.experiment import Experiment, Subcycle
-from src.tarlanIntervals import IntervalList
+from src.tarlanIntervals import IntervalList, TarlanSubcycle
 from src.tarlanError import TarlanError
 from src.const import km, µs, c
 
@@ -157,19 +157,13 @@ class Tarlan():
 
         """
         self.cycle = IntervalList("CYCLE")
-        self.subcycles = IntervalList("SUBCYCLE")
+        # self.subcycles = IntervalList("SUBCYCLE")
+        self.subcycles = TarlanSubcycle()
         
-        streams = ["RF", "RXPROT", "LOPROT", "CAL", "BEAM", "+", "-"]
-        # for ch in Tarlan.channels:
-        #     streams.append(ch)
-        for i in range(1,7):
-            streams.append(f"CH{i}")
-            
-        # Create streams
-        self.streams = dict()
-        for stream in streams:
-            self.streams[stream] = IntervalList(stream)
-        
+        self.stream_names = ["RF", "RXPROT", "LOPROT", "CAL", "BEAM", "+", "-"]
+        for ch in kst_channels():
+            self.stream_names.append(ch)
+        self._init_streams()
             
         # Time control
         self.TCR = 0
@@ -177,7 +171,12 @@ class Tarlan():
         
         if file_name:
             self.from_tlan(file_name)
-            
+    
+    def _init_streams(self):
+        # Create streams
+        self.streams = dict()
+        for stream in self.stream_names:
+            self.streams[stream] = IntervalList(stream)
 
     def to_exp(self) -> Experiment:
         """
@@ -191,80 +190,71 @@ class Tarlan():
 
         """
         exp = Experiment()
-        
-        # RF stream
-        if self.streams["RF"].is_on:
-            raise RuntimeError("RF is not turned off at end of instructions!")
-        if len(self.streams["RF"]) == 0:
-            raise RuntimeWarning("RF is neither turned on nor off in the instructions!")
-        
-        # Channel streams
-        for ch in kst_channels():
-            if self.streams[ch].is_on:
-                raise RuntimeError(ch + " is not turned off at end of experiment!")
-        
-        for subcycle_interval in self.subcycles.intervals:
-            print(subcycle_interval)
+
+        for i, subcycle_interval in enumerate(self.subcycles.intervals):
+            # print(subcycle_interval)
             subcycle = Subcycle(subcycle_interval.begin, subcycle_interval.end)
-            for interval in self.streams["RF"].intervals:
-                subcycle.add_time("transmission", interval)
-            for ch in kst_channels():
-                for interval in self.streams[ch].intervals:
-                    subcycle.add_time(ch, interval)
-            for stream in self.streams:
-                # Transmit and receive streams have been handeled already
-                if stream in ["RF", "+", "-"] or stream.startswith("CH"):
-                    continue
-                
-                if self.streams[stream].is_on:
-                    raise RuntimeError(
-                        f"{stream} is not turned off at end of instructions!"
-                        )
-                
+            
+            for stream in self.subcycles.data_intervals[i]:
                 if len(stream) == 0:
                     continue
-                for interval in self.streams[stream].intervals:
+                for interval in self.subcycles.data_intervals[i][stream].intervals:
                     subcycle.add_time(stream, interval)
+            
             exp.add_subcycle(subcycle)
         
         return exp
-    
-    
-    def from_tlan(self, file_name: str = "") -> None:
+    def cmds_from_tlan(self, filename: str = "") -> list[Command]:
+        cmd_list = []
+        with open(filename) as file:
+            for il, line in enumerate(file):
+                cmds = parse_line(line, il+1)
+                for cmd in cmds:
+                    cmd_list.append(cmd)
+                    if cmd.cmd == "REP":
+                        break
+        return cmd_list
+                    
+    def from_tlan(self, filename: str = "") -> None:
         """
         Parse tlan file and run Tarlan.exec_cmd() for all commands.
         
         :param file_name: Path of tlan file to load, defaults to ""
         :type file_name: str, optional
-
+        
         """
-        cycle = tarlan_parser(file_name)
+        cmd_list = self.cmds_from_tlan(filename)
         
-        self.cycle.turn_on(cycle[0], cycle[0].startline)
-        self.subcycles.turn_on(cycle[0].start, cycle[0].startline)
-        
-        for subcycle in cycle:
+        for cmd in cmd_list:
             
-            # First subcycle has already been started. No need to restart.
-            # Last reset of timecontrol is to close subcycle, but not to start 
-            # a new one. Also here, SETTCR 0 is called.
-            if subcycle.start != 0:
-                # Close last subcycle
-                self.subcycles.turn_off(subcycle.start, subcycle.startline)
-                # Open next subcycle
-                self.subcycles.turn_on(subcycle.start, subcycle.startline)
+            """ Use SETTCR as start and stop of subcycles
+            Use SETTCR 0 as start and as continuation of subcycle
+            SETTCR 0 is therefore only allowed in two cases: In start or 
+            directly before REP. Else, subcycles will be merged without at 
+            wrong places.
+            """
+            if cmd.cmd == "SETTCR":
                 
-            for cmd in subcycle.commands:
-                if cmd.cmd == "REP":
-                    break
-                if cmd.cmd == "SETTCR":
-                    self.SETTCR(cmd.t, cmd.line)
-                else:
-                    self.exec_cmd(cmd)
-        if cmd.cmd != "REP":
-            raise TarlanError("The program stopped with other command than 'REP'", cmd.line)
-        self.subcycles.turn_off(cmd.t, cmd.line)
-        self.cycle.turn_off(cmd.t, cmd.line)
+                # First subcycle
+                if self.cycle.is_off:
+                    self.cycle.turn_on(cmd.t, cmd.line)
+                    self.subcycles.turn_on(cmd.t, cmd.line)
+                
+                # All other subcycles except for that SETTCR that appears 
+                # directly before REP command at the end of the file
+                elif cmd.t != 0:
+                    self.subcycles.turn_off(cmd.t, cmd.line, self.streams)
+                    
+                    # Delete connection to last subcycle streams¨
+                    self._init_streams()
+                    
+                    self.subcycles.turn_on(cmd.t, cmd.line)
+                self.SETTCR(cmd.t, cmd.line)
+            elif cmd.cmd == "REP":
+                self.subcycles.turn_off(cmd.t, cmd.line, self.streams)
+                self.cycle.turn_off(cmd.t, cmd.line)
+            else:
+                self.exec_cmd(cmd)
         
     def ALLOFF(self, time: float, line: int):
         """
@@ -328,8 +318,8 @@ class Tarlan():
             "CALOFF": self.streams["CAL"].turn_off,
             "BEAMON": self.streams["BEAM"].turn_on,
             "BEAMOFF": self.streams["BEAM"].turn_off,
-            "PHA0": self.PHA0,
-            "PHA180": self.PHA180,
+            "PHA0": do_nothing,#self.PHA0,
+            "PHA180": do_nothing,#self.PHA180,
             "ALLOFF": self.ALLOFF,
             "SETTCR": do_nothing,  # Is not handeled here!
             "BUFLIP": do_nothing,  # Too technical here
