@@ -205,9 +205,9 @@ class Tarlan():
         """
         exp = Experiment(os.path.basename(self.filename).split(".")[0])
 
-        for i, subcycle_interval in enumerate(self.subcycles.intervals):
+        for i, interval in enumerate(self.subcycles.intervals):
             # print(subcycle_interval)
-            subcycle = Subcycle(subcycle_interval.begin, subcycle_interval.end)
+            subcycle = Subcycle(interval.begin, interval.end)
             
             for stream in self.subcycles.data_intervals[i]:
                 if len(stream) == 0:
