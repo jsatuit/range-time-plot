@@ -8,21 +8,6 @@ if __name__ == '__main__':
 from src.timeInterval import TimeInterval
 from src.const import km, µs, c
 
-
-class Experiment:
-    """
-    Handling timings for transmitter and receiver channels
-    """
-    def __init__(self):
-        self.transmits = []
-        self.receive_channels = []
-    def add_transmit_time(self,time):
-        # TODO: Check for overlapping 
-        # TODO: Sort
-        self.transmits += [time]
-    # TODO: Add receiver channels. But here we will have more than one.
-
-
 def calc_nearest_range(tx_interval: TimeInterval, rx_interval: TimeInterval, 
                        baud_length: float, v: float = c) -> float:
     """
@@ -133,9 +118,25 @@ def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     ax.tick_params(which = 'minor', grid_linewidth = 2, pad = 0)
     
 def plot_xlims(plot_interval):
+    """Set limits of x axis. """
     plt.xlim((plot_interval/µs).as_tuple)
     
 def plot_setting(name, bar_lengths, bars_begin_at, plot_interval, **kwargs):
+    """
+    Plot setting of radar.
+    
+    :param name: name of setting
+    :type name: str
+    :param bar_lengths: Lengths of bars
+    :type bar_lengths: list or numpy array
+    :param bars_begin_at: Position where bars begin
+    :type bars_begin_at: list or numpy array
+    :param plot_interval: X axis limits
+    :type plot_interval: TimeInterval
+    
+    Other (keyword) arguments go directly to plotting function
+
+    """
     plt.barh(name, np.asarray(bar_lengths)/µs, left=np.asarray(bars_begin_at)/µs)
     plot_xlims(plot_interval)
     plt.xlabel("Time [µs]")

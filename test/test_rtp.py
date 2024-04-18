@@ -5,7 +5,7 @@ Created on Fri Apr  5 08:48:01 2024
 
 @author: jsatuit
 """
-from src import rtp
+from src import expplot as rtp
 import src.timeInterval as ti
 import pytest
 
