@@ -148,3 +148,20 @@ class TimeInterval:
 
         """
         return any([self.within(iv) for iv in other])
+    
+class TimeIntervalList(list):
+    def listof(self, attr):
+        return [getattr(iv, attr) for iv in self]
+    
+    @property
+    def lengths(self):
+        return self.listof("length")
+    
+    @property
+    def begins(self):
+        return self.listof("begin")
+        
+    @property
+    def ends(self):
+        return self.listof("end")
+        
