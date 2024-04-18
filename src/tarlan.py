@@ -1,6 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # from collections import OrderedDict
+"""
+The Transmit And Receiver LANguage (TARLAN) is the language for the radar controllers
+at the EISCAT mainland radars, that are EISCAT UHF and VHF, including receivers
+in Kiruna and Sodankylä.
+
+The radar controller controls most of the physical radar equipment, that is 
+phase shifting, beams, transmittion, reception, but not antenna steering or 
+signal processing.
+
+The dictionary `Tarlan.commands` gives an overview over the commands the system
+can run. More infortmation can be found at
+https://eiscat.se/scientist/user-documentation/radar-controllers-and-programming-for-the-kst-system/
+"""
 import warnings
 
 from bisect import insort_left
@@ -234,8 +247,8 @@ class Tarlan():
                 # All other subcycles except for that SETTCR that appears 
                 # directly before REP command at the end of the file
                 elif cmd.t != 0:
-                    # Turn off phase shifts (# TODO: at RF turnoff)
-                    self.PHA_OFF(cmd.t, cmd.line)
+                    # Turn off phase shifts at RF turnoff
+                    self.PHA_OFF(self.streams["RF"].last_turn_off, cmd.line)
                     self.subcycles.turn_off(cmd.t, cmd.line, self.streams)
                     
                     # Delete connection to last subcycle streams¨
