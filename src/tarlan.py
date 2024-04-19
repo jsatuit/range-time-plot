@@ -20,7 +20,6 @@ import os
 from bisect import insort_left
 from typing import Self
 
-from src.experiment import Experiment, Subcycle
 from src.tarlanIntervals import IntervalList, TarlanSubcycle
 from src.tarlanError import TarlanError
 from src.const import km, µs, c
@@ -171,8 +170,8 @@ class Tarlan():
 
         """
         self.cycle = IntervalList("CYCLE")
-        # self.subcycles = IntervalList("SUBCYCLE")
-        self.subcycles = TarlanSubcycle()
+        # self.subcycle_list = IntervalList("SUBCYCLE")
+        self.subcycle_list = TarlanSubcycle()
         
         self.stream_names = ["RF", "RXPROT", "LOPROT", "CAL", "BEAM", "+", "-"]
         for ch in kst_channels():
@@ -191,33 +190,6 @@ class Tarlan():
         self.streams = dict()
         for stream in self.stream_names:
             self.streams[stream] = IntervalList(stream)
-
-    def to_exp(self) -> Experiment:
-        """
-        Convert loaded tarlan input to Experiment
-        
-        :raises RuntimeError: If radar controller is not resetted correctly 
-            at end of file.
-        :raises RuntimeWarning: if transmitter is constantly off.
-        :return: object containing experiment information and plotting functions.
-        :rtype: Experiment
-
-        """
-        exp = Experiment(os.path.basename(self.filename).split(".")[0])
-
-        for i, interval in enumerate(self.subcycles.intervals):
-            # print(subcycle_interval)
-            subcycle = Subcycle(interval.begin, interval.end)
-            
-            for stream in self.subcycles.data_intervals[i]:
-                if len(stream) == 0:
-                    continue
-                for interval in self.subcycles.data_intervals[i][stream].intervals:
-                    subcycle.add_time(stream, interval)
-            
-            exp.add_subcycle(subcycle)
-        
-        return exp
 
                     
     def from_tlan(self, filename: str = "") -> None:
@@ -243,23 +215,23 @@ class Tarlan():
                 # First subcycle
                 if self.cycle.is_off:
                     self.cycle.turn_on(cmd.t, cmd.line)
-                    self.subcycles.turn_on(cmd.t, cmd.line)
+                    self.subcycle_list.turn_on(cmd.t, cmd.line)
                 
                 # All other subcycles except for that SETTCR that appears 
                 # directly before REP command at the end of the file
                 elif cmd.t != 0:
                     # Turn off phase shifts at RF turnoff
                     self.PHA_OFF(self.streams["RF"].last_turn_off, cmd.line)
-                    self.subcycles.turn_off(cmd.t, cmd.line, self.streams)
+                    self.subcycle_list.turn_off(cmd.t, cmd.line, self.streams)
                     
                     # Delete connection to last subcycle streams¨
                     self._init_streams()
                     
-                    self.subcycles.turn_on(cmd.t, cmd.line)
+                    self.subcycle_list.turn_on(cmd.t, cmd.line)
                 self.SETTCR(cmd.t, cmd.line)
             elif cmd.cmd == "REP":
                 self.PHA_OFF(cmd.t, cmd.line)
-                self.subcycles.turn_off(cmd.t, cmd.line, self.streams)
+                self.subcycle_list.turn_off(cmd.t, cmd.line, self.streams)
                 self.cycle.turn_off(cmd.t, cmd.line)
             else:
                 self.exec_cmd(cmd)
@@ -321,7 +293,7 @@ class Tarlan():
         if self.cycle.is_off:
             raise TarlanError("The cycle has not been started!", cmd.line)
         
-        if self.subcycles.is_off:
+        if self.subcycle_list.is_off:
             raise TarlanError("No subcycle has been started yet!", cmd.line)
             
         #### Implement TARLAN commands from here ####

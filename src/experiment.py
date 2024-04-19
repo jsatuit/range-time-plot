@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
+
 import matplotlib.pyplot as plt
 from typing import Union
 
 from src import expplot
+from src.tarlan import Tarlan
 from src.timeInterval import TimeInterval, TimeIntervalList
 from src.const import km, µs, c
 
@@ -125,7 +128,39 @@ class Experiment:
         self.subcycles.append(subcycle)
         self.subcycles[-1].name = f"{self.name}: subcycle {len(self.subcycles)}"
     
-    
+    @classmethod
+    def from_eiscat_kst(cls, filename: str):
+        """
+        Load experiment file and convert to Experiment.
+        
+        :param filename: Path of tlan file to load.
+        :type filename: str
+        :raises RuntimeError: If radar controller is not resetted correctly 
+            at end of file.
+        :raises RuntimeWarning: if transmitter is constantly off.
+        :return: Object containing properties of the experiment.
+        :rtype: Experiment
+
+        """
+        exp = cls(os.path.basename(filename).split(".")[0])
+        
+        tlan = Tarlan(filename)
+        
+        for i, interval in enumerate(tlan.subcycle_list.intervals):
+            subcycle = Subcycle(interval.begin, interval.end)
+            
+            for stream in tlan.subcycle_list.data_intervals[i]:
+                if len(stream) == 0:
+                    continue
+                for interval in tlan.subcycle_list.data_intervals[i][stream].intervals:
+                    subcycle.add_time(stream, interval)
+            
+            exp.add_subcycle(subcycle)
+
+        
+        return exp
+        
+        
     # def plot(self, subcycle: int = 1):
         
     #     if subcycle <= 0 and subcycle > len(self.subcycles):
