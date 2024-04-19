@@ -14,9 +14,6 @@ The dictionary `Tarlan.commands` gives an overview over the commands the system
 can run. More infortmation can be found at
 https://eiscat.se/scientist/user-documentation/radar-controllers-and-programming-for-the-kst-system/
 """
-import warnings
-import os
-
 from bisect import insort_left
 from typing import Self
 
