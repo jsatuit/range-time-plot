@@ -229,6 +229,8 @@ class Tarlan():
             elif cmd.cmd == "REP":
                 self.PHA_OFF(cmd.t, cmd.line)
                 self.subcycle_list.turn_off(cmd.t, cmd.line, self.streams)
+                # Delete connection to last subcycle streams
+                self._init_streams()
                 self.cycle.turn_off(cmd.t, cmd.line)
             else:
                 self.exec_cmd(cmd)

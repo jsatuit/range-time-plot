@@ -70,7 +70,7 @@ def test_subcycle():
 def test_tarlan():
     tlan = Tarlan()
     assert tlan.cycle.is_off
-    assert tlan.subcycles.is_off
+    assert tlan.subcycle_list.is_off
     for stream in tlan.streams.values():
         assert stream.is_off
     
@@ -80,9 +80,9 @@ def test_tarlan():
         tlan.exec_cmd(Command(1*µs, "CHQPULS", 3))
     
     tlan.cycle.turn_on(0, 1)
-    tlan.subcycles.turn_on(0, 1)
+    tlan.subcycle_list.turn_on(0, 1)
     assert tlan.cycle.is_on
-    assert tlan.subcycles.is_on
+    assert tlan.subcycle_list.is_on
     
     assert tlan.streams["RF"].is_off
     tlan.exec_cmd(Command(10, "RFON", 7))
@@ -119,9 +119,9 @@ def test_tarlan_program():
     tlan = Tarlan(file.name)
     os.remove(file.name)
     
-    exp = tlan.to_exp()
-    assert exp.subcycles[0].transmits[0].begin == pytest.approx(40*µs)
-    assert exp.subcycles[0].transmits[0].end == pytest.approx(220*µs)
-    assert exp.subcycles[1].transmits[0].begin == pytest.approx((40 + 1505)*µs)
-    assert exp.subcycles[1].transmits[0].end == pytest.approx((220 + 1505)*µs)
+    subcycle_streams = tlan.subcycle_list.data_intervals
+    subcycle_streams[0]["RF"].intervals[0].begin == pytest.approx(40*µs)
+    subcycle_streams[0]["RF"].intervals[0].end == pytest.approx(220*µs)
+    subcycle_streams[1]["RF"].intervals[0].begin == pytest.approx((40 + 1505)*µs)
+    subcycle_streams[1]["RF"].intervals[0].end == pytest.approx((220 + 1505)*µs)
     
