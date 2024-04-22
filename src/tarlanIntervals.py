@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from src.tarlanError import TarlanError
-from src.timeInterval import TimeInterval
+from src.timeInterval import TimeInterval, TimeIntervalList
 
 class IntervalList:
     """
@@ -119,7 +119,7 @@ class IntervalList:
         return self.nstreams
     
     @property
-    def intervals(self) -> list[TimeInterval]:
+    def intervals(self) -> TimeIntervalList:
         """
         Return the on-time of the streams as a list of TimeIntervals
         
@@ -128,7 +128,7 @@ class IntervalList:
         """
         if self.is_on:
             raise RuntimeError(f"Stream '{self.name}' is on. Cant return open intervals.")
-        iv = []
+        iv = TimeIntervalList()
         for i in range(self.nstreams):
             iv.append(TimeInterval(*self._streams[i]))
         return iv
