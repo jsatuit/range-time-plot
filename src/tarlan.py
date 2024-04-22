@@ -221,8 +221,8 @@ class Tarlan():
                 # All other subcycles except for that SETTCR that appears 
                 # directly before REP command at the end of the file
                 elif cmd.t != 0:
-                    # Turn off phase shifts at RF turnoff
-                    self.PHA_OFF(self.streams["RF"].last_turn_off, cmd.line)
+                    # Turn off phase shifts at end of subcycle
+                    self.PHA_OFF(cmd.t, cmd.line)
                     self.subcycle_list.turn_off(cmd.t, cmd.line, self.streams)
                     
                     # Delete connection to last subcycle streams
