@@ -135,6 +135,7 @@ class Tarlan():
         "PHA0": "Set proper phase, bit 4 low",
         "PHA180": "Set proper phase, bit 4 high",
         "CALON": "Tromsø and receivers: Enable noise source for calibration, bit 15 high.",
+        "CAL100": "Not documented. Propably same as CALON",
         "CALOFF": "Tromsø and receivers: Disable noise source, bit 15 low.",
         "HCALON": "Remote receivers: enable noise source in only horisontal "+
             "wave guide, high bit 1 high",
@@ -295,6 +296,7 @@ class Tarlan():
             "LOPROT": self.streams["LOPROT"].turn_on,
             "LOPOFF": self.streams["LOPROT"].turn_off,
             "CALON": self.streams["CAL"].turn_on,
+            "CAL100": self.streams["CAL"].turn_on,
             "CALOFF": self.streams["CAL"].turn_off,
             "BEAMON": self.streams["BEAM"].turn_on,
             "BEAMOFF": self.streams["BEAM"].turn_off,
