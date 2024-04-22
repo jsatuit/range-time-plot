@@ -123,7 +123,7 @@ class Tarlan():
     """
     
         
-    commands = {
+    command_docs = {
         "CHQPULS": "High output on bit 31 for 2 us, used for synchronization "+
             "with external hardware.",
         "RXPROT": "Enable receiver protector, bit 12 high",
@@ -152,11 +152,11 @@ class Tarlan():
         
         }
     for i in range(16):
-        commands["F" + str(i)] = "Set transmitter frequency, bit 0-3 high"
+        command_docs["F" + str(i)] = "Set transmitter frequency, bit 0-3 high"
     for ch in kst_channels():
-        commands[ch] = \
+        command_docs[ch] = \
             f"Open sampling gate on the referenced channel board, bit {i+9} high"
-        commands[ch + "OFF"] = \
+        command_docs[ch + "OFF"] = \
             f"Close sampling gate on the referenced channel board, bit {i+9} low"
     
     def __init__(self, filename: str = ""):
@@ -176,6 +176,8 @@ class Tarlan():
         for ch in kst_channels():
             self.stream_names.append(ch)
         self._init_streams()
+        self._generate_commands()
+        self._check_command_docs()
             
         # Time control
         self.TCR = 0
@@ -282,23 +284,10 @@ class Tarlan():
         "Set reference time in time control"
         self.TCR = time
         
-                
-    def exec_cmd(self, cmd: Command):
-        """
-        «Execute» TARLAN command / import command to experiment
         
-        :param cmd: command as pasrsed from the file.
-        :type cmd: Command
-
-        """
-        if self.cycle.is_off:
-            raise TarlanError("The cycle has not been started!", cmd.line)
-        
-        if self.subcycle_list.is_off:
-            raise TarlanError("No subcycle has been started yet!", cmd.line)
-            
+    def _generate_commands(self):
         #### Implement TARLAN commands from here ####
-        execute_command = {
+        commands = {
             "RFON": self.streams["RF"].turn_on,
             "RFOFF": self.streams["RF"].turn_off,
             "RXPROT": self.streams["RXPROT"].turn_on,
@@ -318,14 +307,14 @@ class Tarlan():
             }
         # Add receiver channel commands
         for ch in kst_channels():
-            execute_command[ch] = self.streams[ch].turn_on
-            execute_command[ch+"OFF"] = self.streams[ch].turn_off
+            commands[ch] = self.streams[ch].turn_on
+            commands[ch+"OFF"] = self.streams[ch].turn_off
             
         # Handling Frequencies is not yet implemented
         # TODO: handle frequencies
         for f in range(16):
             freq = f"F{f}"
-            execute_command[freq] = do_nothing
+            commands[freq] = do_nothing
         
         ''' 
         Silent warnings on setting single bits 4 or 5 in transmit and receive 
@@ -333,16 +322,39 @@ class Tarlan():
         '''
         for i in [4, 5]:
             for d in ["R", "T"]:
-                execute_command[f"B{d}X{i}"] = do_nothing
-                execute_command[f"B{d}X{i}OFF"] = do_nothing
-        #### Implement TARLAN commands to here ####    
+                commands[f"B{d}X{i}"] = do_nothing
+                commands[f"B{d}X{i}OFF"] = do_nothing
+        #### Implement TARLAN commands to here ####  
+        self.commands = commands
+        
+    def _check_command_docs(self):
+        # Check that all commands have docstring
+        for cmd in self.commands.keys():
+            if cmd not in self.command_docs.keys():
+                print("Command", cmd, "has no docstring!")
         
         
+    def exec_cmd(self, cmd: Command):
+        """
+        «Execute» TARLAN command / import command to experiment
         
+        :param cmd: command as pasrsed from the file.
+        :type cmd: Command
+
+        """
+        if self.cycle.is_off:
+            raise TarlanError("The cycle has not been started!", cmd.line)
         
-        if cmd.cmd in execute_command.keys():
+        if self.subcycle_list.is_off:
+            raise TarlanError("No subcycle has been started yet!", cmd.line)
+            
+        # Has to be done again and again because python does some strange 
+        # function saving?
+        self._generate_commands()
+            
+        if cmd.cmd in self.commands.keys():
             # print(self.TCR, cmd.t)
-            execute_command[cmd.cmd](self.TCR + cmd.t, cmd.line)
+            self.commands[cmd.cmd](self.TCR + cmd.t, cmd.line)
         else:
             print(f"Command {cmd.cmd}, called from line {cmd.line} ",
                   "is not implemented yet")
