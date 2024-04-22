@@ -12,8 +12,13 @@ from src.experiment import Experiment
               required = True, 
               default = 9
 )
-def main(path):
+@click.argument("subcycle",
+                type = int,
+                required = False,
+                default = 1,
+                )
+def main(path, subcycle):
     print(f"Loading and plotting experiment {path}")
-    Experiment.from_eiscat_kst(path).subcycles[0].plot()
+    Experiment.from_eiscat_kst(path).subcycles[subcycle-1].plot()
     plt.show()
 
