@@ -57,22 +57,24 @@ def calc_furthest_full_range(tx_interval: TimeInterval, rx_interval: TimeInterva
     
     return r
 
-def plot_transmit(tx_interval: TimeInterval, plot_interval: TimeInterval, **kwargs):
+def plot_transmit(ax, tx_interval: TimeInterval, plot_interval: TimeInterval, **kwargs):
     """
     Plots transmit beam position
     
+    :param matplotlib.axes._axes.Axes ax: Axes object to plot into
     :param signal_interval: Interval of signal being transmitted
     :param plot_interval: Axis limits of time axis
     
     Other keyword arguments go to plotting punctions
     
     """
-    plot_t_r(tx_interval, plot_interval, v=c, color='blue', **kwargs)
+    plot_t_r(ax, tx_interval, plot_interval, v=c, color='blue', **kwargs)
     
-def plot_receive(rx_interval, plot_interval, **kwargs):
+def plot_receive(ax, rx_interval, plot_interval, **kwargs):
     """
     Plots receive beam position
     
+    :param matplotlib.axes._axes.Axes ax: Axes object to plot into
     :param TimeInterval signal_interval: Interval of signal being received
     :param TimeInterval plot_interval: Axis limits of time axis
     
@@ -82,12 +84,13 @@ def plot_receive(rx_interval, plot_interval, **kwargs):
     if not "color" in kwargs:
         kwargs["color"] = "red"
     
-    plot_t_r(rx_interval, plot_interval, v=c, d = -1, **kwargs)
+    plot_t_r(ax, rx_interval, plot_interval, v=c, d = -1, **kwargs)
     
-def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
+def plot_t_r(ax, signal_interval, plot_interval, v=c, d = 1, **kwargs):
     """
     Plots transmit or receive beam position
     
+    :param matplotlib.axes._axes.Axes ax: Axes object to plot into
     :param TimeInterval signal_interval: Interval of signal being transmitted/received
     :param TimeInterval plot_interval: Axis limits of time axis
     :param float or int, optional v: Velocity of beam, default light speed
@@ -102,29 +105,30 @@ def plot_t_r(signal_interval, plot_interval, v=c, d = 1, **kwargs):
     
     line2x = signal_interval.end + np.array((0 , d*plot_interval.length))
     line2y = np.array((0 , plot_interval.length*v))
-    # Plot beginning of pulse
-    plt.plot(line1x/µs, line1y/km, **kwargs)
-    # Plot end of pulse
-    plt.plot(line2x/µs, line2y/km, **kwargs)
-    
-    plot_xlims(plot_interval)
-    plt.xlabel("Time [µs]")
-    plt.ylabel("Range [km]")
 
-    ax = plt.gca()
+    # Plot beginning of pulse
+    ax.plot(line1x/µs, line1y/km, **kwargs)
+    # Plot end of pulse
+    ax.plot(line2x/µs, line2y/km, **kwargs)
+    
+    plot_xlims(ax, plot_interval)
+    ax.xaxis.set_label("Time [µs]")
+    ax.yaxis.set_label("Range [km]")
+
     ax.yaxis.set_minor_formatter("{x:.0f}")
     ax.xaxis.set_minor_formatter("{x:.0f}")
     ax.tick_params(which = 'major', pad = 15)
     ax.tick_params(which = 'minor', grid_linewidth = 2, pad = 0)
     
-def plot_xlims(plot_interval):
+def plot_xlims(ax, plot_interval):
     """Set limits of x axis. """
-    plt.xlim((plot_interval/µs).as_tuple)
+    ax.set_xlim((plot_interval/µs).as_tuple)
     
-def plot_setting(name, bar_lengths, bars_begin_at, plot_interval, **kwargs):
+def plot_setting(ax, name, bar_lengths, bars_begin_at, plot_interval, **kwargs):
     """
     Plot setting of radar.
     
+    :param matplotlib.axes._axes.Axes ax: Axes object to plot into
     :param name: name of setting
     :type name: str
     :param bar_lengths: Lengths of bars
@@ -137,30 +141,28 @@ def plot_setting(name, bar_lengths, bars_begin_at, plot_interval, **kwargs):
     Other (keyword) arguments go directly to plotting function
 
     """
-    plt.barh(name, np.asarray(bar_lengths)/µs, 
+    ax.barh(name, np.asarray(bar_lengths)/µs, 
              left=np.asarray(bars_begin_at)/µs, **kwargs)
-    plot_xlims(plot_interval)
-    plt.xlabel("Time [µs]")
+    plot_xlims(ax, plot_interval)
+    ax.xaxis.set_label("Time [µs]")
 
     
-def plot_add_range_label(r):
+def plot_add_range_label(ax, r):
     """
     Adds a label to a certain range as a minor tick
     
     :param float r: range [m]
 
     """
-    ax = plt.gca()
     mt = ax.get_yticks(minor = True)
     ax.set_yticks(np.hstack([mt, r/km]), minor = True)
-def plot_add_time_label(t):
+def plot_add_time_label(ax, t):
     """
     Adds a label to a certain time as a minor tick
     
     :param float t: time [s]
 
     """
-    ax = plt.gca()
     mt = ax.get_xticks(minor = True)
     ax.set_xticks(np.hstack([mt, t/µs]), minor = True) 
 

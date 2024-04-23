@@ -71,21 +71,24 @@ class Subcycle:
                 self.prop[name] = TimeIntervalList()
             self.prop[name].append(time)
             
-    def plot(self, show_rec_if_send: bool = True):
+    def plot(self, ax = None) -> None:
         
         plot_interval = TimeInterval(self.begin, self.end)
         
-        plt.figure(layout="constrained")
-        plt.subplot(2,1,1)
-        plt.grid(which = 'major')
+        if ax is None:
+            fig = plt.figure(layout="constrained")
+            ax = fig.subplots(2, sharex=True, squeeze=True)
+            fig.suptitle(self.name)
+        # plt.subplot(2,1,1)
+        ax[0].grid(which = 'major')
         for transmit in self.transmits:
-            expplot.plot_transmit(transmit, plot_interval)
+            expplot.plot_transmit(ax[0], transmit, plot_interval)
         
         cols = ["black", "red", "green", "orange", "brown", "grey"]
         for i, receives in enumerate(self.receive.values()):
             for receive in receives:
                 if not receive.within_any(self.rx_protection):
-                    expplot.plot_receive(receive, plot_interval, color=cols[i])
+                    expplot.plot_receive(ax[0], receive, plot_interval, color=cols[i])
             
         # Hard-coded, not good, but as long as we have no baud length, 
         # we cant do better...
@@ -97,24 +100,24 @@ class Subcycle:
         #             rmins.append(rtp.calc_nearest_range(transmit, receive))
         #             rmaxs.append(rtp.calc_furthest_range(transmit, receive))
         # plt.ylim(0, max(rmaxs))
-        plt.ylim(0, 1000)
+        ax[0].set_ylim(0, 1000)
         
         # plot_add_range_label(rmin)
         # plot_add_range_label(rmax)
         
-        plt.subplot(2,1,2)
-        expplot.plot_setting("RF", self.transmits.lengths, self.transmits.begins, 
+        # plt.subplot(2,1,2)
+        expplot.plot_setting(ax[1], "RF", self.transmits.lengths, self.transmits.begins, 
                          plot_interval)
         for i, (ch, receives) in enumerate(self.receive.items()):
-            expplot.plot_setting("CH"+str(ch), receives.lengths, receives.begins, 
+            expplot.plot_setting(ax[1], "CH"+str(ch), receives.lengths, receives.begins, 
                              plot_interval, color = cols[i])
         if self.rx_protection:
-            expplot.plot_setting("Rx protector", self.rx_protection.lengths,
+            expplot.plot_setting(ax[1], "Rx protector", self.rx_protection.lengths,
                              self.rx_protection.begins, plot_interval)
         for name, iv in self.prop.items():
-            expplot.plot_setting(name, iv.lengths, iv.begins, plot_interval)
+            expplot.plot_setting(ax[1], name, iv.lengths, iv.begins, plot_interval)
         
-        plt.suptitle(self.name)
+        fig.savefig("data/test.png")
         
 class Experiment:
     """
