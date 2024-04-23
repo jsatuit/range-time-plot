@@ -117,7 +117,6 @@ class Subcycle:
         for name, iv in self.prop.items():
             expplot.plot_setting(ax[1], name, iv.lengths, iv.begins, plot_interval)
         
-        fig.savefig("data/test.png")
         
 class Experiment:
     """
