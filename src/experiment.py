@@ -3,6 +3,7 @@
 import os
 
 import matplotlib.pyplot as plt
+
 from typing import Union
 
 from src.expplot import Expplot
@@ -96,8 +97,7 @@ class Subcycle:
 
         # ax[0].set_ylim(0, 1000)
 
-        # expplot.plot_setting(ax[1], "RF", self.transmits.lengths, self.transmits.begins, 
-        #                  plot_interval)
+        plot.state("RF", self.transmits.lengths, self.transmits.begins)
         # for i, (ch, receives) in enumerate(self.receive.items()):
         #     expplot.plot_setting(ax[1], "CH"+str(ch), receives.lengths, receives.begins, 
         #                      plot_interval, color = cols[i])
@@ -106,6 +106,7 @@ class Subcycle:
         #                      self.rx_protection.begins, plot_interval)
         # for name, iv in self.prop.items():
         #     expplot.plot_setting(ax[1], name, iv.lengths, iv.begins, plot_interval)
+        plot.xlim()
         
         
 class Experiment:

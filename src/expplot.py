@@ -89,7 +89,7 @@ class Expplot:
         if interval is None:
             interval = self.plot_interval
             
-        for ax in self.axes:
+        for ax in self.ax:
             self.ax[0].set_xlim((interval/µs).as_tuple)
         
         
@@ -161,7 +161,7 @@ class Expplot:
         """
         self.add_beam(interval, v=c, transmit=False, **kwargs)   
         
-    def plot_setting(self, name: str, bar_lengths: Union[list, np.ndarray], 
+    def state(self, name: str, bar_lengths: Union[list, np.ndarray], 
                      bars_begin_at: Union[list, np.ndarray], **kwargs):
         """
         Plot setting of radar.
