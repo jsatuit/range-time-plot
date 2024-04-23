@@ -137,7 +137,8 @@ def plot_setting(name, bar_lengths, bars_begin_at, plot_interval, **kwargs):
     Other (keyword) arguments go directly to plotting function
 
     """
-    plt.barh(name, np.asarray(bar_lengths)/µs, left=np.asarray(bars_begin_at)/µs)
+    plt.barh(name, np.asarray(bar_lengths)/µs, 
+             left=np.asarray(bars_begin_at)/µs, **kwargs)
     plot_xlims(plot_interval)
     plt.xlabel("Time [µs]")
 
