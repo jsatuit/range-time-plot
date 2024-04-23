@@ -64,9 +64,12 @@ class Expplot:
     An interface to matplotlib specialised for plotting experiments 
     (transmit/receive beams)
     """
-    def __init__(self, plot_interval: TimeInterval):
+    def __init__(self, plot_interval: TimeInterval, rmax: float = 1e6):
         self.fig = plt.figure()
         self.ax = self.fig.subplots(2, sharex=True, squeeze=True)
+        self.ax[0].grid(which = 'major')
+        self.ax[0].set_ylim(0, rmax/km)
+        self.ax[1].invert_yaxis()
         self.plot_interval = plot_interval
     
     def title(self, title: str):

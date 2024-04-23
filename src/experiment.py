@@ -76,16 +76,8 @@ class Subcycle:
     def plot(self, ax = None) -> None:
         
         plot = Expplot(TimeInterval(self.begin, self.end))
-        
-        
-        # plot_interval = TimeInterval(self.begin, self.end)
-        
-        # if ax is None:
-        #     fig = plt.figure(layout="constrained")
-        #     ax = fig.subplots(2, sharex=True, squeeze=True)
-        #     fig.suptitle(self.name)
-        # plt.subplot(2,1,1)
-        # ax[0].grid(which = 'major')
+
+        # Make range-time plot
         for transmit in self.transmits:
             plot.transmit(transmit)
         
@@ -95,9 +87,7 @@ class Subcycle:
                 if not receive.within_any(self.rx_protection):
                     plot.receive(receive, color = cols[i])
             
-
-        # ax[0].set_ylim(0, 1000)
-
+        # Plot state properties of experiemen
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
         for i, (ch, receives) in enumerate(self.receive.items()):
             plot.state("CH"+str(ch), receives.lengths, receives.begins) 
