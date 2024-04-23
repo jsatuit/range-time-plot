@@ -88,11 +88,11 @@ class Subcycle:
         for transmit in self.transmits:
             plot.plot_transmit(transmit)
         
-        # cols = ["black", "red", "green", "orange", "brown", "grey"]
+        cols = ["black", "red", "green", "orange", "brown", "grey"]
         for i, receives in enumerate(self.receive.values()):
             for receive in receives:
                 if not receive.within_any(self.rx_protection):
-                    plot.plot_receive(receive)
+                    plot.plot_receive(receive, color = cols[i])
             
 
         # ax[0].set_ylim(0, 1000)

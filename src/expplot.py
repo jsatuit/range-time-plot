@@ -64,10 +64,10 @@ class Expplot:
     An interface to matplotlib specialised for plotting experiments 
     (transmit/receive beams)
     """
-    def __init__(self):
+    def __init__(self, plot_interval: TimeInterval):
         self.fig = plt.figure()
         self.ax = self.fig.subplots(2, sharex=True, squeeze=True)
-        self.plot_interval = TimeInterval()
+        self.plot_interval = plot_interval
     
     def title(self, title: str):
         """
@@ -93,7 +93,7 @@ class Expplot:
             self.ax[0].set_xlim((interval/µs).as_tuple)
         
         
-    def plot_beam(self, interval: TimeInterval, v: float = c, 
+    def add_beam(self, interval: TimeInterval, v: float = c, 
                   transmit: bool = True, **kwargs):
         """
         Plots transmit or receive beam position
@@ -118,11 +118,17 @@ class Expplot:
         line2x = interval.end + np.array((0, d * self.plot_interval.length))
         line2y = np.array((0 , self.plot_interval.length*v))
 
+        
+
         # Plot beginning of pulse
         lineplot = self.ax[0].plot(line1x/µs, line1y/km, **kwargs)
+        
+        # Make sure that end of pulse is in the same colour as the beginning.
+        if "color" not in kwargs:
+            kwargs["color"] = lineplot[-1].get_c()
+            
         # Plot end of pulse
-        self.ax[0].plot(line2x/µs, line2y/km, color = lineplot[-1].get_c(), 
-                        **kwargs)
+        self.ax[0].plot(line2x/µs, line2y/km, **kwargs)
         
         self.ax[0].xaxis.set_label("Time [µs]")
         self.ax[0].yaxis.set_label("Range [km]")
@@ -132,7 +138,7 @@ class Expplot:
         self.ax[0].tick_params(which = 'major', pad = 15)
         self.ax[0].tick_params(which = 'minor', grid_linewidth = 2, pad = 0)
         
-    def plot_transmit(self, interval: TimeInterval, **kwargs):
+    def transmit(self, interval: TimeInterval, **kwargs):
         """
         Plots transmit beam position
         
@@ -143,7 +149,7 @@ class Expplot:
         
         """
         self.plot_beam(interval, v=c, **kwargs)
-    def plot_receive(self, interval: TimeInterval, **kwargs):
+    def receive(self, interval: TimeInterval, **kwargs):
         """
         Plots receive beam position
         
