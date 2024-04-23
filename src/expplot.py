@@ -202,27 +202,25 @@ class Expplot:
         self.ax[1].barh(name, np.asarray(bar_lengths)/µs, 
                  left=np.asarray(bars_begin_at)/µs, **kwargs)
         self.ax[1].xaxis.set_label("Time [µs]")
+            
+    def add_range_label(self, r: float):
+        """
+        Adds a label to a certain range as a minor tick
         
-
+        :param float r: range [m]
     
-def plot_add_range_label(ax, r):
-    """
-    Adds a label to a certain range as a minor tick
+        """
+        mt = self.ax[0].get_yticks(minor = True)
+        self.ax[0].set_yticks(np.hstack([mt, r/km]), minor = True)
+    def add_time_label(self, t: float):
+        """
+        Adds a label to a certain time as a minor tick
+        
+        :param float t: time [s]
     
-    :param float r: range [m]
-
-    """
-    mt = ax.get_yticks(minor = True)
-    ax.set_yticks(np.hstack([mt, r/km]), minor = True)
-def plot_add_time_label(ax, t):
-    """
-    Adds a label to a certain time as a minor tick
-    
-    :param float t: time [s]
-
-    """
-    mt = ax.get_xticks(minor = True)
-    ax.set_xticks(np.hstack([mt, t/µs]), minor = True) 
+        """
+        mt = self.ax[0].get_xticks(minor = True)
+        self.ax[0].set_xticks(np.hstack([mt, t/µs]), minor = True) 
 
 
     
