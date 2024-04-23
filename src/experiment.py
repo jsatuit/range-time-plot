@@ -100,13 +100,13 @@ class Subcycle:
 
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
         for i, (ch, receives) in enumerate(self.receive.items()):
-            plot.state("CH"+str(ch), receives.lengths, receives.begins, color = cols[i]) 
+            plot.state("CH"+str(ch), receives.lengths, receives.begins) 
                               # plot_interval)#, color = cols[i])
-        # if self.rx_protection:
-        #     expplot.plot_setting(ax[1], "Rx protector", self.rx_protection.lengths,
-        #                      self.rx_protection.begins, plot_interval)
-        # for name, iv in self.prop.items():
-        #     expplot.plot_setting(ax[1], name, iv.lengths, iv.begins, plot_interval)
+        if self.rx_protection:
+            plot.state("Rx protector", self.rx_protection.lengths,
+                              self.rx_protection.begins)
+        for name, iv in self.prop.items():
+            plot.state(name, iv.lengths, iv.begins)
         
         plot.xlim()
         
