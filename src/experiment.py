@@ -73,9 +73,11 @@ class Subcycle:
                 self.prop[name] = TimeIntervalList()
             self.prop[name].append(time)
             
-    def plot(self, ax = None) -> None:
+    def plot(self, plot = None) -> None:
         
-        plot = Expplot(TimeInterval(self.begin, self.end))
+        if plot is None:
+            plot = Expplot(TimeInterval(self.begin, self.end))
+            plot.xlim()
 
         # Make range-time plot
         for transmit in self.transmits:
@@ -98,7 +100,6 @@ class Subcycle:
         for name, iv in self.prop.items():
             plot.state(name, iv.lengths, iv.begins)
         
-        plot.xlim()
         
         
 class Experiment:
@@ -146,6 +147,7 @@ class Experiment:
         return exp
     
     def plot(self, subcycles: list = []):
+        
         for s in subcycles:
             if s <= 0:
                 raise ValueError("Subcycle number must be larger than zero!")
@@ -158,42 +160,15 @@ class Experiment:
             title = self.name + f", subcycles {subcycles}"
         else:
             title = self.name + "(whole cycle)"
-            subcycles = list(range(len(self.subcycles)))
-        
-        
-        
-        fig = plt.figure()
-        ax = fig.subplots(2, sharex=True, squeeze=True)
-        fig.suptitle(title)
+            subcycles = list(range(1, len(self.subcycles) + 1))
+
+        plot_interval = TimeInterval(self.subcycles[subcycles[0] - 1].begin,
+                                     self.subcycles[subcycles[-1] - 1].end)
+        plot = Expplot(plot_interval)
+        plot.title(title)
+
+        plot.xlim(plot_interval)
         
         for si in subcycles:
-            self.subcycles[si-1].plot(ax)
-        
-        
-    # def plot(self, subcycle: int = 1):
-        
-    #     if subcycle <= 0 and subcycle > len(self.subcycles):
-    #         raise ValueError("Select a subcycle between 1 and {len(self.subcycles)}, not {subcycle}")
-        
-    #     plot_interval = self.subcycles[subcycle-1]
-        
-    #     plt.figure()
-    #     plt.grid(which = 'major')
-    #     for transmit in self.transmits:
-    #         if transmit.within(plot_interval):
-    #             rtp.plot_transmit(transmit, plot_interval)
-        
-    #     cols = ["black", "red", "green", "orange", "brown", "grey"]
-    #     for i, receives in enumerate(self.receive.values()):
-    #         for receive in receives:
-    #             if receive.within(plot_interval):
-    #                 rtp.plot_receive(receive, plot_interval, color=cols[i])
-            
-    #     # Hard-coded, not good, but as long as we have no reception, 
-    #     # we cant do better...
-    #     plt.ylim(0, 1000)
-    #     # for ch in self.receive_channels:
-    #     #     for receive in ch:
-    #     #             plot_receive(receive, self.instruction_cycle)
-    #     # plot_add_range_label(rmin)
-    #     # plot_add_range_label(rmax)
+            self.subcycles[si-1].plot(plot)
+
