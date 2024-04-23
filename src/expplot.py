@@ -2,9 +2,12 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+
 if __name__ == '__main__':
     import sys
     sys.path.append("..") # Adds current directory to python modules path.
+    
+from typing import Union
 from src.timeInterval import TimeInterval
 from src.const import km, µs, c
 
@@ -56,7 +59,121 @@ def calc_furthest_full_range(tx_interval: TimeInterval, rx_interval: TimeInterva
     r = v*dt/2
     
     return r
+class Expplot:
+    """
+    An interface to matplotlib specialised for plotting experiments 
+    (transmit/receive beams)
+    """
+    def __init__(self):
+        self.fig = plt.figure()
+        self.ax = self.fig.subplots(2, sharex=True, squeeze=True)
+        self.plot_interval = TimeInterval()
+    
+    def title(self, title: str):
+        """
+        Set supertitle to figure
+        
+        :param title: Title string
+        :type title: str
 
+        """
+        self.fig.suptitle(title)
+        
+    def xlim(self, interval: Union[TimeInterval, None] = None):
+        """
+        Set x axes limits.
+        
+        :param TimeInterval | None interval: x axes limits as a TimeInterval
+        
+        """
+        if interval is None:
+            interval = self.plot_interval
+            
+        for ax in self.axes:
+            self.ax[0].set_xlim((interval/µs).as_tuple)
+        
+        
+    def plot_beam(self, interval: TimeInterval, v: float = c, 
+                  transmit: bool = True, **kwargs):
+        """
+        Plots transmit or receive beam position
+        
+        :param interval: Interval of signal being transmitted/received
+        :type interval: TimeInterval
+        :param float, optional v: Velocity of beam, default light speed
+        :param bool, optional transmit: Direction of beam. True – Transmit, 
+            False – receive, defaults to True
+        
+        Keyword arguments are passed further to matplotlib.
+        
+        """
+        if transmit:
+            d = 1
+        else:
+            d = -1
+        
+        line1x = interval.begin + np.array((0, d * self.plot_interval.length))
+        line1y = np.array((0 , self.plot_interval.length*v))
+        
+        line2x = interval.end + np.array((0, d * self.plot_interval.length))
+        line2y = np.array((0 , self.plot_interval.length*v))
+
+        # Plot beginning of pulse
+        lineplot = self.ax[0].plot(line1x/µs, line1y/km, **kwargs)
+        # Plot end of pulse
+        self.ax[0].plot(line2x/µs, line2y/km, color = lineplot[-1].get_c(), 
+                        **kwargs)
+        
+        self.ax[0].xaxis.set_label("Time [µs]")
+        self.ax[0].yaxis.set_label("Range [km]")
+
+        self.ax[0].yaxis.set_minor_formatter("{x:.0f}")
+        self.ax[0].xaxis.set_minor_formatter("{x:.0f}")
+        self.ax[0].tick_params(which = 'major', pad = 15)
+        self.ax[0].tick_params(which = 'minor', grid_linewidth = 2, pad = 0)
+        
+    def plot_transmit(self, interval: TimeInterval, **kwargs):
+        """
+        Plots transmit beam position
+        
+        :param interval: Interval of signal being transmitted
+        :type interval: TimeInterval
+        
+        Keyword arguments are passed further to matplotlib.
+        
+        """
+        self.plot_beam(interval, v=c, **kwargs)
+    def plot_receive(self, interval: TimeInterval, **kwargs):
+        """
+        Plots receive beam position
+        
+        :param interval: Interval of signal being received
+        :type interval: TimeInterval
+        
+        Keyword arguments are passed further to matplotlib.
+        
+        """
+        self.plot_beam(interval, v=c, transmit=False, **kwargs)   
+        
+    def plot_setting(self, name: str, bar_lengths: Union[list, np.ndarray], 
+                     bars_begin_at: Union[list, np.ndarray], **kwargs):
+        """
+        Plot setting of radar.
+        
+        :param name: name of setting
+        :type name: str
+        :param bar_lengths: Lengths of bars
+        :type bar_lengths: list or numpy array
+        :param bars_begin_at: Position where bars begin
+        :type bars_begin_at: list or numpy array
+        
+        Other (keyword) arguments go directly to plotting function
+    
+        """
+        self.ax[1].barh(name, np.asarray(bar_lengths)/µs, 
+                 left=np.asarray(bars_begin_at)/µs, **kwargs)
+        self.ax[1].xaxis.set_label("Time [µs]")
+        
 def plot_transmit(ax, tx_interval: TimeInterval, plot_interval: TimeInterval, **kwargs):
     """
     Plots transmit beam position

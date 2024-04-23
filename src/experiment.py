@@ -5,7 +5,7 @@ import os
 import matplotlib.pyplot as plt
 from typing import Union
 
-from src import expplot
+from src.expplot import Expplot
 from src.tarlan import Tarlan
 from src.timeInterval import TimeInterval, TimeIntervalList
 from src.const import km, µs, c
@@ -73,49 +73,40 @@ class Subcycle:
             
     def plot(self, ax = None) -> None:
         
-        plot_interval = TimeInterval(self.begin, self.end)
+        plot = Expplot()
+        plot.plot_interval = TimeInterval(self.begin, self.end)
         
-        if ax is None:
-            fig = plt.figure(layout="constrained")
-            ax = fig.subplots(2, sharex=True, squeeze=True)
-            fig.suptitle(self.name)
+        
+        # plot_interval = TimeInterval(self.begin, self.end)
+        
+        # if ax is None:
+        #     fig = plt.figure(layout="constrained")
+        #     ax = fig.subplots(2, sharex=True, squeeze=True)
+        #     fig.suptitle(self.name)
         # plt.subplot(2,1,1)
-        ax[0].grid(which = 'major')
+        # ax[0].grid(which = 'major')
         for transmit in self.transmits:
-            expplot.plot_transmit(ax[0], transmit, plot_interval)
+            plot.plot_transmit(transmit)
         
-        cols = ["black", "red", "green", "orange", "brown", "grey"]
+        # cols = ["black", "red", "green", "orange", "brown", "grey"]
         for i, receives in enumerate(self.receive.values()):
             for receive in receives:
                 if not receive.within_any(self.rx_protection):
-                    expplot.plot_receive(ax[0], receive, plot_interval, color=cols[i])
+                    plot.plot_receive(receive)
             
-        # Hard-coded, not good, but as long as we have no baud length, 
-        # we cant do better...
-        # rmins = []
-        # rmaxs = []
-        # for transmit in self.transmits:
-        #     for receives in self.receive.values():
-        #         for receive in receives:
-        #             rmins.append(rtp.calc_nearest_range(transmit, receive))
-        #             rmaxs.append(rtp.calc_furthest_range(transmit, receive))
-        # plt.ylim(0, max(rmaxs))
-        ax[0].set_ylim(0, 1000)
-        
-        # plot_add_range_label(rmin)
-        # plot_add_range_label(rmax)
-        
-        # plt.subplot(2,1,2)
-        expplot.plot_setting(ax[1], "RF", self.transmits.lengths, self.transmits.begins, 
-                         plot_interval)
-        for i, (ch, receives) in enumerate(self.receive.items()):
-            expplot.plot_setting(ax[1], "CH"+str(ch), receives.lengths, receives.begins, 
-                             plot_interval, color = cols[i])
-        if self.rx_protection:
-            expplot.plot_setting(ax[1], "Rx protector", self.rx_protection.lengths,
-                             self.rx_protection.begins, plot_interval)
-        for name, iv in self.prop.items():
-            expplot.plot_setting(ax[1], name, iv.lengths, iv.begins, plot_interval)
+
+        # ax[0].set_ylim(0, 1000)
+
+        # expplot.plot_setting(ax[1], "RF", self.transmits.lengths, self.transmits.begins, 
+        #                  plot_interval)
+        # for i, (ch, receives) in enumerate(self.receive.items()):
+        #     expplot.plot_setting(ax[1], "CH"+str(ch), receives.lengths, receives.begins, 
+        #                      plot_interval, color = cols[i])
+        # if self.rx_protection:
+        #     expplot.plot_setting(ax[1], "Rx protector", self.rx_protection.lengths,
+        #                      self.rx_protection.begins, plot_interval)
+        # for name, iv in self.prop.items():
+        #     expplot.plot_setting(ax[1], name, iv.lengths, iv.begins, plot_interval)
         
         
 class Experiment:
