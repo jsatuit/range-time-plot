@@ -78,7 +78,21 @@ class Expplot:
         # Dictionary of name/is/property – colour pairs
         self.cols = {}
         
-    def get_colour(self, name: str):
+    def get_colour(self, name: str) -> str:
+        """
+        Get colour for desired parameter.
+        
+        Assigns a new colour if needed. There is a maximum of assignable 
+        colours since matplotlibs default colours are used. These are limited.
+        
+        :param name: parameter name
+        :type name: str
+        :raises RuntimeError: if a new colour is assigned but there is no new 
+            colour to take.
+        :return: colour
+        :rtype: str
+
+        """
         if name in self.cols.keys():
             colour = self.cols[name]
         else:

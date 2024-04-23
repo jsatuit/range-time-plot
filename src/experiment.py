@@ -74,6 +74,14 @@ class Subcycle:
             self.prop[name].append(time)
             
     def plot(self, plot = None) -> None:
+        """
+        Plot reached ranges and transmitter/receiver states for single subcycle.
+        
+        :param plot: If given Expplot, everything is plotted into given Expplot object. 
+            If None, a new plot is created, defaults to None
+        :type plot: Expplot | None, optional
+
+        """
         
         if plot is None:
             plot = Expplot(TimeInterval(self.begin, self.end))
@@ -87,6 +95,7 @@ class Subcycle:
                 if not receive.within_any(self.rx_protection):
                     plot.receive("CH"+str(ch), receive)
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
+        
         # Plot state properties of experiement
         for i, (ch, receives) in enumerate(self.receive.items()):
             plot.state("CH"+str(ch), receives.lengths, receives.begins) 
@@ -142,7 +151,19 @@ class Experiment:
         
         return exp
     
-    def plot(self, subcycles: list = []):
+    def plot(self, subcycles: list = []) -> None:
+        """
+        Plot multiple subcycles.
+        
+        Calls Subcycle.plot(plot) for every subcycle to plot
+        
+        :param subcycles: List of which subcycles to plot. Subcycles are 
+            counted from one. Empty list means plot all subcycles, defaults 
+            to plotting all. 
+        :type subcycles: list, optional
+        :raises ValueError: If invalid subcycle numbers are given.
+
+        """
         
         for s in subcycles:
             if s <= 0:
