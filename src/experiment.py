@@ -78,22 +78,18 @@ class Subcycle:
         if plot is None:
             plot = Expplot(TimeInterval(self.begin, self.end))
             plot.xlim()
-
+            
         # Make range-time plot
         for transmit in self.transmits:
-            plot.transmit(transmit)
-        
-        cols = list(mcolors.TABLEAU_COLORS)[1:]#["black", "red", "green", "orange", "brown", "grey"]
-        for i, receives in enumerate(self.receive.values()):
+            plot.transmit("RF", transmit)
+        for i, (ch, receives) in enumerate(self.receive.items()):
             for receive in receives:
                 if not receive.within_any(self.rx_protection):
-                    plot.receive(receive, color = cols[i])
-            
-        # Plot state properties of experiemen
+                    plot.receive("CH"+str(ch), receive)
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
+        # Plot state properties of experiement
         for i, (ch, receives) in enumerate(self.receive.items()):
             plot.state("CH"+str(ch), receives.lengths, receives.begins) 
-                              # plot_interval)#, color = cols[i])
         if self.rx_protection:
             plot.state("Rx protector", self.rx_protection.lengths,
                               self.rx_protection.begins)

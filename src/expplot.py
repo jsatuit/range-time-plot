@@ -2,6 +2,8 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as mc
+
 
 if __name__ == '__main__':
     import sys
@@ -71,7 +73,22 @@ class Expplot:
         self.ax[0].set_ylim(0, rmax/km)
         self.ax[1].invert_yaxis()
         self.plot_interval = plot_interval
-    
+        
+        self.available_colours = list(mc.TABLEAU_COLORS)
+        # Dictionary of name/is/property – colour pairs
+        self.cols = {}
+        
+    def get_colour(self, name: str):
+        if name in self.cols.keys():
+            colour = self.cols[name]
+        else:
+            try:
+                colour = self.available_colours.pop(0)
+            except IndexError:
+                raise RuntimeError("Ran out of colours!")
+            self.cols[name] = colour
+        return colour
+        
     def title(self, title: str):
         """
         Set supertitle to figure
@@ -96,7 +113,7 @@ class Expplot:
             self.ax[0].set_xlim((interval/µs).as_tuple)
         
         
-    def add_beam(self, interval: TimeInterval, v: float = c, 
+    def add_beam(self, name: str, interval: TimeInterval, v: float = c, 
                   transmit: bool = True, **kwargs):
         """
         Plots transmit or receive beam position
@@ -122,13 +139,13 @@ class Expplot:
         line2y = np.array((0 , self.plot_interval.length*v))
 
         
+        if "color" not in kwargs:
+            kwargs["color"] = self.get_colour(name)
 
         # Plot beginning of pulse
-        lineplot = self.ax[0].plot(line1x/µs, line1y/km, **kwargs)
+        self.ax[0].plot(line1x/µs, line1y/km, **kwargs)
         
         # Make sure that end of pulse is in the same colour as the beginning.
-        if "color" not in kwargs:
-            kwargs["color"] = lineplot[-1].get_c()
             
         # Plot end of pulse
         self.ax[0].plot(line2x/µs, line2y/km, **kwargs)
@@ -141,7 +158,7 @@ class Expplot:
         self.ax[0].tick_params(which = 'major', pad = 15)
         self.ax[0].tick_params(which = 'minor', grid_linewidth = 2, pad = 0)
         
-    def transmit(self, interval: TimeInterval, **kwargs):
+    def transmit(self, name: str, interval: TimeInterval, **kwargs):
         """
         Plots transmit beam position
         
@@ -151,8 +168,8 @@ class Expplot:
         Keyword arguments are passed further to matplotlib.
         
         """
-        self.add_beam(interval, v=c, **kwargs)
-    def receive(self, interval: TimeInterval, **kwargs):
+        self.add_beam(name, interval, v=c, **kwargs)
+    def receive(self, name: str, interval: TimeInterval, **kwargs):
         """
         Plots receive beam position
         
@@ -162,7 +179,7 @@ class Expplot:
         Keyword arguments are passed further to matplotlib.
         
         """
-        self.add_beam(interval, v=c, transmit=False, **kwargs)   
+        self.add_beam(name, interval, v=c, transmit=False, **kwargs)   
         
     def state(self, name: str, bar_lengths: Union[list, np.ndarray], 
                      bars_begin_at: Union[list, np.ndarray], **kwargs):
@@ -179,6 +196,9 @@ class Expplot:
         Other (keyword) arguments go directly to plotting function
     
         """
+        if "color" not in kwargs:
+            kwargs["color"] = self.get_colour(name)
+        
         self.ax[1].barh(name, np.asarray(bar_lengths)/µs, 
                  left=np.asarray(bars_begin_at)/µs, **kwargs)
         self.ax[1].xaxis.set_label("Time [µs]")
@@ -208,8 +228,7 @@ def plot_receive(ax, rx_interval, plot_interval, **kwargs):
     
     """
     if not "color" in kwargs:
-        kwargs["color"] = "red"
-    
+        kwargs["color"] = self.get_colour(name)    
     plot_t_r(ax, rx_interval, plot_interval, v=c, d = -1, **kwargs)
     
 def plot_t_r(ax, signal_interval, plot_interval, v=c, d = 1, **kwargs):
