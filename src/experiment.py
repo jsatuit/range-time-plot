@@ -73,8 +73,7 @@ class Subcycle:
             
     def plot(self, ax = None) -> None:
         
-        plot = Expplot()
-        plot.plot_interval = TimeInterval(self.begin, self.end)
+        plot = Expplot(TimeInterval(self.begin, self.end))
         
         
         # plot_interval = TimeInterval(self.begin, self.end)
@@ -86,13 +85,13 @@ class Subcycle:
         # plt.subplot(2,1,1)
         # ax[0].grid(which = 'major')
         for transmit in self.transmits:
-            plot.plot_transmit(transmit)
+            plot.transmit(transmit)
         
         cols = ["black", "red", "green", "orange", "brown", "grey"]
         for i, receives in enumerate(self.receive.values()):
             for receive in receives:
                 if not receive.within_any(self.rx_protection):
-                    plot.plot_receive(receive, color = cols[i])
+                    plot.receive(receive, color = cols[i])
             
 
         # ax[0].set_ylim(0, 1000)

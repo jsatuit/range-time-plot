@@ -148,7 +148,7 @@ class Expplot:
         Keyword arguments are passed further to matplotlib.
         
         """
-        self.plot_beam(interval, v=c, **kwargs)
+        self.add_beam(interval, v=c, **kwargs)
     def receive(self, interval: TimeInterval, **kwargs):
         """
         Plots receive beam position
@@ -159,7 +159,7 @@ class Expplot:
         Keyword arguments are passed further to matplotlib.
         
         """
-        self.plot_beam(interval, v=c, transmit=False, **kwargs)   
+        self.add_beam(interval, v=c, transmit=False, **kwargs)   
         
     def plot_setting(self, name: str, bar_lengths: Union[list, np.ndarray], 
                      bars_begin_at: Union[list, np.ndarray], **kwargs):
