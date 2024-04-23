@@ -3,6 +3,7 @@
 import os
 
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 
 from typing import Union
 
@@ -88,7 +89,7 @@ class Subcycle:
         for transmit in self.transmits:
             plot.transmit(transmit)
         
-        cols = ["black", "red", "green", "orange", "brown", "grey"]
+        cols = list(mcolors.TABLEAU_COLORS)[1:]#["black", "red", "green", "orange", "brown", "grey"]
         for i, receives in enumerate(self.receive.values()):
             for receive in receives:
                 if not receive.within_any(self.rx_protection):
@@ -98,14 +99,15 @@ class Subcycle:
         # ax[0].set_ylim(0, 1000)
 
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
-        # for i, (ch, receives) in enumerate(self.receive.items()):
-        #     expplot.plot_setting(ax[1], "CH"+str(ch), receives.lengths, receives.begins, 
-        #                      plot_interval, color = cols[i])
+        for i, (ch, receives) in enumerate(self.receive.items()):
+            plot.state("CH"+str(ch), receives.lengths, receives.begins, color = cols[i]) 
+                              # plot_interval)#, color = cols[i])
         # if self.rx_protection:
         #     expplot.plot_setting(ax[1], "Rx protector", self.rx_protection.lengths,
         #                      self.rx_protection.begins, plot_interval)
         # for name, iv in self.prop.items():
         #     expplot.plot_setting(ax[1], name, iv.lengths, iv.begins, plot_interval)
+        
         plot.xlim()
         
         
