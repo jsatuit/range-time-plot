@@ -161,6 +161,30 @@ class Experiment:
 
         
         return exp
+    
+    def plot(self, subcycles: list = []):
+        for s in subcycles:
+            if s <= 0:
+                raise ValueError("Subcycle number must be larger than zero!")
+            elif s > len(self.subcycles):
+                raise ValueError(f"There are only {len(self.subcycles)}" \
+                            + f"subcycles! You chose to plot subcycle {s},"\
+                            + " which is too large")
+        
+        if len(subcycles) > 0:
+            title = self.name + f", subcycles {subcycles}"
+        else:
+            title = self.name + "(whole cycle)"
+            subcycles = list(range(len(self.subcycles)))
+        
+        
+        
+        fig = plt.figure()
+        ax = fig.subplots(2, sharex=True, squeeze=True)
+        fig.suptitle(title)
+        
+        for si in subcycles:
+            self.subcycles[si-1].plot(ax)
         
         
     # def plot(self, subcycle: int = 1):
