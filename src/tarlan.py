@@ -21,7 +21,17 @@ from typing import Self
 
 from src.tarlanIntervals import IntervalList, TarlanSubcycle
 from src.tarlanError import TarlanError
+from src.eventlist import TimedEvent, EventList
 from src.const import km, µs, c
+
+tarlan_command_docstring =\
+""":param time: time [s]
+:type time: float
+:param line: line where the command is found. Used for error handling only.
+:type line: int"""
+"""Docstring ito be inserted to all tarlan commands."""
+
+
 
 def kst_channels():
     "List of available channels"
@@ -73,6 +83,79 @@ class Command:
     
     def __str__(self):
         return f"{self.line}: {self.t/µs} {self.cmd}"
+    
+class PhaseShifter():
+    """Simulates behaviour of phase shifter"""
+    def __init__(self):
+        """Initialize phase shifter"""
+        # Keep list private so that developers and users know that they should 
+        # not manipulate the list so that it keeps being sorted.
+        self._phase_shifts = []
+        self._phases = []
+        
+    def set_phase(self, time: float, phase: float):
+        """
+        Set phase shifter to certain phase
+        
+        :param float time: Time of phase shift
+        :param float phase: Phase to set to.
+
+        """
+        insort_left(self._phase_shifts, TimedEvent(time, phase))
+        if phase not in self._phases:
+            self._phases.append(phase)
+
+    def restart(self):
+        """Restarts phase shifter.
+        
+        Means that all saved content is deleted. Use this when data is copied, 
+        for example at ethe end of a subcycle.
+        """
+        # If the list is empty, there is nothing to do and the phase shifter 
+        # is off.
+        if len(self._phase_shifts) > 0:
+            last_phase = self._phase_shifts[-1].event
+            self._phase_shifts = EventList()
+            self.set_phase(0, last_phase)
+        
+    def PHA0(self, time: float):
+        """
+        Set phase shifter to 0 degree.
+        
+        :param float time: Time of phase shift
+        """
+        self.set_phase(time, 0)
+        
+    def PHA180(self, time: float):
+        """
+        Set phase shifter to 180 degree.
+        
+        :param float time: Time of phase shift
+        """
+        self.set_phase(time, 180)
+    
+    # def intervals_within(self, interval: TimeInterval) -> dict[float, TimeIntervalList]:
+    #     """
+    #     Give intervals of the times when phaseshifter inserts phase shifts.
+        
+    #     Output intervals are within the specified interval.
+        
+    #     :param interval: Interval the output should be within
+    #     :type interval: TimeInterval
+    #     :return: dictionary of phaseshift – TimeIntervalList pairs.
+    #     :rtype: dict[float, TimeIntervalList]
+
+    #     """
+    #     d = {}
+    #     for phase in self._phases:
+    #         for phase_shift in self._phase_shifts:
+    @property
+    def phase_shifts(self):
+        "List of TimedEvents contaning the phase shifts"
+        return self._phase_shifts
+                
+        
+        
     
 class Tarlan():
     """
@@ -207,13 +290,10 @@ class Tarlan():
         self.filename = filename
         
     def ALLOFF(self, time: float, line: int):
-        """
+        f"""
         Turn off signal reception with all channels
         
-        :param time: time [s]
-        :type time: float
-        :param line: line where the command is found. Used for error handling only.
-        :type line: int
+        {tarlan_command_docstring}
 
         """
         for i in range(1,7):
@@ -252,6 +332,13 @@ class Tarlan():
         
         
     def _generate_commands(self):
+        #"""Implement other TARLAN commands.
+        #
+        #These are:
+        #    
+        #"""
+        
+        
         #### Implement TARLAN commands from here ####
         commands = {
             "RFON": self.streams["RF"].turn_on,
