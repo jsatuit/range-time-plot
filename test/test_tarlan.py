@@ -4,7 +4,7 @@ import pytest
 import tempfile
 import os
 
-from src.tarlan import µs, parse_line, TarlanError, Command, ParseSubcycle, Tarlan
+from src.tarlan import µs, parse_line, TarlanError, Command, Tarlan
 
 
 def test_parse_line():
@@ -38,34 +38,6 @@ def test_command():
     assert str(cmd1) == "32: 8.0 CH1"
     assert str(cmd2) == "39: 135.0 ALLOFF"
     
-def test_subcycle():
-    s = ParseSubcycle(line = 2)
-    
-    assert s.start == 0
-    assert s.startline == 2
-    assert len(s.commands) == 0
-    
-    s.add_command(Command(0.9*µs, "CHQPULS", 3))
-    assert s.start == 0
-    assert s.startline == 2
-    assert len(s.commands) == 1
-    
-    s.add_command(Command(5*µs, "RXPROT", 4))
-    assert s.start == 0
-    assert s.startline == 2
-    assert len(s.commands) == 2
-    
-    s.add_command(Command(0.4*µs, "STFIR", 3))
-    assert s.start == 0
-    assert s.startline == 2
-    assert len(s.commands) == 3
-    
-    assert s.commands[0].cmd in ["CHQPULS", "STFIR"]
-    assert s.commands[1].cmd in ["CHQPULS", "STFIR"]
-    assert s.commands[2].cmd == "RXPROT"
-    
-    with pytest.raises(ValueError):
-        s.add_command(Command(0.4*µs, "LOPROT", 1))
     
 def test_tarlan():
     tlan = Tarlan()
