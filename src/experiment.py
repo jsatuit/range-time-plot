@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 import os
 
-import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
 
 from typing import Union
 
