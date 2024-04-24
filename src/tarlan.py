@@ -74,41 +74,6 @@ class Command:
     def __str__(self):
         return f"{self.line}: {self.t/µs} {self.cmd}"
     
-class ParseSubcycle:
-    """
-    Lists commands in single subcycle. Used for grouping commands from the tlan 
-    file. Commands are sorted after execution time
-    """
-    
-    def __init__(self, start_subcycle: float = 0, line: int = 0) -> None:
-        """
-        
-        :param start_subcycle: start of subcycle in seconds, defaults to 0
-        :type start_subcycle: float, optional
-        :param int, optional line: Codeline where subcycle starts
-
-        """
-        self.start = start_subcycle
-        self.startline = line
-        self.commands = []
-        
-    def add_command(self, cmd: str) -> None:
-        """
-        Add command to subcycle. 
-        :param cmd: command
-        :type cmd: str
-        :raises ValueError: if command is above start of subcycle in the tlan 
-            file
-
-        """
-        if cmd.line > 0 and cmd.line < self.startline:
-            raise ValueError(f"The inserted command is from line {cmd.line},"
-                             " above the start line {self.startline} of the"
-                             " subcycle!")
-
-        insort_left(self.commands, cmd)
-                 
-            
 class Tarlan():
     """
     Class for parsing and handling an TARLAN experiment
