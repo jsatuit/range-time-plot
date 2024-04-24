@@ -16,12 +16,11 @@ https://eiscat.se/scientist/user-documentation/radar-controllers-and-programming
 """
 import numpy as np
 
-from bisect import insort_left
 from typing import Self
 
+from src.phaseshifter import PhaseShifter
 from src.tarlanIntervals import IntervalList, TarlanSubcycle
 from src.tarlanError import TarlanError
-from src.eventlist import TimedEvent, EventList
 from src.const import km, µs, c
 
 tarlan_command_docstring =\
@@ -84,77 +83,7 @@ class Command:
     def __str__(self):
         return f"{self.line}: {self.t/µs} {self.cmd}"
     
-class PhaseShifter():
-    """Simulates behaviour of phase shifter"""
-    def __init__(self):
-        """Initialize phase shifter"""
-        # Keep list private so that developers and users know that they should 
-        # not manipulate the list so that it keeps being sorted.
-        self._phase_shifts = []
-        self._phases = []
-        
-    def set_phase(self, time: float, phase: float):
-        """
-        Set phase shifter to certain phase
-        
-        :param float time: Time of phase shift
-        :param float phase: Phase to set to.
 
-        """
-        insort_left(self._phase_shifts, TimedEvent(time, phase))
-        if phase not in self._phases:
-            self._phases.append(phase)
-
-    def restart(self):
-        """Restarts phase shifter.
-        
-        Means that all saved content is deleted. Use this when data is copied, 
-        for example at ethe end of a subcycle.
-        """
-        # If the list is empty, there is nothing to do and the phase shifter 
-        # is off.
-        if len(self._phase_shifts) > 0:
-            last_phase = self._phase_shifts[-1].event
-            self._phase_shifts = EventList()
-            self.set_phase(0, last_phase)
-        
-    def PHA0(self, time: float):
-        """
-        Set phase shifter to 0 degree.
-        
-        :param float time: Time of phase shift
-        """
-        self.set_phase(time, 0)
-        
-    def PHA180(self, time: float):
-        """
-        Set phase shifter to 180 degree.
-        
-        :param float time: Time of phase shift
-        """
-        self.set_phase(time, 180)
-    
-    # def intervals_within(self, interval: TimeInterval) -> dict[float, TimeIntervalList]:
-    #     """
-    #     Give intervals of the times when phaseshifter inserts phase shifts.
-        
-    #     Output intervals are within the specified interval.
-        
-    #     :param interval: Interval the output should be within
-    #     :type interval: TimeInterval
-    #     :return: dictionary of phaseshift – TimeIntervalList pairs.
-    #     :rtype: dict[float, TimeIntervalList]
-
-    #     """
-    #     d = {}
-    #     for phase in self._phases:
-    #         for phase_shift in self._phase_shifts:
-    @property
-    def phase_shifts(self):
-        "List of TimedEvents contaning the phase shifts"
-        return self._phase_shifts
-                
-        
         
     
 class Tarlan():
@@ -220,6 +149,7 @@ class Tarlan():
         self.cycle = IntervalList("CYCLE")
         # self.subcycle_list = IntervalList("SUBCYCLE")
         self.subcycle_list = TarlanSubcycle()
+        self.phaseshifter = PhaseShifter()
         
         self.stream_names = ["RF", "RXPROT", "LOPROT", "CAL", "BEAM", "+", "-"]
         for ch in kst_channels():
@@ -266,12 +196,13 @@ class Tarlan():
                 if self.cycle.is_off:
                     self.cycle.turn_on(cmd.t, cmd.line)
                     self.subcycle_list.turn_on(cmd.t, cmd.line)
+                    
                 
                 # All other subcycles except for that SETTCR that appears 
                 # directly before REP command at the end of the file
                 elif cmd.t != 0:
                     # Turn off phase shifts at end of subcycle
-                    self.PHA_OFF(cmd.t, cmd.line)
+                    # self.PHA_OFF(cmd.t, cmd.line)
                     self.subcycle_list.turn_off(cmd.t, cmd.line, self.streams)
                     
                     # Delete connection to last subcycle streams
@@ -280,7 +211,7 @@ class Tarlan():
                     self.subcycle_list.turn_on(cmd.t, cmd.line)
                 self.SETTCR(cmd.t, cmd.line)
             elif cmd.cmd == "REP":
-                self.PHA_OFF(cmd.t, cmd.line)
+                # self.PHA_OFF(cmd.t, cmd.line)
                 self.subcycle_list.turn_off(cmd.t, cmd.line, self.streams)
                 # Delete connection to last subcycle streams
                 self._init_streams()
@@ -300,31 +231,6 @@ class Tarlan():
             CH = "CH"+str(i)
             if self.streams[CH].is_on:
                 self.streams[CH].turn_off(time, line)
-    
-    def PHA0(self, time: float, line: int):
-        "Set phase shift of oscillator to 0°"
-        if self.streams["+"].is_off:
-            self.streams["+"].turn_on(time, line)
-            
-        if self.streams["-"].is_on:
-            self.streams["-"].turn_off(time, line)
-            
-    def PHA180(self, time: float, line: int):
-        "Set phase shift of oscillator to 0°"
-        if self.streams["+"].is_on:
-            self.streams["+"].turn_off(time, line)
-            
-        if self.streams["-"].is_off:
-            self.streams["-"].turn_on(time, line)
-            
-    def PHA_OFF(self, time: float, line: int):
-        """
-        Turn off phase shifts. This is not a TARLAN command, but needed to 
-        able to plot phase shifts later.
-        """
-        for ps in ["+", "-"]:
-            if self.streams[ps].is_on:
-                self.streams[ps].turn_off(time, line)
             
     def SETTCR(self, time: float, line: int):
         "Set reference time in time control"
@@ -352,8 +258,8 @@ class Tarlan():
             "CALOFF": self.streams["CAL"].turn_off,
             "BEAMON": self.streams["BEAM"].turn_on,
             "BEAMOFF": self.streams["BEAM"].turn_off,
-            "PHA0": self.PHA0,
-            "PHA180": self.PHA180,
+            "PHA0": self.phaseshifter.PHA0,
+            "PHA180": self.phaseshifter.PHA180,
             "ALLOFF": self.ALLOFF,
             "SETTCR": do_nothing,  # Is not handeled here!
             "BUFLIP": do_nothing,  # Too technical here

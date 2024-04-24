@@ -1,6 +1,7 @@
 
 
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.colors as mc
 
@@ -11,6 +12,7 @@ if __name__ == '__main__':
     
 from typing import Union
 from src.timeInterval import TimeInterval
+from src.eventlist import EventList
 from src.const import km, µs, c
 
 def calc_nearest_range(tx_interval: TimeInterval, rx_interval: TimeInterval, 
@@ -216,6 +218,22 @@ class Expplot:
         self.ax[1].barh(name, np.asarray(bar_lengths)/µs, 
                  left=np.asarray(bars_begin_at)/µs, **kwargs)
         self.ax[1].xaxis.set_label("Time [µs]")
+        
+    def phase(self, phaseshifts: EventList, end: float = -1):
+        
+        bars_begin_at = phaseshifts.times
+        bar_lengths = np.diff(bars_begin_at + [end])
+        # Make sure that phases are between 0 and 360 degree
+        phases = [phase%360 for phase in phaseshifts.events]
+        
+        cmap = mpl.colormaps["twilight"]
+        
+        colours = [cmap(phase/360) for phase in phases]
+        
+        self.ax[1].barh("phase", bar_lengths/µs, 
+                        left = np.asarray(bars_begin_at)/µs,
+                        color = colours)
+        
             
     def add_range_label(self, r: float):
         """

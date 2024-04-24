@@ -12,6 +12,9 @@ class TimedEvent:
         self.time = time
         self.event = event
         
+    def __lt__(self, other):
+        return self.time < other.time
+        
         
         
 
@@ -30,7 +33,25 @@ class EventList(UserList):
         if not isinstance(value, TimedEvent):
             raise TypeError('only TimedEvent accepted')
         self._list.insert(index, value)
-        
-        
     
+    def listof(self, attr: str):
+        """
+        Return list of the attribute `attr` of each TimeInterval.
+        
+        See other functions for examples.
+        """
+        return [getattr(event, attr) for event in self]
     
+    @property
+    def times(self) -> list[float]:
+        """
+        list with the time of each TimedEvent
+        """
+        return self.listof("time")
+    
+    @property
+    def events(self) -> list[float]:
+        """
+        list of all events. That are all TimeEvent.events.
+        """
+        return self.listof("event")
