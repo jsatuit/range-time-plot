@@ -229,8 +229,6 @@ class Expplot:
         cmap = mpl.colormaps["twilight"]
         
         colours = [cmap(phase/360) for phase in phases]
-        for i in range(len(bar_lengths)):
-            print(bar_lengths[i], bars_begin_at[i], colours[i])
         self.ax[1].barh("phase", bar_lengths/µs, 
                         left = np.asarray(bars_begin_at)/µs,
                         color = colours)
