@@ -94,7 +94,7 @@ class Subcycle:
                 if not receive.within_any(self.rx_protection):
                     plot.receive("CH"+str(ch), receive)
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
-        plot.phase(self.phaseshifts, end=self.transmits[-1].end)
+        plot.phase(self.phaseshifts, self.transmits)
         # Plot state properties of experiment
         for i, (ch, receives) in enumerate(self.receive.items()):
             plot.state("CH"+str(ch), receives.lengths, receives.begins) 

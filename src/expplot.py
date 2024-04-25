@@ -220,9 +220,9 @@ class Expplot:
         self.ax[1].xaxis.set_label("Time [µs]")
         
         
-    def phase(self, phaseshifts: EventList, end: float = -1):
-        bars_begin_at = phaseshifts.times
-        bar_lengths = np.diff(bars_begin_at + [end])
+    def phase(self, phaseshifts: EventList, tx_intervals):
+        bars_begin_at = [tx_intervals[0].begin] + phaseshifts.times[1:]
+        bar_lengths = np.diff(bars_begin_at + [tx_intervals[-1].end])
         # Make sure that phases are between 0 and 360 degree
         phases = [phase%360 for phase in phaseshifts.events]
         
