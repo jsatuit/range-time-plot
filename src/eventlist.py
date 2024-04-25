@@ -14,6 +14,12 @@ class TimedEvent:
         
     def __lt__(self, other):
         return self.time < other.time
+    
+    def __str__(self):
+        return f"{self.time}: {self.event}"
+    
+    def __repr__(self):
+        return f"TimedEvent({self.time}, {self.event})"
         
         
         
@@ -32,7 +38,7 @@ class EventList(UserList):
     def insert(self, index, value):
         if not isinstance(value, TimedEvent):
             raise TypeError('only TimedEvent accepted')
-        self._list.insert(index, value)
+        super().insert(index, value)
     
     def listof(self, attr: str):
         """

@@ -71,6 +71,7 @@ class Subcycle:
                 self.prop[name] = TimeIntervalList()
             self.prop[name].append(time)
             
+            
     def plot(self, plot = None) -> None:
         """
         Plot reached ranges and transmitter/receiver states for single subcycle.
@@ -93,8 +94,8 @@ class Subcycle:
                 if not receive.within_any(self.rx_protection):
                     plot.receive("CH"+str(ch), receive)
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
-        
-        # Plot state properties of experiement
+        plot.phase(self.phaseshifts, end=self.transmits[-1].end)
+        # Plot state properties of experiment
         for i, (ch, receives) in enumerate(self.receive.items()):
             plot.state("CH"+str(ch), receives.lengths, receives.begins) 
         if self.rx_protection:
@@ -135,15 +136,15 @@ class Experiment:
         
         tlan = Tarlan(filename)
         
-        for i, interval in enumerate(tlan.subcycle_list.intervals):
-            subcycle = Subcycle(interval.begin, interval.end)
+        for i, subcycle_interval in enumerate(tlan.subcycle_list.intervals):
+            subcycle = Subcycle(subcycle_interval.begin, subcycle_interval.end)
             
             for stream in tlan.subcycle_list.data_intervals[i]:
                 if len(stream) == 0:
                     continue
-                for interval in tlan.subcycle_list.data_intervals[i][stream].intervals:
-                    subcycle.add_time(stream, interval)
-            
+                for data_interval in tlan.subcycle_list.data_intervals[i][stream].intervals:
+                    subcycle.add_time(stream, data_interval)
+            subcycle.phaseshifts = tlan.phaseshifter.phase_shifts_within(subcycle_interval)
             exp.add_subcycle(subcycle)
 
         

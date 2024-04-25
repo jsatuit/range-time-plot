@@ -84,7 +84,6 @@ class PhaseShifter():
         "List of TimedEvents contaning the phase shifts"
         return self._phase_shifts
     
-    @property
     def phase_shifts_within(self, interval: TimeInterval):
         "List of TimedEvents contaning the phase shifts within interval"
         phase_shifts = EventList()
@@ -93,7 +92,7 @@ class PhaseShifter():
         begun = False
         # Keeps the index of first phase shift within the interval
         first_index = None
-        for i, shift in enumerate(self._phase_shift):
+        for i, shift in enumerate(self.phase_shifts):
             # Keep first index for adding the phase shift before thr first
             # because the phaseshift may still be the first in this subcycle.
             if not begun:
@@ -106,10 +105,9 @@ class PhaseShifter():
                 
         # Add the last phase shift from before the interval
         if first_index > 0:
-            phase_shifts.insert(0,
-                                interval.begin,
-                                self._phase_shifts[first_index - 1].event,
-                                )
+            last_shift = TimedEvent(interval.begin, 
+                                    self.phase_shifts[first_index - 1].event)
+            phase_shifts.insert(0, last_shift)
         
         return phase_shifts
     
