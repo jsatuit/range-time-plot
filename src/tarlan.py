@@ -131,9 +131,20 @@ class Tarlan():
         "ALLOFF": "Close sampling gate on all channel boards, bit 10-15 low",
         "REP": "End of tarlan program/repeat cycle",
         "SETTCR": "Set reference time in time control?",
+        "RXSYNC": "A 2 us pulse on bit 31 on the front of the receiver controller.",
+        "TXSYNC": "A 2 us pulse on bit 31 on the front of the transmitter controller.",
+        "AD1L": "Route input for AD 1 to channel board 1, 2, 3.",
+        "AD1R": "Route input for AD 1 to channel board 4, 5, 6.",
+        "AD2L": "Route input for AD 2 to channel board 1, 2, 3.",
+        "AD2R": "Route input for AD 2 to channel board 4, 5, 6.",
+        "STFIR": "Start the fir filters onboard channel boards, necessary "+\
+            "to do before using them, bit 16 strobed.",
         }
     for i in range(16):
         command_docs["F" + str(i)] = "Set transmitter frequency, bit 0-3 high"
+    for i in range(1024):
+        command_docs["NCOSEL" + str(i)] = "Load the frequency defined in the "+\
+            "requested memory into the NCO plus strobe bit 29."
     for ch in kst_channels():
         command_docs[ch] = \
             f"Open sampling gate on the referenced channel board, bit {i+9} high"
@@ -247,8 +258,9 @@ class Tarlan():
                 
     def STFIR(self, time: float, line: int):
         if self._loaded_FIR > 0:
-            warn(f"STFIR was called on line {line}, but FIR filters are "+\
-                 "loaded already!", TarlanWarning)
+            pass
+            # warn(f"STFIR was called on line {line}, but FIR filters are "+\
+            #      "loaded already!", TarlanWarning)
         else:
             self._loaded_FIR = time
             
@@ -282,6 +294,13 @@ class Tarlan():
             "PHA180": self.phaseshifter.PHA180,
             "ALLOFF": self.ALLOFF,
             "STFIR": self.STFIR,
+            "RXSYNC": do_nothing,  # Synchronization not implemented
+            "CHQPULS": do_nothing,  # Synchronization not implemented
+            "TXSYNC": do_nothing,  # Synchronization not implemented
+            "AD1L": do_nothing,  # Documentation of command unclear
+            "AD1R": do_nothing,  # Documentation of command unclear
+            "AD2L": do_nothing,  # Documentation of command unclear
+            "AD2R": do_nothing,  # Documentation of command unclear
             "SETTCR": do_nothing,  # Is not handeled here!
             "BUFLIP": do_nothing,  # Too technical here
             "STC": do_nothing,  # Too technical here
@@ -296,6 +315,10 @@ class Tarlan():
         for f in range(16):
             freq = f"F{f}"
             commands[freq] = do_nothing
+        # TODO handle frequencies...
+        for fline in range(1024):
+            sl = f"NCOSEL{fline}"
+            commands[sl] = do_nothing
         
         ''' 
         Silent warnings on setting single bits 4 or 5 in transmit and receive 
