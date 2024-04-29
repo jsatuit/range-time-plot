@@ -328,8 +328,7 @@ class Tarlan():
             # print(self.TCR, cmd.t)
             self.commands[cmd.cmd](self.TCR + cmd.t, cmd.line)
         else:
-            # TODO: Make this a warning.
-            print(f"Command {cmd.cmd}, called from line {cmd.line} ",
+            warn(f"Command {cmd.cmd}, called from line {cmd.line} ",
                   "is not implemented yet")
     def baud_length(self) -> float:
         """
