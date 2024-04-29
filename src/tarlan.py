@@ -21,7 +21,7 @@ from typing import Self
 
 from src.phaseshifter import PhaseShifter
 from src.tarlanIntervals import IntervalList, TarlanSubcycle
-from src.tarlanError import TarlanError
+from src.tarlanError import TarlanError, TarlanWarning
 from src.const import km, µs, c
 
 tarlan_command_docstring =\
@@ -130,7 +130,7 @@ class Tarlan():
         "BUFLIP": "Change side of buffer memory in channel boards, bit 17 high strobed.",
         "ALLOFF": "Close sampling gate on all channel boards, bit 10-15 low",
         "REP": "End of tarlan program/repeat cycle",
-        "SETTCR": "Set time controller to common reference?",
+        "SETTCR": "Set reference time in time control?",
         }
     for i in range(16):
         command_docs["F" + str(i)] = "Set transmitter frequency, bit 0-3 high"
@@ -169,6 +169,7 @@ class Tarlan():
         self._init_streams()
         self._generate_commands()
         self._check_command_docs()
+        self._loaded_FIR = False
             
         # Time control
         self.TCR = 0
@@ -243,6 +244,13 @@ class Tarlan():
             CH = "CH"+str(i)
             if self.streams[CH].is_on:
                 self.streams[CH].turn_off(time, line)
+                
+    def STFIR(self, time: float, line: int):
+        if self._loaded_FIR > 0:
+            warn(f"STFIR was called on line {line}, but FIR filters are "+\
+                 "loaded already!", TarlanWarning)
+        else:
+            self._loaded_FIR = time
             
     def SETTCR(self, time: float, line: int):
         "Set reference time in time control"
@@ -273,6 +281,7 @@ class Tarlan():
             "PHA0": self.phaseshifter.PHA0,
             "PHA180": self.phaseshifter.PHA180,
             "ALLOFF": self.ALLOFF,
+            "STFIR": self.STFIR,
             "SETTCR": do_nothing,  # Is not handeled here!
             "BUFLIP": do_nothing,  # Too technical here
             "STC": do_nothing,  # Too technical here
@@ -328,8 +337,8 @@ class Tarlan():
             # print(self.TCR, cmd.t)
             self.commands[cmd.cmd](self.TCR + cmd.t, cmd.line)
         else:
-            warn(f"Command {cmd.cmd}, called from line {cmd.line} ",
-                  "is not implemented yet")
+            warn(f"Command {cmd.cmd}, called from line {cmd.line} "+\
+                  "is not implemented yet", TarlanWarning)
     def baud_length(self) -> float:
         """
         Estimate baud length.
