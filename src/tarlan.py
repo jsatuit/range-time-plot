@@ -16,6 +16,7 @@ https://eiscat.se/scientist/user-documentation/radar-controllers-and-programming
 """
 import numpy as np
 
+from warnings import warn
 from typing import Self
 
 from src.phaseshifter import PhaseShifter
@@ -109,6 +110,8 @@ class Tarlan():
         "LOPOFF": "Disable local oscillator protector, bit 6 low",
         "BEAMON": "Enable beam in klystron, bit 13 high",
         "BEAMOFF": "Disable beam in klystron, bit 13 low",
+        "RFON": "Enable RF output, bit 11 high",
+        "RFOFF": "Disable RF output, bit 11 low",
         "PHA0": "Set proper phase, bit 4 low",
         "PHA180": "Set proper phase, bit 4 high",
         "CALON": "Tromsø and receivers: Enable noise source for calibration, bit 15 high.",
@@ -127,7 +130,7 @@ class Tarlan():
         "BUFLIP": "Change side of buffer memory in channel boards, bit 17 high strobed.",
         "ALLOFF": "Close sampling gate on all channel boards, bit 10-15 low",
         "REP": "End of tarlan program/repeat cycle",
-        
+        "SETTCR": "Set time controller to common reference?",
         }
     for i in range(16):
         command_docs["F" + str(i)] = "Set transmitter frequency, bit 0-3 high"
@@ -136,7 +139,16 @@ class Tarlan():
             f"Open sampling gate on the referenced channel board, bit {i+9} high"
         command_docs[ch + "OFF"] = \
             f"Close sampling gate on the referenced channel board, bit {i+9} low"
-    
+    for i in range(32):
+        command_docs["BRX" + str(i)] = f"Set bit {i} on receiver controller. "+\
+            "No checks are made."
+        command_docs["BRX" + str(i) + "OFF"] = f"Set bit {i} on receiver controller. "+\
+            "No checks are made. "
+        command_docs["BTX" + str(i)] = f"Set bit {i} on transmitter controller. "+\
+            "No checks are made. Use with caution."
+        command_docs["BTX" + str(i) + "OFF"] = f"Set bit {i} on transmitter controller. "+\
+            "No checks are made. Use with caution."
+        
     def __init__(self, filename: str = ""):
         """
         Initializing Tarlan(). If .tlan file is specified, it will be loaded.
@@ -151,7 +163,7 @@ class Tarlan():
         self.subcycle_list = TarlanSubcycle()
         self.phaseshifter = PhaseShifter()
         
-        self.stream_names = ["RF", "RXPROT", "LOPROT", "CAL", "BEAM", "+", "-"]
+        self.stream_names = ["RF", "RXPROT", "LOPROT", "CAL", "BEAM"]
         for ch in kst_channels():
             self.stream_names.append(ch)
         self._init_streams()
@@ -316,6 +328,7 @@ class Tarlan():
             # print(self.TCR, cmd.t)
             self.commands[cmd.cmd](self.TCR + cmd.t, cmd.line)
         else:
+            # TODO: Make this a warning.
             print(f"Command {cmd.cmd}, called from line {cmd.line} ",
                   "is not implemented yet")
     def baud_length(self) -> float:
