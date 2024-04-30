@@ -209,25 +209,16 @@ class Tarlan():
         
         for cmd in cmd_list:
             
-            """ Use SETTCR as start and stop of subcycles
-            Use SETTCR 0 as start and as continuation of subcycle
-            SETTCR 0 is therefore only allowed in two cases: In start or 
-            directly before REP. Else, subcycles will be merged without at 
-            wrong places.
-            """
+            # First subcycle
+            if self.cycle.is_off:
+                self.cycle.turn_on(0, cmd.line)
+                self.subcycle_list.turn_on(0, cmd.line)
+                    
+            """ Use SETTCR as start and stop of subcycles.
+            In this implementation, SETTCR 0 means that subcycle is continued."""
             if cmd.cmd == "SETTCR":
                 
-                # First subcycle
-                if self.cycle.is_off:
-                    self.cycle.turn_on(cmd.t, cmd.line)
-                    self.subcycle_list.turn_on(cmd.t, cmd.line)
-                    
-                
-                # All other subcycles except for that SETTCR that appears 
-                # directly before REP command at the end of the file
-                elif cmd.t != 0:
-                    # Turn off phase shifts at end of subcycle
-                    # self.PHA_OFF(cmd.t, cmd.line)
+                if cmd.t > 0:
                     self.subcycle_list.turn_off(cmd.t, cmd.line, self.streams)
                     
                     # Delete connection to last subcycle streams
@@ -235,6 +226,7 @@ class Tarlan():
                     
                     self.subcycle_list.turn_on(cmd.t, cmd.line)
                 self.SETTCR(cmd.t, cmd.line)
+                
             elif cmd.cmd == "REP":
                 # self.PHA_OFF(cmd.t, cmd.line)
                 self.subcycle_list.turn_off(cmd.t, cmd.line, self.streams)
