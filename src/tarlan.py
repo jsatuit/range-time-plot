@@ -22,6 +22,7 @@ from typing import Self
 from src.phaseshifter import PhaseShifter
 from src.tarlanIntervals import IntervalList, TarlanSubcycle
 from src.tarlanError import TarlanError, TarlanWarning
+from src.eventlist import EventList
 from src.const import km, µs, c
 
 tarlan_command_docstring =\
@@ -397,6 +398,16 @@ class Tarlan():
             raise RuntimeError(msg)
         
         return np.gcd.reduce(phase_len_ns)/1e9
+    
+    def phaseshifts(self, idx: int = 0) -> tuple[EventList, list[float]]:
+        
+        # Does this subcycle exist (or has it been parsed yet?)
+        
+        sc_interval = self.subcycle_list.intervals[idx]
+        tx_intervals = self.subcycle_list.data_intervals[idx]["RF"].intervals
+        
+        return self.phaseshifter.phase_shifts_within(sc_interval, tx_intervals)
+        
     
         
 def parse_line(line: str, line_number: int = 0) -> list[Command]:

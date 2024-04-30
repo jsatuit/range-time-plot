@@ -95,6 +95,7 @@ class Subcycle:
                     plot.receive("CH"+str(ch), receive)
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
         plot.phase(self.phaseshifts, self.transmits)
+        print("Baudlengths in subcycle:", self.baudlengths)
         # Plot state properties of experiment
         for i, (ch, receives) in enumerate(self.receive.items()):
             plot.state("CH"+str(ch), receives.lengths, receives.begins) 
@@ -144,7 +145,7 @@ class Experiment:
                     continue
                 for data_interval in tlan.subcycle_list.data_intervals[i][stream].intervals:
                     subcycle.add_time(stream, data_interval)
-            subcycle.phaseshifts = tlan.phaseshifter.phase_shifts_within(subcycle_interval)
+            subcycle.phaseshifts, subcycle.baudlengths = tlan.phaseshifts(i)
             exp.add_subcycle(subcycle)
 
         
