@@ -221,6 +221,11 @@ class Expplot:
         
         
     def phase(self, phaseshifts: EventList, tx_intervals):
+        
+        # No transmission -> No phase plot
+        if len(tx_intervals) == 0:
+            return
+        
         bars_begin_at = [tx_intervals[0].begin] + phaseshifts.times[1:]
         bar_lengths = np.diff(bars_begin_at + [tx_intervals[-1].end])
         # Make sure that phases are between 0 and 360 degree
