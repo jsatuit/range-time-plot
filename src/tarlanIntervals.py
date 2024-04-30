@@ -78,10 +78,15 @@ class IntervalList:
         :raises TarlanError: if stream is on already
 
         """
-        if self.is_off:
-            self._streams.append([time])
-        else:
+        if self.is_on:
             raise TarlanError(f"Data stream {self.name} is already on!", line)
+        try:
+            if time < self.last_turn_off:
+                raise TarlanError(f"Data stream was turned off at {self.last_turn_off}."+\
+                      f"It cannot be turned on at {time}!")
+        except RuntimeError:
+            pass
+        self._streams.append([time])
     
     def turn_off(self, time: float, line: int):
         """
@@ -91,13 +96,19 @@ class IntervalList:
         :type time: float
         :param line: line in the tlan file. Used for error handling only.
         :type line: int
-        :raises TarlanError: if stream is off already
+        :raises TarlanError: if stream is off or if time is before time of switching on
         
         """
-        if self.is_on:
-            self._streams[-1].append(time)
-        else:
+        if self.is_off:
             raise TarlanError(f"Data stream {self.name} is already off!", line)
+        try:
+            if time < self.last_turn_on:
+                raise TarlanError(f"Data stream was turned on at {self.last_turn_on}."+\
+                              f"It cannot be turned off at {time}!")
+        except RuntimeError:
+            pass
+        
+        self._streams[-1].append(time)
             
     @property
     def nstreams(self) -> int:
