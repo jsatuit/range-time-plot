@@ -85,7 +85,7 @@ class PhaseShifter():
         return self._phase_shifts
     
     def phase_shifts_within(self, interval: TimeInterval, 
-                            tx_intervals: TimeIntervalList = []
+                            tx_intervals: TimeIntervalList | None = None
                             ) -> EventList | tuple[EventList, list[float]]:
         """List of TimedEvents contaning the phase shifts within interval.
         
@@ -97,8 +97,8 @@ class PhaseShifter():
         :param interval: interval which the phases shifts should be inside of.
         :type interval: TimeInterval
         :param tx_intervals: transmit intervals. If wanted to estimate baud 
-            lengths, these must be given, defaults to []
-        :type tx_intervals: TimeIntervalList, optional
+            lengths, these must be given, defaults to None
+        :type tx_intervals: TimeIntervalList or None, optional
         :return: A list of the phase shifts within the interval. If 
             tx_intervals is given, also a list of baud lengths is returned.
         :rtype: EventList[, list[float]]
@@ -127,7 +127,7 @@ class PhaseShifter():
                                     self.phase_shifts[first_index - 1].event)
             phase_shifts.insert(0, last_shift)
         
-        if len(tx_intervals) > 0:
+        if tx_intervals is not None:
             baud_lengths = \
                 [self.estimate_baud_length(interval) for interval in tx_intervals]
             
