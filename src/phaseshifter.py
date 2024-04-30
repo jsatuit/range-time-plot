@@ -85,11 +85,24 @@ class PhaseShifter():
         return self._phase_shifts
     
     def phase_shifts_within(self, interval: TimeInterval, 
-                            tx_intervals: TimeIntervalList = []):
+                            tx_intervals: TimeIntervalList = []
+                            ) -> EventList | tuple[EventList, list[float]]:
         """List of TimedEvents contaning the phase shifts within interval.
+        
+        The last phase shift before the interval is also returned.
         
         Also returns list of (estimated) baud lengths if transmit intervals are 
         given.
+        
+        :param interval: interval which the phases shifts should be inside of.
+        :type interval: TimeInterval
+        :param tx_intervals: transmit intervals. If wanted to estimate baud 
+            lengths, these must be given, defaults to []
+        :type tx_intervals: TimeIntervalList, optional
+        :return: A list of the phase shifts within the interval. If 
+            tx_intervals is given, also a list of baud lengths is returned.
+        :rtype: EventList[, list[float]]
+
         """
         phase_shifts = EventList()
         
@@ -122,7 +135,19 @@ class PhaseShifter():
         else:
             return phase_shifts
     
-    def estimate_baud_length(self, interval: TimeInterval):
+    def estimate_baud_length(self, interval: TimeInterval) -> float:
+        """
+        Estimate baud length within transmit interval.
+        
+        Baud length is estimated by finding the greatest common divisor of the 
+        time between the phase shifts in the transmit pulse.
+        
+        :param interval: transmit interval
+        :type interval: TimeInterval
+        :return: baud length
+        :rtype: float
+
+        """
         return 0
     
     def as_line(self, interval: TimeInterval):
