@@ -9,7 +9,7 @@ import numpy as np
 
 from bisect import insort_left
 
-from src.timeInterval import TimeInterval
+from src.timeInterval import TimeInterval, TimeIntervalList
 from src.eventlist import TimedEvent, EventList
 
 class PhaseShifter():
@@ -84,8 +84,13 @@ class PhaseShifter():
         "List of TimedEvents contaning the phase shifts"
         return self._phase_shifts
     
-    def phase_shifts_within(self, interval: TimeInterval):
-        "List of TimedEvents contaning the phase shifts within interval"
+    def phase_shifts_within(self, interval: TimeInterval, 
+                            tx_intervals: TimeIntervalList = []):
+        """List of TimedEvents contaning the phase shifts within interval.
+        
+        Also returns list of (estimated) baud lengths if transmit intervals are 
+        given.
+        """
         phase_shifts = EventList()
         
         # Tells if we are above the lower limit of the interval
@@ -109,7 +114,16 @@ class PhaseShifter():
                                     self.phase_shifts[first_index - 1].event)
             phase_shifts.insert(0, last_shift)
         
-        return phase_shifts
+        if len(tx_intervals) > 0:
+            baud_lengths = \
+                [self.estimate_baud_length(interval) for interval in tx_intervals]
+            
+            return phase_shifts, baud_lengths
+        else:
+            return phase_shifts
+    
+    def estimate_baud_length(self, interval: TimeInterval):
+        return 0
     
     def as_line(self, interval: TimeInterval):
         phase_shifts = self.phase_shifts_within(interval)
