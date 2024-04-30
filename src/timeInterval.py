@@ -28,7 +28,8 @@ class TimeInterval:
     """
     def __init__(self, begin: float = 0.0, end: float = 0):
         if end < begin:
-            raise ValueError("Start of interval must come before end")
+            msg = f"Start of interval {begin} must come before end {end}, but did not!"
+            raise ValueError(msg)
         self.begin = begin
         self.end = end
 
