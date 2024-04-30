@@ -148,7 +148,18 @@ class PhaseShifter():
         :rtype: float
 
         """
-        return 0
+        # Timepoints where phase is shifted
+        tshifts = self.phase_shifts_within(interval).times
+        
+        # Length of the time the phase shifter is in one state
+        tlen = np.diff(tshifts)
+        
+        # Change subcycle time to integers showing the time in nanoseconds.
+        # This is much better than the radar controller ca do, so there should
+        # be problems with too bad accuracy. NO CHECKS ARE MADE!
+        tlenns = np.rint(tlen*1e9).astype(int)
+        
+        return np.gcd.reduce(tlenns)/1e9
     
     def as_line(self, interval: TimeInterval):
         phase_shifts = self.phase_shifts_within(interval)

@@ -95,7 +95,7 @@ class Subcycle:
                     plot.receive("CH"+str(ch), receive)
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
         plot.phase(self.phaseshifts, self.transmits)
-        print("Baudlengths in subcycle:", self.baudlengths)
+        print("Baudlengths in subcycle:", *[f" {bl*1e6} µs" for bl in self.baudlengths])
         # Plot state properties of experiment
         for i, (ch, receives) in enumerate(self.receive.items()):
             plot.state("CH"+str(ch), receives.lengths, receives.begins) 
