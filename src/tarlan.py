@@ -362,42 +362,7 @@ class Tarlan():
         else:
             warn(f"Command {cmd.cmd}, called from line {cmd.line} "+\
                   "is not implemented yet", TarlanWarning)
-    def baud_length(self) -> float:
-        """
-        Estimate baud length.
-        
-        Algorithm:
-        - Use times when is the transmit in one phase and calculate the largest 
-        common divisor of those. This should in most cases be the baud length.
-        
-        The computation fails if the bauds need accuracy of better than 1 ns.
-        If that happens, the function must be changed accordingly (three 
-        hard-coded numbers must become larger)
-        
-        :raises RuntimeError: If needed accuracy is not met.
-        :return: baud length [s]
-        :rtype: float
 
-        """
-        # length of single phase intervals
-        phase_len = []
-        for s in ["+", "-"]:
-            for subcycle in self.subcycle_list.data_intervals:
-                for length in subcycle[s].intervals.lengths:
-                    phase_len.append(length)
-        
-        # Sadly, function calculating gcd does not accept floating point numbers.
-        # Therefore we multiply with a milliard and hope for integers. This means
-        # that there cant be any bauds (or intervals) with accuracy better than 
-        # 1 nanosecond.
-        pla = np.asarray(phase_len)
-        phase_len_ns = np.rint(pla*1e9).astype(int)
-        if not np.all(phase_len_ns - pla*1e9 < 0.5):
-            msg = "Could not round array to integers! This propably means that"\
-            " an better accuracy than 1 nanosecond is needed."
-            raise RuntimeError(msg)
-        
-        return np.gcd.reduce(phase_len_ns)/1e9
     
     def phaseshifts(self, idx: int = 0) -> tuple[EventList, list[float]]:
         
