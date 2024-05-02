@@ -5,9 +5,10 @@ import os
 
 from typing import Union
 
-from src.expplot import Expplot
+from src.expplot import Expplot, calc_nearest_range, calc_furthest_full_range
 from src.tarlan import Tarlan
 from src.timeInterval import TimeInterval, TimeIntervalList
+from src.eventlist import EventList
 from src.const import km, µs, c
 
 class Subcycle:
@@ -20,6 +21,8 @@ class Subcycle:
         self.receive = {}
         self.rx_protection = TimeIntervalList()
         self.prop = {}
+        self.baudlengths = []
+        self.phaseshifts = EventList()
         
         self._begin = begin
         self._end = end
@@ -72,13 +75,15 @@ class Subcycle:
             self.prop[name].append(time)
             
             
-    def plot(self, plot = None) -> None:
+    def plot(self, plot = None, rangelims: bool = False) -> None:
         """
         Plot reached ranges and transmitter/receiver states for single subcycle.
         
         :param plot: If given Expplot, everything is plotted into given Expplot object. 
             If None, a new plot is created, defaults to None
         :type plot: Expplot | None, optional
+        :param bool, optional rangelims: Show nearest and furthest ranges as
+            axis ticks. default False.
 
         """
         
@@ -95,7 +100,23 @@ class Subcycle:
                     plot.receive("CH"+str(ch), receive)
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
         plot.phase(self.phaseshifts, self.transmits)
-        print("Baudlengths in subcycle:", *[f" {bl*1e6} µs" for bl in self.baudlengths])
+        if rangelims:
+            # Calculate nearest and furthest range for all transmit–receive pairs
+            nearest = []
+            furthest = []
+            for i, transmit in enumerate(self.transmits):
+                for (ch, receives) in self.receive.items():
+                    for receive in receives:
+                        nearest.append(calc_nearest_range(transmit, receive, 
+                                                          self.baudlengths[i]))
+                        furthest.append(calc_furthest_full_range(transmit,
+                                                                 receive,
+                                                                 self.baudlengths[i]))
+            for ran in nearest:
+                plot.add_range_label(ran)
+            for ran in furthest:
+                plot.add_range_label(ran)
+        
         # Plot state properties of experiment
         for i, (ch, receives) in enumerate(self.receive.items()):
             plot.state("CH"+str(ch), receives.lengths, receives.begins) 

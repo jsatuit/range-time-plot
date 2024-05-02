@@ -30,7 +30,7 @@ def calc_nearest_range(tx_interval: TimeInterval, rx_interval: TimeInterval,
 
     """
     
-    rx_interval.check_overlap(tx_interval)
+    # rx_interval.check_overlap(tx_interval)
     
     
     # Traveltime to nearest range gate
@@ -54,7 +54,7 @@ def calc_furthest_full_range(tx_interval: TimeInterval, rx_interval: TimeInterva
     :return: Furthest range gate. 
     """
     
-    rx_interval.check_overlap(tx_interval)
+    # rx_interval.check_overlap(tx_interval)
     
     # Traveltime to furtherst range gate
     dt = rx_interval.end-tx_interval.end
