@@ -116,8 +116,9 @@ class Tarlan():
         "PHA0": "Set proper phase, bit 4 low",
         "PHA180": "Set proper phase, bit 4 high",
         "CALON": "Tromsø and receivers: Enable noise source for calibration, bit 15 high.",
-        "CAL100": "Not documented. Propably same as CALON",
+        "CAL100": "Enable noise source for calibration, bit 15 high.",
         "CALOFF": "Tromsø and receivers: Disable noise source, bit 15 low.",
+        "CAL0": "Disable noise source for calibration, bit 15 low.",
         "HCALON": "Remote receivers: enable noise source in only horisontal "+
             "wave guide, high bit 1 high",
         "HCALOFF": "Remote receivers: disable noise source in only horisontal "+
@@ -140,6 +141,8 @@ class Tarlan():
         "AD2R": "Route input for AD 2 to channel board 4, 5, 6.",
         "STFIR": "Start the fir filters onboard channel boards, necessary "+\
             "to do before using them, bit 16 strobed.",
+        "TRANS": "Not documented.",
+        "RECEV": "Not documented.",
         }
     for i in range(16):
         command_docs["F" + str(i)] = "Set transmitter frequency, bit 0-3 high"
@@ -271,6 +274,8 @@ class Tarlan():
         
         #### Implement TARLAN commands from here ####
         commands = {
+            "TRANS": do_nothing,  # No documentation
+            "RECEV": do_nothing,  # No documentation
             "RFON": self.streams["RF"].turn_on,
             "RFOFF": self.streams["RF"].turn_off,
             "RXPROT": self.streams["RXPROT"].turn_on,
@@ -280,6 +285,7 @@ class Tarlan():
             "CALON": self.streams["CAL"].turn_on,
             "CAL100": self.streams["CAL"].turn_on,
             "CALOFF": self.streams["CAL"].turn_off,
+            "CAL0": self.streams["CAL"].turn_off,
             "BEAMON": self.streams["BEAM"].turn_on,
             "BEAMOFF": self.streams["BEAM"].turn_off,
             "PHA0": self.phaseshifter.PHA0,
