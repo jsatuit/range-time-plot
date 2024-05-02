@@ -122,7 +122,7 @@ class PhaseShifter():
                 phase_shifts.append(shift)
                 
         # Add the last phase shift from before the interval
-        if first_index > 0:
+        if first_index is not None and first_index > 0:
             last_shift = TimedEvent(interval.begin, 
                                     self.phase_shifts[first_index - 1].event)
             phase_shifts.insert(0, last_shift)
