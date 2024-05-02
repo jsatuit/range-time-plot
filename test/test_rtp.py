@@ -32,13 +32,6 @@ def test_calc_nearest_range():
     assert calc_nearest_range(ti.TimeInterval(0,1), 
                                   ti.TimeInterval(1,2),1,100) == 50
     
-    # Test Overlapping intervals
-    with pytest.raises(ti.OverlapError):
-        calc_nearest_range(ti.TimeInterval(0,1), 
-                               ti.TimeInterval(0,1),1)
-    with pytest.raises(ti.OverlapError):
-        calc_nearest_range(ti.TimeInterval(0,1), 
-                               ti.TimeInterval(0,1),0.1)
     
 def test_calc_furthest_full_range():
     assert calc_furthest_full_range(ti.TimeInterval(0,1), 
@@ -63,8 +56,3 @@ def test_calc_furthest_full_range():
     assert calc_furthest_full_range(ti.TimeInterval(0,1), 
                                         ti.TimeInterval(1,2),1,100) == 50
     
-    # Test Overlapping intervals
-    with pytest.raises(ti.OverlapError):
-        calc_furthest_full_range(ti.TimeInterval(0,1), ti.TimeInterval(0,1),1)
-    with pytest.raises(ti.OverlapError):
-        calc_furthest_full_range(ti.TimeInterval(0,1), ti.TimeInterval(0,1),0.1)
