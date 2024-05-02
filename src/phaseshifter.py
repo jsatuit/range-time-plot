@@ -64,21 +64,6 @@ class PhaseShifter():
         """
         self.set_phase(time, 180)
     
-    # def intervals_within(self, interval: TimeInterval) -> dict[float, TimeIntervalList]:
-    #     """
-    #     Give intervals of the times when phaseshifter inserts phase shifts.
-        
-    #     Output intervals are within the specified interval.
-        
-    #     :param interval: Interval the output should be within
-    #     :type interval: TimeInterval
-    #     :return: dictionary of phaseshift – TimeIntervalList pairs.
-    #     :rtype: dict[float, TimeIntervalList]
-
-    #     """
-    #     d = {}
-    #     for phase in self._phases:
-    #         for phase_shift in self._phase_shifts:
     @property
     def phase_shifts(self):
         "List of TimedEvents contaning the phase shifts"
@@ -140,7 +125,13 @@ class PhaseShifter():
         Estimate baud length within transmit interval.
         
         Baud length is estimated by finding the greatest common divisor of the 
-        time between the phase shifts in the transmit pulse.
+        time between the phase shifts in the transmit pulse. 
+        
+        WARNING: This is NOT a perfect function and will fail in cases where the
+        pulse has phases like ++++ or ++--. but still works for cases like +++--.
+        
+        In many KST experiments (f.e. beata, manda), the first baud is not used or 
+        the code is long enough such that this function works for all pulses.
         
         :param interval: transmit interval
         :type interval: TimeInterval
@@ -162,6 +153,31 @@ class PhaseShifter():
         return np.gcd.reduce(tlenns)/1e9
     
     def as_line(self, interval: TimeInterval):
+        """
+        Coordinates of a line connecting the phase shifts within an interval
+        
+        That is a list of x coordinates and a list of y coordinates which 
+        respectively describes the time and phases of the phase shifts
+        
+        Example:
+        180        x----------x     x----   etc.
+                   |          |     |
+        0   -x-----x          x-----x
+             0     6          17    25   
+        
+        gives
+        [0, 6, 6, 17, 17, 25, 25, ...]
+        and
+        [0, 0, 180, 180, 0, 0, 180, ...]
+        
+        (Not used at current)
+        
+        :param interval: nInterval the phase shifts should be within
+        :type interval: TimeInterval
+        :return: lists of coordinates
+        :rtype: tuple[list[float], list[float]]
+
+        """
         phase_shifts = self.phase_shifts_within(interval)
         
         t = np.asarray(phase_shifts.times)
