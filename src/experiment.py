@@ -218,7 +218,6 @@ class Experiment:
         # Parse elan
         eros = Eros(radar)
         eros(f"runexperiment {path} lm scan_pattern Country 90.0")
-        cals = eros.py_getcallings(["loadradar"])
         
         """ Now looking for which .tlan file to load. This is done by finding the 
         last loaded .rbin file* and exchange ending .rbin with .tlan. This should 
@@ -237,11 +236,9 @@ class Experiment:
         We could also have looked at .tbin file, but since the remote receivers 
             dont transmit, the .tbin file would never be loaded.
         """
-        rbin = ""
-        for call in cals:
-            if call[0] == "loadradar" and "-file" in call:
-                i = call.index("-file")
-                rbin = os.path.splitext(os.path.split(call[i+1])[1])[0]
+        files = eros.py_get_loadedfiles()
+        rbin = os.path.split(files["rbin"])[1]
+
         
         # Find tlan from rbin. 
         tlans = []

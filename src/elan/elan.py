@@ -46,6 +46,8 @@ class Eros(TclScope):
         t = datetime.datetime.now(datetime.timezone.utc)
         tstr = t.strftime('%Y-%M-%d %H:%M:%S.%f')
         return tstr
+    def py_get_loadedfiles(self):
+        return self._loadedfiles
     def argv(self, *args):
         return ' '.join(self.__argv)
     def armradar(self, args):
