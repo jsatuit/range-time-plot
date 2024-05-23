@@ -178,7 +178,10 @@ class Eros(TclScope):
         
         
     def runexperiment(self, args):
-        filename = args[0]+".elan"
+        if args[0].endswith(".elan"):
+            filename = args[0]
+        else:
+            filename = args[0]+".elan"
         self.__argv = args[2:]
         with open(filename) as file:
             script = file.read()
