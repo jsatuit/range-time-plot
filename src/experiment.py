@@ -8,7 +8,7 @@ from typing import Union
 from src.expplot import Expplot, calc_nearest_range, calc_furthest_full_range
 from src.tlan.tarlan import Tarlan
 from src.timeInterval import TimeInterval, TimeIntervalList
-from src.elan.elan import Eros
+from src.elan.elan import Eros, filefinder
 from src.eventlist import EventList
 from src.const import km, µs, c
 
@@ -195,33 +195,14 @@ class Experiment:
         
 
         """
-        expname = os.path.splitext(os.path.split(filename)[1])[0]
+        (directory, expname, path) = filefinder(filename)
         exp = cls(expname)
-        # Find elan file
-        if not filename.endswith(".elan"):
-            filename += ".elan"
-        paths = [
-            filename,
-            os.path.join("/kst/exp", filename),
-            os.path.join("kst", "exp", filename),
-        ]
-        exists = False
-        for path in paths:
-            if os.path.isfile(path):
-                exists = True
-                break
-        if not exists:
-            raise FileNotFoundError(filename)
-        
-        directory = os.path.split(path)[0]
         
         # Parse elan
         eros = Eros(radar)
         eros(f"runexperiment {path} lm scan_pattern Country 90.0")
         
-        
-        tlan_name = eros.py_get_tlan(directory)
-        tlan = Tarlan(os.path.join(directory, tlan_name))
+        tlan = Tarlan(os.path.join(directory, eros.py_get_tlan(directory)))
         
         for i, subcycle_interval in enumerate(tlan.subcycle_list.intervals):
             subcycle = Subcycle(subcycle_interval.begin, subcycle_interval.end)

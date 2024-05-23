@@ -14,6 +14,40 @@ from math import ceil
 
 from src.elan.tcl import TclScope, extend
 
+def filefinder(filename:str):
+    """
+    Find file filename. 
+    :param filename: experiment filename. May be absolute path (/kst/exp/manda/manda) or relative to 
+        root of this repository (for example kst/exp/manda/manda). The function will 
+        also look into folder /kst/exp or kst/exp if they exist.
+    :type filename: str
+    :raises FileNotFoundError: If the experiment file is not found in the given 
+        directory, or within (subfolders of) (/)kst/exp
+    :return: directory, name of experiment, path to experiment
+    :rtype: Tuple[str, str, str]
+
+    """
+    expname = os.path.splitext(os.path.split(filename)[1])[0]
+    
+    # Find elan file
+    if not filename.endswith(".elan"):
+        filename += ".elan"
+    paths = [
+        filename,
+        os.path.join("/kst/exp", filename),
+        os.path.join("kst", "exp", filename),
+    ]
+    exists = False
+    for path in paths:
+        if os.path.isfile(path):
+            exists = True
+            break
+    if not exists:
+        raise FileNotFoundError(filename)
+    
+    directory = os.path.split(path)[0]
+    return directory, expname, path
+
 class Eros(TclScope):
     RCs = ["transmitter","receiver","ion line receiver","plasma line receiver"]
     
