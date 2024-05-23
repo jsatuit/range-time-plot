@@ -6,6 +6,8 @@ This module includes some EROS functions to the tcl parser. Also these are badly
 
 
 import datetime
+import difflib
+import os
 import re
 
 from math import ceil
@@ -48,6 +50,40 @@ class Eros(TclScope):
         return tstr
     def py_get_loadedfiles(self):
         return self._loadedfiles
+    def py_get_tlan(self, di = ""):
+        """Guess which .tlan file was used
+        
+        This is done by finding the last loaded .rbin file* and exchange ending 
+        .rbin with .tlan. This should work. 
+        
+        * compiled .tlan file for reception.
+        
+        However, there are some potential problems with this:
+        - There is no guarantee that the filenames are the same: There
+            could be that exp.tlan which was compiled to mohahaha.rbin (and wtf.tbin).
+        - There is also a risk that the script is updated while the binary files are not.
+        - Transmit-only experiments wont be loaded. Since they would also violate 
+            rules EISCAT blue book and thereby not run, this will only happen if 
+            the experiment is not programmed properly.
+            
+        We could also have looked at .tbin file, but since the remote receivers 
+            dont transmit, the .tbin file would never be loaded.
+        """
+        rbin_path = self._loadedfiles["rbin"]
+        directory, rbin = os.path.split(rbin_path)
+        if di:
+            directory = di
+        # Find tlan from rbin. 
+        tlans = []
+        with os.scandir(directory) as iterator:
+            for entry in iterator:
+                if entry.name.endswith(".tlan") and entry.is_file():
+                    tlans.append(entry.name)
+                    
+        #Use that tlan file that has name closest to rbin
+        tlan_name = difflib.get_close_matches(rbin, tlans, n=1)[0]
+        return tlan_name
+        
     def argv(self, *args):
         return ' '.join(self.__argv)
     def armradar(self, args):
