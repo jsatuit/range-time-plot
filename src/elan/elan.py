@@ -28,7 +28,7 @@ def filefinder(filename:str):
 
     """
     expname = os.path.splitext(os.path.split(filename)[1])[0]
-    
+
     # Find elan file
     if not filename.endswith(".elan"):
         filename += ".elan"
@@ -43,7 +43,7 @@ def filefinder(filename:str):
             exists = True
             break
     if not exists:
-        raise FileNotFoundError(filename)
+        raise FileNotFoundError(path)
     
     directory = os.path.split(path)[0]
     return directory, expname, path
