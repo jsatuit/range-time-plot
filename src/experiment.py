@@ -6,7 +6,7 @@ import os
 from typing import Union
 
 from src.expplot import Expplot, calc_nearest_range, calc_furthest_full_range
-from src.tarlan import Tarlan
+from src.tlan.tarlan import Tarlan
 from src.timeInterval import TimeInterval, TimeIntervalList
 from src.eventlist import EventList
 from src.const import km, µs, c

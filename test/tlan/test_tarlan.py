@@ -4,7 +4,7 @@ import pytest
 import tempfile
 import os
 
-from src.tarlan import µs, parse_line, TarlanError, Command, Tarlan
+from src.tlan.tarlan import µs, parse_line, TarlanError, Command, Tarlan
 
 
 def test_parse_line():

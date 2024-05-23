@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from src.tarlanError import TarlanError
+from src.tlan.tarlanError import TarlanError
 from src.timeInterval import TimeInterval, TimeIntervalList
 
 class IntervalList:

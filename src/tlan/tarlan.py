@@ -20,8 +20,8 @@ from warnings import warn
 from typing import Self
 
 from src.phaseshifter import PhaseShifter
-from src.tarlanIntervals import IntervalList, TarlanSubcycle
-from src.tarlanError import TarlanError, TarlanWarning
+from src.tlan.tarlanIntervals import IntervalList, TarlanSubcycle
+from src.tlan.tarlanError import TarlanError, TarlanWarning
 from src.eventlist import EventList
 from src.const import km, µs, c
 

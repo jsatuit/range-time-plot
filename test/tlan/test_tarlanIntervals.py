@@ -7,7 +7,7 @@ Created on Thu Apr 18 12:36:13 2024
 """
 import pytest  
 from src.timeInterval import TimeInterval
-from src.tarlanIntervals import IntervalList
+from src.tlan.tarlanIntervals import IntervalList
 
 def test_intervallist():
     # Test empty interval
