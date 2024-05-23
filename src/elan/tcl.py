@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+This module contains tcl parsing functions. These are badly documented here to speed up developing time. 
+
+TclScope is the main class that executes functions.  
+
+Notes:
+There are problems with the implementation of lists. At current, tcl lists are saved as python lists, but that sometimes gives errors. Since the most important parts of library work as expected, the implementation might stay like this. 
+"""
 import re
 
 from math import sin, cos, sqrt, hypot

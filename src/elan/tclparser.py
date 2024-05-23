@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+This module contains tcl parsing functions. These are badly documented here to speed up developing time. 
+
+The class TclParser parses a tcl script/line into TclCommand objects. These are used/executed by TclScope.  
+"""
 import re
 
 

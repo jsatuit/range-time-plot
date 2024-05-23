@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+This module includes some EROS functions to the tcl parser. Also these are badly documented here, but there is an explanation of EROS commands at https://portal.eiscat.se/jussi/eiscat/erosdoc/cmds.html
+"""
+
 
 import datetime
 import re
