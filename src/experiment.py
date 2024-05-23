@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
-
+import difflib
 
 from typing import Union
 
 from src.expplot import Expplot, calc_nearest_range, calc_furthest_full_range
 from src.tlan.tarlan import Tarlan
 from src.timeInterval import TimeInterval, TimeIntervalList
+from src.elan.elan import Eros
 from src.eventlist import EventList
 from src.const import km, µs, c
 
@@ -154,9 +155,106 @@ class Experiment:
         :rtype: Experiment
 
         """
-        exp = cls(os.path.basename(filename).split(".")[0])
+        expname = os.path.splitext(os.path.split(filename)[1])[0]
+        exp = cls(expname)
         
         tlan = Tarlan(filename)
+        
+        for i, subcycle_interval in enumerate(tlan.subcycle_list.intervals):
+            subcycle = Subcycle(subcycle_interval.begin, subcycle_interval.end)
+            
+            for stream in tlan.subcycle_list.data_intervals[i]:
+                if len(stream) == 0:
+                    continue
+                for data_interval in tlan.subcycle_list.data_intervals[i][stream].intervals:
+                    subcycle.add_time(stream, data_interval)
+            subcycle.phaseshifts, subcycle.baudlengths = tlan.phaseshifts(i)
+            exp.add_subcycle(subcycle)
+
+        
+        return exp
+    
+    @classmethod
+    def from_elan(cls, filename: str, radar: str = 'UHF'):
+        """
+        Load experiment file and convert to Experiment.
+        
+        This is done by parsing the commands that would be run if the user typed
+        "runexperiment <filename> <timestec> <some args>" in an real EROS console.
+        
+        :param str filename: Path of elan file to load. The filename may have 
+            the ending .elan or the ending may be be left out. If the file is 
+            not found, python will look into "/kst/exp/filename" and "kst/exp/filename"
+        :param str radar: Site to plot the experiment for. Possibles are "UHF", 
+            "VHF", "ESR", "KIR", "SOD"
+        :raises RuntimeError: If radar controller is not resetted correctly 
+            at end of tlan file.
+        :raises RuntimeWarning: if transmitter is constantly off.
+        :return: Object containing properties of the experiment.
+        :rtype: Experiment
+        
+
+        """
+        expname = os.path.splitext(os.path.split(filename)[1])[0]
+        exp = cls(expname)
+        # Find elan file
+        if not filename.endswith(".elan"):
+            filename += ".elan"
+        paths = [
+            filename,
+            os.path.join("/kst/exp", filename),
+            os.path.join("kst", "exp", filename),
+        ]
+        exists = False
+        for path in paths:
+            if os.path.isfile(path):
+                exists = True
+                break
+        if not exists:
+            raise FileNotFoundError(filename)
+        
+        directory = os.path.split(path)[0]
+        
+        # Parse elan
+        eros = Eros(radar)
+        eros(f"runexperiment {path} lm scan_pattern Country 90.0")
+        cals = eros.py_getcallings(["loadradar"])
+        
+        """ Now looking for which .tlan file to load. This is done by finding the 
+        last loaded .rbin file* and exchange ending .rbin with .tlan. This should 
+        work. 
+        
+        * compiled .tlan file for reception.
+        
+        However, there are some potential problems with this:
+        - There is no guarantee that the filenames are the same: There
+            could be that exp.tlan which was compiled to mohahaha.rbin (and wtf.tbin).
+        - There is also a risk that the script is updated while the binary files are not.
+        - Transmit-only experiments wont be loaded. Since they would also violate 
+            rules EISCAT blue book and thereby not run, this will only happen if 
+            the experiment is not programmed properly.
+            
+        We could also have looked at .tbin file, but since the remote receivers 
+            dont transmit, the .tbin file would never be loaded.
+        """
+        rbin = ""
+        for call in cals:
+            if call[0] == "loadradar" and "-file" in call:
+                i = call.index("-file")
+                rbin = os.path.splitext(os.path.split(call[i+1])[1])[0]
+        
+        # Find tlan from rbin. 
+        tlans = []
+        with os.scandir(directory) as iterator:
+            for entry in iterator:
+                if entry.name.endswith(".tlan") and entry.is_file():
+                    tlans.append(entry.name)
+                    
+        #Use that tlan file that has name closest to rbin
+        
+        
+        tlan_name = difflib.get_close_matches(rbin, tlans, n=1)[0]
+        tlan = Tarlan(os.path.join(directory, tlan_name))
         
         for i, subcycle_interval in enumerate(tlan.subcycle_list.intervals):
             subcycle = Subcycle(subcycle_interval.begin, subcycle_interval.end)
