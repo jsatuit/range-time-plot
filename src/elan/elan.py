@@ -20,6 +20,7 @@ class Eros(TclScope):
         # if "radar" not in var.keys():
         #     raise ValueError("Radar not specified!")
         self._var = var
+        self._loadedfiles = dict(zip(["rbin", "tbin", "nco", "filter", "fil"], "     "))
         if len(radar) > 0:
             self._var["_radar"] = radar
             
@@ -56,7 +57,14 @@ class Eros(TclScope):
         print(f"Enters BLOCK {args[0]} at {tstr} UTC")
         return self.proc(args)
     def callblock(self, args):
-        return self.eval(args)
+        # Do the work
+        ret = self.eval(args)
+        
+        # Take over loaded files from block
+        # Calling a proc/block gives the last entry of the log the scope of the 
+        # proc execution. Thereby we have access to the list of loaded files
+        self._loadedfiles = {**self._loadedfiles, **self._log[-1]["scope"]._loadedfiles}
+        return ret
     def disablerecording(self, args = []):
         if self.ISESR() == "True" or len(args) == 0:
             rec = "ion"
@@ -110,6 +118,7 @@ class Eros(TclScope):
             linearg = -1
             
         fil = args[linearg + 1]
+        self._loadedfiles["filter"] = fil
         # channel numbers are all decimals, divided by anything else.
         chs = re.findall(r'\d+', args[linearg + 2])
         options = args[io:]
@@ -138,6 +147,7 @@ class Eros(TclScope):
     
     def loadfrequency(self, args):
         options, rec, file, chs = self._parse_args_op_rec_x_chs(args)
+        self._loadedfiles["nco"] = file
 
         verbose = "verbose "*("v" in options)
         l = "load"*("t" not in options)
@@ -152,6 +162,9 @@ class Eros(TclScope):
         for option, value in zip(args[1::2], args[2::2]):
             if option[1] == 'f':
                 print(f"load compiled TARLAN programfile {value}")
+                tbin_or_rbin = extend(["tbin", "rbin"], args[0][0])
+                self._loadedfiles[tbin_or_rbin] = value
+
             elif option[1] == 'l':
                 loop_count = int(value)
                 print(f"set loopcounter to {loop_count}")
@@ -167,6 +180,7 @@ class Eros(TclScope):
                 print(f"set syncronisation period to {sync_period} µs")
                 # TODO: Actually load TLAN to get this information
                 rep = 192000  # From manda
+        
         # Ensure that the syncronisation period is correct
         needed_sync = ceil(rep*loop_count/10000)*10000 - rep*loop_count
         if not abs(needed_sync - sync_period) < 0.01:
@@ -228,7 +242,9 @@ class Eros(TclScope):
                 ant = args[3]
         else:
             ant = self._var["_ant"]
-            
+        
+        self._loadedfiles["fil"] = CorrFile
+
         
         print(f"Loading file {CorrFile} into correlator.")
         print(f"Uses Expid {Expid}")
