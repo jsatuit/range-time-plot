@@ -56,7 +56,8 @@ class Eros(TclScope):
         # if "radar" not in var.keys():
         #     raise ValueError("Radar not specified!")
         self._var = var
-        self._loadedfiles = dict(zip(["rbin", "tbin", "nco", "filter", "fil"], "     "))
+        self._loadedfiles = dict(zip(["rbin", "tbin", "filter", "fil", "nco"], 
+                                     [""]*4+[[""]*6]))
         if len(radar) > 0:
             self._var["_radar"] = radar
             
@@ -219,7 +220,8 @@ class Eros(TclScope):
     
     def loadfrequency(self, args):
         options, rec, file, chs = self._parse_args_op_rec_x_chs(args)
-        self._loadedfiles["nco"] = file
+        for ch in chs:
+            self._loadedfiles["nco"][int(ch)-1] = file
 
         verbose = "verbose "*("v" in options)
         l = "load"*("t" not in options)
