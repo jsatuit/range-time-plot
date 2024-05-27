@@ -8,26 +8,30 @@ See also [Jussis EISCAT portal]
 (https://portal.eiscat.se/jussi/eiscat/erosdoc/uhf_radar.html)
 """
 
+
 class Nco:
     """Parsing and handling of numerically controlled oscillator (NCO) files.
     """
+
     def __init__(self, filename: str) -> None:
         """
-        Initialie numerically controlled oscillator for single channel
-        
+        Initialise numerically controlled oscillator for single channel
+
         :param filename: Path to .nco file
         :type filename: str
         :raises ValueError: If file not has valid data.
 
         """
-        self.freqs = []
-        
+
         with open(filename) as file:
             lines = file.read()
-            
+
+        self.freqs = self.parse_nco(lines)
+
+    def parse_nco(self, lines: str) -> list[float]:
+        freqs = []
         # First line MUST be NCOPAR_VS	0.1
         assert lines[0].split() == ["NCOPAR_VS", "0.1"]
-        
         for il, line in enumerate(lines[1:]):
             text = line.split("%")[0]
             if text.isspace():
@@ -44,17 +48,18 @@ class Nco:
             except ValueError:
                 msg = f"{elems[2]} in line{il+2} is not a valid number!"
                 raise ValueError(msg)
-            
-            self.freqs.append(freq)
 
-            
+        freqs.append(freq)
+        return freqs
+
     def set_lo1(self, lo1: float) -> None:
         self._lo1 = lo1
+
     def set_lo2(self, lo2: float) -> None:
         self._lo2 = lo2
+
     def NCOSEL(self, nr: int) -> None:
         self.f_nco = self.freq[nr]
+
     def get_freq(self) -> float:
         return self.lo1 + self._lo2 + self.f_nco
-
-            
