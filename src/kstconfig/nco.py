@@ -26,9 +26,24 @@ class Nco:
         with open(filename) as file:
             lines = file.read()
 
-        self.freqs = self.parse_nco(lines)
+        self.freqs = Nco.parse_nco(lines)
 
-    def parse_nco(self, lines: str) -> list[float]:
+    @staticmethod
+    def parse_nco(lines: str) -> list[float]:
+        """
+        Parse lines from a nco file. 
+
+        Can only parse whole file at once.
+
+        :param lines: lines in the file
+        :type lines: str
+        :raises AssertionError: if the format of the file is not correct.
+        :raises ValueError: if frequency is not a floating-point number.
+        :return: list of frequencies for this experiment
+        :rtype: list[float]
+
+        """
+        lines = lines.split("\n")
         freqs = []
         # First line MUST be NCOPAR_VS	0.1
         assert lines[0].split() == ["NCOPAR_VS", "0.1"]
@@ -39,7 +54,7 @@ class Nco:
             elems = text.split()
             assert elems[0] == "NCO"
             nr = int(elems[1])
-            assert nr == len(self.freqs)
+            assert nr == len(freqs)
             # Assert that elem[2] is a floatin.point number
             # If this works, this is the fastest way ... If not, it should crash anyway.
             # https://stackoverflow.com/questions/354038/how-do-i-check-if-a-string-represents-a-number-float-or-int/23639915#23639915
@@ -49,7 +64,7 @@ class Nco:
                 msg = f"{elems[2]} in line{il+2} is not a valid number!"
                 raise ValueError(msg)
 
-        freqs.append(freq)
+            freqs.append(freq)
         return freqs
 
     def set_lo1(self, lo1: float) -> None:
