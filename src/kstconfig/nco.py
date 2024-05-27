@@ -13,13 +13,16 @@ class Nco:
     """Parsing and handling of numerically controlled oscillator (NCO) files.
     """
 
-    def __init__(self, filename: str) -> None:
+    def __init__(self, filename: str, lo1: float = 812, lo2: float = 128) -> None:
         """
         Initialise numerically controlled oscillator for single channel
 
-        :param filename: Path to .nco file
-        :type filename: str
+        :param str filename: Path to .nco file
+        :param float lo1: Local oscillator 1 frequency [MHz]. Default is 812 MHz
+        :param float lo2: Local oscillator 2 frequency [MHz]. Default is 128 MHz
         :raises ValueError: If file not has valid data.
+        
+        Frequencies are for that branch that leads to this channel.
 
         """
 
@@ -52,6 +55,7 @@ class Nco:
             if text.isspace():
                 continue
             elems = text.split()
+            assert len(elems) == 3
             assert elems[0] == "NCO"
             nr = int(elems[1])
             assert nr == len(freqs)
@@ -68,13 +72,41 @@ class Nco:
         return freqs
 
     def set_lo1(self, lo1: float) -> None:
+        """
+        Set local oscillator 1 frequency.
+        
+        :param lo1: Frequency [MHz]
+        :type lo1: float
+
+        """
         self._lo1 = lo1
 
     def set_lo2(self, lo2: float) -> None:
+        """
+        Set local oscillator 1 frequency.
+        
+        :param lo1: Frequency [MHz]
+        :type lo1: float
+
+        """
         self._lo2 = lo2
 
     def NCOSEL(self, nr: int) -> None:
+        """
+        Select frequency of numerical controlled oscillator.
+        
+        :param nr: Frequency number
+        :type nr: int
+
+        """
         self.f_nco = self.freq[nr]
 
     def get_freq(self) -> float:
+        """
+        Return the centre frequency of this channel.
+        
+        :return: frequency [MHz]
+        :rtype: float
+
+        """
         return self.lo1 + self._lo2 + self.f_nco
