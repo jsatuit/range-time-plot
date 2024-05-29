@@ -160,12 +160,15 @@ class Tarlan():
         command_docs["BTX" + str(i) + "OFF"] = f"Set bit {i} on transmitter controller. " +\
             "No checks are made. Use with caution."
 
-    def __init__(self, filename: str = ""):
+    def __init__(self, filename: str = "", lo1: tuple[float, float] = 812e6, 
+                 lo2: tuple[float, float] = 128e6):
         """
         Initializing Tarlan(). If .tlan file is specified, it will be loaded.
 
         :param str, optional filename: Path of tlan file to load. No file is loaded if 
             string is empty, defaults to ""
+        :param tuple[float, float], optional lo1: Frequencies in first local oscillator [Hz]. One frequency for each path, two in total. UHF lo1 must be inserted twice.
+        :param tuple[float, float], optional lo2: Frequencies in second local oscillator [Hz]. One frequency for each path, two in total
 
         """
         self.cycle = IntervalList("CYCLE")
@@ -184,6 +187,9 @@ class Tarlan():
         # Time control
         self.TCR = 0
         self.end_time = 0
+        
+        self._lo1 = lo1
+        self._lo2 = lo2
 
         if filename:
             self.from_tlan(filename)
