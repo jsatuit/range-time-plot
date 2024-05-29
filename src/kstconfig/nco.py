@@ -31,6 +31,8 @@ class Nco:
         else:
             lines = filename
         self.freqs = Nco.parse_nco(lines)
+        self._lo1 = lo1
+        self._lo2 = lo2
 
     @staticmethod
     def parse_nco(lines: str) -> list[float]:
