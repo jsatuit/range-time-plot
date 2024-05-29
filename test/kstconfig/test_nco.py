@@ -90,3 +90,23 @@ def test_reading():
     with pytest.raises(ValueError):
         Nco.parse_nco(faultyfile4)
         
+def test_nco():
+    # Test manda
+    file = """NCOPAR_VS 0.1
+    NCO 0 8.5"""
+    
+    ch1 = Nco(file, 812)
+    assert len(ch1.freqs) == 1
+    assert ch1.freqs[0] == 8.5
+    with pytest.raises(AttributeError):
+        ch1.get_freq()
+    
+    ch1.set_lo2(124)
+    assert ch1.freqs[0] == 8.5
+    with pytest.raises(AttributeError):
+        ch1.get_freq()
+    with pytest.raises(IndexError):
+        ch1.NCOSEL(1)
+    ch1.NCOSEL(0)
+    assert ch1.get_freq() == 927.5
+    

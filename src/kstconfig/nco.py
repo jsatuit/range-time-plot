@@ -102,14 +102,15 @@ class Nco:
         :type nr: int
 
         """
-        self.f_nco = self.freq[nr]
+        self.f_nco = self.freqs[nr]
 
     def get_freq(self) -> float:
         """
         Return the centre frequency of this channel.
         
+        :raises AttributeError: if frequency has not been selected
         :return: frequency [MHz]
         :rtype: float
 
         """
-        return self.lo1 + self._lo2 + self.f_nco
+        return self._lo1 + self._lo2 + self.f_nco
