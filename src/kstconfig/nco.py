@@ -113,4 +113,4 @@ class Nco:
         :rtype: float
 
         """
-        return self._lo1 + self._lo2 + self.f_nco
+        return self._lo1 + self._lo2 - self.f_nco
