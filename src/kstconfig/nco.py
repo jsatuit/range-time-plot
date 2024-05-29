@@ -7,7 +7,7 @@ that comes into a channel. When reading these files, one should be aware of that
 See also [Jussis EISCAT portal]
 (https://portal.eiscat.se/jussi/eiscat/erosdoc/uhf_radar.html)
 """
-
+import os
 
 class Nco:
     """Parsing and handling of numerically controlled oscillator (NCO) files.
@@ -25,10 +25,11 @@ class Nco:
         Frequencies are for that branch that leads to this channel.
 
         """
-
-        with open(filename) as file:
-            lines = file.read()
-
+        if os.path.isfile(filename):
+            with open(filename) as file:
+                lines = file.read()
+        else:
+            lines = filename
         self.freqs = Nco.parse_nco(lines)
 
     @staticmethod

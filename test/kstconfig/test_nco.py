@@ -89,3 +89,4 @@ def test_reading():
     
     with pytest.raises(ValueError):
         Nco.parse_nco(faultyfile4)
+        
