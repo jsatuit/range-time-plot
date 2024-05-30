@@ -306,11 +306,11 @@ class Eros(TclScope):
                           "P3", "U42", "42U", "U42m", 
                           "P4", "D42", "42U", "U42m"], [1]*5 + [2]*5 + [3]*4 + [4]*4
                          ))
-        if self.UHF() == "True":
+        if self.ISUHF() == "True":
             pathnr = pathsUHF[path]
-        elif self.VHF() == "True":
+        elif self.ISVHF() == "True":
             pathnr = pathsVHF[path]
-        elif self.ESR() == "True":
+        elif self.ISESR() == "True":
             pathnr = pathsESR[path]
         else:
             raise RuntimeError("You are at no radar ???")
