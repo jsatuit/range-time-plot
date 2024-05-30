@@ -13,11 +13,11 @@ class Nco:
     """Parsing and handling of numerically controlled oscillator (NCO) files.
     """
 
-    def __init__(self, filename: str, lo1: float = 812, lo2: float = 128) -> None:
+    def __init__(self, filename: str = "NCOPAR_VS 0.1\nNCO 0 8.5", lo1: float = 812, lo2: float = 128) -> None:
         """
         Initialise numerically controlled oscillator for single channel
 
-        :param str filename: Path to .nco file or content of .nco file
+        :param str filename: Path to .nco file or content of .nco file. Default is manda ch1 NCO file
         :param float lo1: Local oscillator 1 frequency [MHz]. Default is 812 MHz
         :param float lo2: Local oscillator 2 frequency [MHz]. Default is 128 MHz
         :raises ValueError: If file not has valid data.
