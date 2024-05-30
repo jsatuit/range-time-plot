@@ -20,6 +20,7 @@ from warnings import warn
 from typing import Self
 
 from src.phaseshifter import PhaseShifter
+from src.kstconfig.nco import Nco
 from src.tlan.tarlanIntervals import IntervalList, TarlanSubcycle
 from src.tlan.tarlanError import TarlanError, TarlanWarning
 from src.eventlist import EventList
@@ -160,8 +161,8 @@ class Tarlan():
         command_docs["BTX" + str(i) + "OFF"] = f"Set bit {i} on transmitter controller. " +\
             "No checks are made. Use with caution."
 
-    def __init__(self, filename: str = "", lo1: tuple[float, float] = 812e6, 
-                 lo2: tuple[float, float] = 128e6):
+    def __init__(self, filename: str = "", lo1: tuple[float, float] = (812e6,)*2, 
+                 lo2: tuple[float, float] = (128e6,122e6), chfreqs: dict[int, Nco] | None = None):
         """
         Initializing Tarlan(). If .tlan file is specified, it will be loaded.
 
@@ -169,6 +170,8 @@ class Tarlan():
             string is empty, defaults to ""
         :param tuple[float, float], optional lo1: Frequencies in first local oscillator [Hz]. One frequency for each path, two in total. UHF lo1 must be inserted twice.
         :param tuple[float, float], optional lo2: Frequencies in second local oscillator [Hz]. One frequency for each path, two in total
+        :param dict[int, Nco] | None chfreqs: Dictionary of channel numbers with correspondig Nco objects. 
+            These are used to store the current frequency of data in this channel. If None, all 6 channels are loaded with only 8.5 MHz. Defaults to None
 
         """
         self.cycle = IntervalList("CYCLE")
@@ -190,6 +193,12 @@ class Tarlan():
         
         self._lo1 = lo1
         self._lo2 = lo2
+        if chfreqs is None:
+            self.chfreqs = {}
+            for ch in kst_channels():
+                self.chfreqs[ch] = Nco(lo1=lo1, lo2=lo2)
+        else:
+            self.chfreqs = chfreqs
 
         if filename:
             self.from_tlan(filename)
