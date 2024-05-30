@@ -262,7 +262,8 @@ class Tarlan():
             if self.streams[CH].is_on:
                 self.streams[CH].turn_off(time, line)
     def NCOSEL(self, time: float, line: int, nco_line: int):
-        print(f"Did not load NCO line {nco_line} at time {time}, tlan line {line}")
+        for nco in self.chfreqs.values():
+            nco.NCOSEL(nco_line)
     def STFIR(self, time: float, line: int):
         if self._loaded_FIR > 0:
             warn(f"STFIR was called on line {line}, but FIR filters are " +
