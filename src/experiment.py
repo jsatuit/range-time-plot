@@ -218,8 +218,9 @@ class Experiment:
         # Parse elan
         eros = Eros(radar)
         eros(f"runexperiment {path} lm scan_pattern Country 90.0")
-
-        tlan = Tarlan(os.path.join(directory, eros.py_get_tlan(directory)))
+        
+        tlan = Tarlan(os.path.join(directory, eros.py_get_tlan(directory)),
+                      tuple(eros.py_get_lo(1)), tuple(eros.py_get_lo(2)))
 
         for i, subcycle_interval in enumerate(tlan.subcycle_list.intervals):
             subcycle = Subcycle(subcycle_interval.begin, subcycle_interval.end)

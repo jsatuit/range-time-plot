@@ -97,7 +97,7 @@ class Eros(TclScope):
         return self._loadedfiles
     def py_get_lo(self, lon: int) -> int:
         "Return last loaded frequencies in local oscillator with number `lon`"
-        return self._var["_lo{lon}"]
+        return self._var[f"_lo{lon}"]
     def py_get_tlan(self, di = ""):
         """Guess which .tlan file was used
         
@@ -291,7 +291,7 @@ class Eros(TclScope):
     
     def selectlo(self, args):
         path = args[-2]  # ion/pla (UHF), I/II or A/B (VHF), or <too complicated to show here> (ESR)
-        f = args[-1]  # MHz
+        f = int(args[-1])  # MHz
         
         # Specify which oscillator to use as a number
         # UHF: 1 - ion, 2 - pla
@@ -333,7 +333,7 @@ class Eros(TclScope):
         s += f"Frequency {f}."
         print(s)
             
-        self.__var[f"_lo{lon}"][pathnr-1] = f
+        self._var[f"_lo{lon}"][pathnr-1] = f
     def setfrequency(self, args):
         # Of course the docs are right here.
         # Could not setfrequency and loadfrequency have same order of arguments?????

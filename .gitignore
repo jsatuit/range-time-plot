@@ -163,3 +163,4 @@ cython_debug/
 # Data files (at least those that shall not be published)
 kst/
 todo.md
+test/_tests
