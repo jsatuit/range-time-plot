@@ -13,7 +13,7 @@ class Nco:
     """Parsing and handling of numerically controlled oscillator (NCO) files.
     """
 
-    def __init__(self, filename: str = "NCOPAR_VS 0.1\nNCO 0 8.5", lo1: float = 812, lo2: float = 128) -> None:
+    def __init__(self, filename: str = "NCOPAR_VS 0.1\nNCO 0 0.0", lo1: float = 812, lo2: float = 128) -> None:
         """
         Initialise numerically controlled oscillator for single channel
 
@@ -107,6 +107,7 @@ class Nco:
 
         """
         self.f_nco = self.freqs[nr]
+        print("f_nco s now ", self.f_nco)
 
     def get_freq(self) -> float:
         """
