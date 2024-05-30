@@ -132,10 +132,10 @@ class Tarlan():
         "SETTCR": "Set reference time in time control?",
         "RXSYNC": "A 2 us pulse on bit 31 on the front of the receiver controller.",
         "TXSYNC": "A 2 us pulse on bit 31 on the front of the transmitter controller.",
-        "AD1L": "Route input for AD 1 to channel board 1, 2, 3.",
-        "AD1R": "Route input for AD 1 to channel board 4, 5, 6.",
-        "AD2L": "Route input for AD 2 to channel board 1, 2, 3.",
-        "AD2R": "Route input for AD 2 to channel board 4, 5, 6.",
+        "AD1L": "Route input from AD 1 to channel board 1, 2, 3.",
+        "AD1R": "Route input from AD 1 to channel board 4, 5, 6.",
+        "AD2L": "Route input from AD 2 to channel board 1, 2, 3.",
+        "AD2R": "Route input from AD 2 to channel board 4, 5, 6.",
         "STFIR": "Start the fir filters onboard channel boards, necessary " +
         "to do before using them, bit 16 strobed.",
         "TRANS": "Not documented.",
@@ -302,10 +302,10 @@ class Tarlan():
             "RXSYNC": do_nothing,  # Synchronization not implemented
             "CHQPULS": do_nothing,  # Synchronization not implemented
             "TXSYNC": do_nothing,  # Synchronization not implemented
-            "AD1L": do_nothing,  # Documentation of command unclear
-            "AD1R": do_nothing,  # Documentation of command unclear
-            "AD2L": do_nothing,  # Documentation of command unclear
-            "AD2R": do_nothing,  # Documentation of command unclear
+            "AD1L": do_nothing,
+            "AD1R": do_nothing,
+            "AD2L": do_nothing,
+            "AD2R": do_nothing,
             "SETTCR": do_nothing,  # Is not handeled here!
             "BUFLIP": do_nothing,  # Too technical here
             "STC": do_nothing,  # Too technical here
