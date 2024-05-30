@@ -48,8 +48,13 @@ def filefinder(filename:str):
     directory = os.path.split(path)[0]
     return directory, expname, path
 
+
+
 class Eros(TclScope):
     RCs = ["transmitter","receiver","ion line receiver","plasma line receiver"]
+    
+    lo1_default = {"UHF": [812], "VHF": [298, 298], "ESR": [419, 435, 419, 435]}
+    lo2_default = {"UHF": [128, 122], "VHF": [84, 84], "ESR": [81.25]*4}
     
     def __init__(self, radar = "", ant = "", master = None, **var):
         super().__init__(master)
@@ -59,6 +64,7 @@ class Eros(TclScope):
         self._loadedfiles = dict(zip(["rbin", "tbin", "filter", "fil", "nco"], 
                                      [""]*4+[[""]*6]))
         if len(radar) > 0:
+            assert radar in ["UHF", "VHF", "ESR", "KIR", "SOD"]
             self._var["_radar"] = radar
             
             if not ant:
@@ -69,6 +75,9 @@ class Eros(TclScope):
             # Variables sometimes used at ESR
             self._var["32p"] = "32p"==ant
             self._var["42p"] = "42p"==ant
+            
+            self._var["_lo1"] = Eros.lo1_default[radar]
+            self._var["_lo2"] = Eros.lo2_default[radar]
                 
         self.__argv = []
         self._starttimes = {
@@ -84,7 +93,11 @@ class Eros(TclScope):
         tstr = t.strftime('%Y-%M-%d %H:%M:%S.%f')
         return tstr
     def py_get_loadedfiles(self):
+        "Return a dictionary with last loaded files by this EROS instance (including subfunctions)"
         return self._loadedfiles
+    def py_get_lo(self, lon: int) -> int:
+        "Return last loaded frequencies in local oscillator with number `lon`"
+        return self._var["_lo{lon}"]
     def py_get_tlan(self, di = ""):
         """Guess which .tlan file was used
         
@@ -231,6 +244,7 @@ class Eros(TclScope):
         v = f"{verbose}{l}{t}".capitalize()
         s = f"{v} {c}frequencies from file {file} {u} into channels {', '.join(chs)}"
         print(s)
+    
     def loadradar(self, args):
         print(f"Load {extend(self.RCs, args[0])} controller")
         for option, value in zip(args[1::2], args[2::2]):
@@ -276,12 +290,50 @@ class Eros(TclScope):
         self(script)
     
     def selectlo(self, args):
+        path = args[-2]  # ion/pla (UHF), I/II or A/B (VHF), or <too complicated to show here> (ESR)
+        f = args[-1]  # MHz
+        
+        # Specify which oscillator to use as a number
+        # UHF: 1 - ion, 2 - pla
+        # VHF: 1 – I/A, 2 - II/B
+        # ESR: 1 – P1/U32/32U/U32m/U, 2 – P2/D32/32D/D32m/D, 3 – P3/U42/42U/U42m, 4 – P4/D42/42D/D42m
+        pathsUHF = dict(zip(["i", "ion", "1", "p", "pla", "2"], [1]*3+[2]*3))
+        pathsVHF = dict(zip(["I", "A", "II", "B"], [1]*2+[2]*2))
+        pathsESR = dict(zip
+                        
+                        (["P1", "U32", "32U", "U32m", "U", 
+                          "P2", "D32", "32D", "D32m", "D", 
+                          "P3", "U42", "42U", "U42m", 
+                          "P4", "D42", "42U", "U42m"], [1]*5 + [2]*5 + [3]*4 + [4]*4
+                         ))
+        if self.UHF() == "True":
+            pathnr = pathsUHF[path]
+        elif self.VHF() == "True":
+            pathnr = pathsVHF[path]
+        elif self.ESR() == "True":
+            pathnr = pathsESR[path]
+        else:
+            raise RuntimeError("You are at no radar ???")
+            
+                
+        
         s = "Select local oscillator frequencies: "
         if len(args) == 3:
+            lon = int(args[0])
+            assert lon in [1, 2]
             s += f"Oscillator {args[0]}, "
-        s += f"Path {args[-2]}, "
-        s += f"Frequency {args[-1]}."
+        elif self.ISUHF() == "True":
+            lon = 2  # At UHF, only lo2 can be configured
+        elif self.ISESR() == "True":
+            lon = 1  # At ESR, only lo1 can be configured
+        else:
+            raise ValueError("At VHF, the local oscillafor must be specified!")
+            
+        s += f"Path {path}, "
+        s += f"Frequency {f}."
         print(s)
+            
+        self.__var[f"_lo{lon}"][pathnr-1] = f
     def setfrequency(self, args):
         # Of course the docs are right here.
         # Could not setfrequency and loadfrequency have same order of arguments?????
