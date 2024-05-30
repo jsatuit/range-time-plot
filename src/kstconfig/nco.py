@@ -17,7 +17,7 @@ class Nco:
         """
         Initialise numerically controlled oscillator for single channel
 
-        :param str filename: Path to .nco file
+        :param str filename: Path to .nco file or content of .nco file
         :param float lo1: Local oscillator 1 frequency [MHz]. Default is 812 MHz
         :param float lo2: Local oscillator 2 frequency [MHz]. Default is 128 MHz
         :raises ValueError: If file not has valid data.
@@ -28,9 +28,11 @@ class Nco:
         if os.path.isfile(filename):
             with open(filename) as file:
                 lines = file.read()
+            self.set_freqs(Nco.parse_nco(lines))
+        elif filename:
+            self.set_freqs(Nco.parse_nco(filename))
         else:
-            lines = filename
-        self.freqs = Nco.parse_nco(lines)
+            pass
         self._lo1 = lo1
         self._lo2 = lo2
 
@@ -73,6 +75,8 @@ class Nco:
 
             freqs.append(freq)
         return freqs
+    def set_freqs(self, freqs: list[float]) -> None:
+        self.freqs = freqs
 
     def set_lo1(self, lo1: float) -> None:
         """
