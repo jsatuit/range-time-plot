@@ -29,8 +29,10 @@ class Nco:
             with open(filename) as file:
                 lines = file.read()
             self.set_freqs(Nco.parse_nco(lines))
+            assert hasattr(self, "freqs")
         elif filename:
             self.set_freqs(Nco.parse_nco(filename))
+            assert hasattr(self, "freqs")
         else:
             pass
         self._lo1 = lo1
@@ -54,13 +56,15 @@ class Nco:
         lines = lines.split("\n")
         freqs = []
         # First line MUST be NCOPAR_VS	0.1
-        assert lines[0].split() == ["NCOPAR_VS", "0.1"]
+        if not lines[0].split() == ["NCOPAR_VS", "0.1"]:
+            raise RuntimeError(f"First line must be 'NCOPAR_VS 0.1', not {lines[0]}")
         for il, line in enumerate(lines[1:]):
             text = line.split("%")[0]
-            if text.isspace():
+            if text.isspace() or len(text) == 0:
                 continue
             elems = text.split()
-            assert len(elems) == 3
+            if not len(elems) == 3:
+                raise RuntimeError(f"Error in loading nco file: In line {il+1}, there are not three columns, but {len(elems)}")
             assert elems[0] == "NCO"
             nr = int(elems[1])
             assert nr == len(freqs)
@@ -106,6 +110,8 @@ class Nco:
         :type nr: int
 
         """
+        if not hasattr(self, "freqs"):
+            raise RuntimeError("A channel has not loaded controller file yet!")
         self.f_nco = self.freqs[nr]
         print("f_nco s now ", self.f_nco)
 
