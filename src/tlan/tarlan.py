@@ -172,7 +172,7 @@ class Tarlan():
         :param tuple[float, float], optional lo1: Frequencies in first local oscillator [Hz]. One frequency for each path, two in total. UHF lo1 must be inserted twice.
         :param tuple[float, float], optional lo2: Frequencies in second local oscillator [Hz]. One frequency for each path, two in total
         :param dict[int, Nco] | None chfreqs: Dictionary of channel numbers with correspondig Nco objects. 
-            These are used to store the current frequency of data in this channel. If None, all 6 channels are loaded with only 8.5 MHz. Defaults to None
+            These are used to store the current frequency of data in this channel. If None, all 6 channels are loaded with NCO only 8.5 MHz. Defaults to None
 
         """
         self.cycle = IntervalList("CYCLE")
@@ -196,7 +196,7 @@ class Tarlan():
         self._lo2 = lo2
         if chfreqs is None:
             self.chfreqs = {}
-            for ch in kst_channels():
+            for ch in range(1,7):  # From 1 to 6
                 self.chfreqs[ch] = Nco(lo1=lo1, lo2=lo2)
         else:
             self.chfreqs = chfreqs
