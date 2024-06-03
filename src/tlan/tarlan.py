@@ -266,8 +266,9 @@ class Tarlan():
             nco.NCOSEL(nco_line)
     def STFIR(self, time: float, line: int):
         if self._loaded_FIR > 0:
-            warn(f"STFIR was called on line {line}, but FIR filters are " +
-                 "loaded already!", TarlanWarning)
+            # warn(f"STFIR was called on line {line}, but FIR filters are " +
+                 # "loaded already!", TarlanWarning)
+                 pass
         else:
             self._loaded_FIR = time
 
