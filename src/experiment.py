@@ -9,6 +9,7 @@ from src.expplot import Expplot, calc_nearest_range, calc_furthest_full_range
 from src.tlan.tarlan import Tarlan
 from src.timeInterval import TimeInterval, TimeIntervalList
 from src.elan.elan import Eros, filefinder
+from src.kstconfig.nco import Nco
 from src.eventlist import EventList
 from src.const import km, µs, c
 
@@ -218,9 +219,19 @@ class Experiment:
         # Parse elan
         eros = Eros(radar)
         eros(f"runexperiment {path} lm scan_pattern Country 90.0")
+        eros_loadedfiles = eros.py_get_loadedfiles()
+        ncofiles = eros_loadedfiles["nco"]
+        lo1 = tuple(eros.py_get_lo(1, MHz=False))
+        lo2 = tuple(eros.py_get_lo(2, MHz=False))
+        ncos = {}
+        for ch in range(1, 7):
+            # Load random lo frequencies because Nco needs to have something
+            # Quick and dirty solution to file loading error: Ignore first slash / to get kst/exp ...
+            ncos[ch] = Nco(ncofiles[ch-1][1:], lo1[0], lo2[0])
+            
         
         tlan = Tarlan(os.path.join(directory, eros.py_get_tlan(directory)),
-                      tuple(eros.py_get_lo(1)), tuple(eros.py_get_lo(2)))
+                      lo1, lo2, ncos)
 
         for i, subcycle_interval in enumerate(tlan.subcycle_list.intervals):
             subcycle = Subcycle(subcycle_interval.begin, subcycle_interval.end)
