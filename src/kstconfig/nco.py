@@ -113,7 +113,7 @@ class Nco:
         if not hasattr(self, "freqs"):
             raise RuntimeError("A channel has not loaded controller file yet!")
         self.f_nco = self.freqs[nr]
-        print("f_nco s now ", self.f_nco)
+        # print("f_nco s now ", self.f_nco)
 
     def get_freq(self) -> float:
         """

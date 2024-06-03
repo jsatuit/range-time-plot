@@ -225,6 +225,9 @@ class Experiment:
         lo2 = tuple(eros.py_get_lo(2, MHz=False))
         ncos = {}
         for ch in range(1, 7):
+            if len(ncofiles[ch-1]) == 0:
+                print(f"Channel {ch-1} was not loaded into NCO. This will not be available to Tarlan.")
+                continue
             # Load random lo frequencies because Nco needs to have something
             # Quick and dirty solution to file loading error: Ignore first slash / to get kst/exp ...
             ncos[ch] = Nco(ncofiles[ch-1][1:], lo1[0], lo2[0])
