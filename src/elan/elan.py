@@ -95,9 +95,19 @@ class Eros(TclScope):
     def py_get_loadedfiles(self):
         "Return a dictionary with last loaded files by this EROS instance (including subfunctions)"
         return self._loadedfiles
-    def py_get_lo(self, lon: int) -> int:
-        "Return last loaded frequencies in local oscillator with number `lon`"
-        return self._var[f"_lo{lon}"]
+    def py_get_lo(self, lon: int, MHz: bool = True) -> list[int]:
+        """
+        Return last loaded frequencies in local oscillator
+        
+        :param int lon: Which local oscillator to check
+        :param bool, optional MHz: If to return frequency in MHz or not (else frequency is given in Hz), defaults to True (that is in MHz)
+        :return: Loaded frequencies in selected oscillator
+        :rtype: list[int]
+        """
+        if MHz:
+            return self._var[f"_lo{lon}"]
+        else:
+            return [freq*1e6 for freq in self._var[f"_lo{lon}"]]
     def py_get_tlan(self, di = ""):
         """Guess which .tlan file was used
         
