@@ -254,10 +254,10 @@ class Tarlan():
             if ch in channels:
                 if route == 1 and len(self._lo1) == 1:
                     # If at UHF and route 2 is chosen, still lo1 is used. The split is after lo1.
-                    nco.set_lo1(self._lo1[0])
+                    nco.set_lo1(self._lo1[0]/1e6)
                 else:
-                    nco.set_lo1(self._lo1[route])
-                nco.set_lo2(self._lo2[route])
+                    nco.set_lo1(self._lo1[route]/1e6)
+                nco.set_lo2(self._lo2[route]/1e6)
     def AD1L(self, time: float, line: int):
         self._AD2CH(0, [1, 2, 3])
     def AD1R(self, time: float, line: int):
