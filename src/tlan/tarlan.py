@@ -162,8 +162,8 @@ class Tarlan():
         command_docs["BTX" + str(i) + "OFF"] = f"Set bit {i} on transmitter controller. " +\
             "No checks are made. Use with caution."
 
-    def __init__(self, filename: str = "", lo1: tuple[float, float] = (812e6,)*2, 
-                 lo2: tuple[float, float] = (128e6,122e6), chfreqs: dict[int, Nco] | None = None):
+    def __init__(self, filename: str = "", lo1: tuple[float, float] = (812e6,)*2,
+                 lo2: tuple[float, float] = (128e6, 122e6), chfreqs: dict[int, Nco] | None = None):
         """
         Initializing Tarlan(). If .tlan file is specified, it will be loaded.
 
@@ -191,12 +191,12 @@ class Tarlan():
         # Time control
         self.TCR = 0
         self.end_time = 0
-        
+
         self._lo1 = lo1
         self._lo2 = lo2
         if chfreqs is None:
             self.chfreqs = {}
-            for ch in range(1,7):  # From 1 to 6
+            for ch in range(1, 7):  # From 1 to 6
                 self.chfreqs[ch] = Nco(lo1=lo1, lo2=lo2)
         else:
             self.chfreqs = chfreqs
@@ -249,10 +249,11 @@ class Tarlan():
             else:
                 self.exec_cmd(cmd)
         self.filename = filename
+
     def _AD2CH(self, path: int, channels: list[int]):
         """
         Routes selected receiver path (1 or 2) into selected channels
-        
+
         :param route: selected receiver path (1 or 2)
         :type route: int
         :param channels: Channels the receiver path will be routed into. May be chosen freely as this is not a real TARLAN command, but a helper.
@@ -268,15 +269,19 @@ class Tarlan():
                 else:
                     nco.set_lo1(self._lo1[path]/1e6)
                 nco.set_lo2(self._lo2[path]/1e6)
+
     def AD1L(self, time: float, line: int):
         self._AD2CH(0, [1, 2, 3])
+
     def AD1R(self, time: float, line: int):
         self._AD2CH(0, [4, 5, 6])
+
     def AD2L(self, time: float, line: int):
         self._AD2CH(1, [1, 2, 3])
+
     def AD2R(self, time: float, line: int):
         self._AD2CH(1, [4, 5, 6])
-            
+
     def ALLOFF(self, time: float, line: int):
         f"""
         Turn off signal reception with all channels
@@ -288,14 +293,16 @@ class Tarlan():
             CH = "CH"+str(i)
             if self.streams[CH].is_on:
                 self.streams[CH].turn_off(time, line)
+
     def NCOSEL(self, time: float, line: int, nco_line: int):
         for nco in self.chfreqs.values():
             nco.NCOSEL(nco_line)
+
     def STFIR(self, time: float, line: int):
         if self._loaded_FIR > 0:
             # warn(f"STFIR was called on line {line}, but FIR filters are " +
-                 # "loaded already!", TarlanWarning)
-                 pass
+            # "loaded already!", TarlanWarning)
+            pass
         else:
             self._loaded_FIR = time
 
