@@ -197,7 +197,7 @@ class Tarlan():
         if chfreqs is None:
             self.chfreqs = {}
             for ch in range(1, 7):  # From 1 to 6
-                self.chfreqs[ch] = Nco(lo1=lo1, lo2=lo2)
+                self.chfreqs[ch] = Nco(lo1=lo1/1e6, lo2=lo2/1e6)
         else:
             self.chfreqs = chfreqs
 
@@ -269,6 +269,7 @@ class Tarlan():
                 else:
                     nco.set_lo1(self._lo1[path]/1e6)
                 nco.set_lo2(self._lo2[path]/1e6)
+                print(f"Channel {ch} now has center frequency {nco.get_freq()} MHz")
 
     def AD1L(self, time: float, line: int):
         self._AD2CH(0, [1, 2, 3])
@@ -295,8 +296,9 @@ class Tarlan():
                 self.streams[CH].turn_off(time, line)
 
     def NCOSEL(self, time: float, line: int, nco_line: int):
-        for nco in self.chfreqs.values():
+        for ch, nco in self.chfreqs.items():
             nco.NCOSEL(nco_line)
+            print(f"Channel {ch} now has center frequency {nco.get_freq()} MHz")
 
     def STFIR(self, time: float, line: int):
         if self._loaded_FIR > 0:

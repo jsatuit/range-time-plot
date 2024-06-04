@@ -230,7 +230,7 @@ class Experiment:
                 continue
             # Load random lo frequencies because Nco needs to have something
             # Quick and dirty solution to file loading error: Ignore first slash / to get kst/exp ...
-            ncos[ch] = Nco(ncofiles[ch-1][1:], lo1[0], lo2[0])
+            ncos[ch] = Nco(ncofiles[ch-1][1:], lo1[0]/1e6, lo2[0]/1e6)
             
         
         tlan = Tarlan(os.path.join(directory, eros.py_get_tlan(directory)),
