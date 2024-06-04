@@ -6,5 +6,8 @@
 km = 1e3
 "1 kilometer [m]"
 
+MHz = 1e6
+"1 Megahertz [Hz]"
+
 c = 3e8
 "Speed of light [m/s]"
