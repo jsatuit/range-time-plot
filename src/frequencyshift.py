@@ -47,3 +47,36 @@ class FrequencyList(SortedDict):
             print(self.peekitem(i))
 
         return frequencies
+
+    def as_line(self, interval: TimeInterval) -> tuple[list, list]:
+        """
+        Coordinates of a line connecting the phase shifts within an interval
+        
+        That is a list of x coordinates and a list of y coordinates which 
+        respectively describes the time and phases of the phase shifts
+        
+        Example:
+        180        x----------x     x----   etc.
+                   |          |     |
+        0   -x-----x          x-----x
+             0     6          17    25   
+        
+        gives
+        [0, 6, 6, 17, 17, 25, 25, ...]
+        and
+        [0, 0, 180, 180, 0, 0, 180, ...]
+        
+        (Not used at current)
+        
+        :param interval: Interval the shifts should be within
+        :type interval: TimeInterval
+        :return: lists of coordinates
+        :rtype: tuple[list[float], list[float]]
+
+        """
+        shifts = self.shifts_within(interval)
+        
+        x = [item for item in shifts.keys() for _ in range(2)][1:] + [interval.end]
+        y = [item for item in shifts.values() for _ in range(2)]
+        
+        return x, y
