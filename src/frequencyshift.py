@@ -75,7 +75,10 @@ class FrequencyList(SortedDict):
         if isinstance(interval, tuple) and len(interval) == 2:
             interval = TimeInterval(*interval)
         elif isinstance(interval, float) or isinstance(interval, int):
-            interval = TimeInterval(self.keys()[0], interval)
+            if interval > self.keys()[0]:
+                interval = TimeInterval(self.keys()[0], interval)
+            else:
+                raise ValueError("End of x axis can't be before first frequncy shift!")
         elif not isinstance(interval, TimeInterval):
             raise TypeError("Variable `interval` must be a `TimeInterval` or a tuple of two numbers!")
             

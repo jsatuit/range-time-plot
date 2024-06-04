@@ -25,3 +25,5 @@ def test_as_line():
         fl.as_line()
     with pytest.raises(ValueError):
         fl.as_line((0,2))
+    with pytest.raises(ValueError):
+        fl.as_line(0)
