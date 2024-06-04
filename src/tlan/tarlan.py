@@ -249,15 +249,25 @@ class Tarlan():
             else:
                 self.exec_cmd(cmd)
         self.filename = filename
-    def _AD2CH(self, route: int, channels: list[int]):
+    def _AD2CH(self, path: int, channels: list[int]):
+        """
+        Routes selected receiver path (1 or 2) into selected channels
+        
+        :param route: selected receiver path (1 or 2)
+        :type route: int
+        :param channels: Channels the receiver path will be routed into. May be chosen freely as this is not a real TARLAN command, but a helper.
+            If the channel is not loaded into tarlan, it is ignored.
+        :type channels: list[int]
+
+        """
         for ch, nco in self.chfreqs.items():
             if ch in channels:
-                if route == 1 and len(self._lo1) == 1:
-                    # If at UHF and route 2 is chosen, still lo1 is used. The split is after lo1.
+                if path == 1 and len(self._lo1) == 1:
+                    # If at UHF and path 2 is chosen, still lo1 is used. The split is after lo1.
                     nco.set_lo1(self._lo1[0]/1e6)
                 else:
-                    nco.set_lo1(self._lo1[route]/1e6)
-                nco.set_lo2(self._lo2[route]/1e6)
+                    nco.set_lo1(self._lo1[path]/1e6)
+                nco.set_lo2(self._lo2[path]/1e6)
     def AD1L(self, time: float, line: int):
         self._AD2CH(0, [1, 2, 3])
     def AD1R(self, time: float, line: int):
