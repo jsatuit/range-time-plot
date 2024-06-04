@@ -246,8 +246,9 @@ class Experiment:
                 for data_interval in tlan.subcycle_list.data_intervals[i][stream].intervals:
                     subcycle.add_time(stream, data_interval)
             subcycle.phaseshifts, subcycle.baudlengths = tlan.phaseshifts(i)
-            for ch in range(1,7):
-                subcycle.rx_freqs[f"channel {ch}"] = tlan.freq_rec[ch]
+            for i, freq_ch in enumerate(tlan.freq_rec):
+                if len(freq_ch) > 0:
+                    subcycle.rx_freqs[f"CH{i}"] = freq_ch
             exp.add_subcycle(subcycle)
 
         return exp
