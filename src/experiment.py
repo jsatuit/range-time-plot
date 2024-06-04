@@ -102,6 +102,8 @@ class Subcycle:
             for receive in receives:
                 if not receive.within_any(self.rx_protection):
                     plot.receive("CH"+str(ch), receive)
+                    
+                plot.frequency("CH"+str(ch), self.rx_freqs[ch], receive)
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
         plot.phase(self.phaseshifts, self.transmits)
         if rangelims:
@@ -248,7 +250,7 @@ class Experiment:
             subcycle.phaseshifts, subcycle.baudlengths = tlan.phaseshifts(i)
             for i, freq_ch in enumerate(tlan.freq_rec):
                 if len(freq_ch) > 0:
-                    subcycle.rx_freqs[f"CH{i}"] = freq_ch
+                    subcycle.rx_freqs[i] = freq_ch
             exp.add_subcycle(subcycle)
 
         return exp

@@ -12,8 +12,9 @@ if __name__ == '__main__':
     
 from typing import Union
 from src.timeInterval import TimeInterval
+from src.frequencyshift import FrequencyList
 from src.eventlist import EventList
-from src.const import km, µs, c
+from src.const import km, µs, c, MHz
 
 def calc_nearest_range(tx_interval: TimeInterval, rx_interval: TimeInterval, 
                        baud_length: float, v: float = c) -> float:
@@ -70,7 +71,7 @@ class Expplot:
     """
     def __init__(self, plot_interval: TimeInterval, rmax: float = 1e6):
         self.fig = plt.figure()
-        self.ax = self.fig.subplots(2, sharex=True, squeeze=True)
+        self.ax = self.fig.subplots(3, sharex=True, squeeze=True)
         self.ax[0].grid(which = 'major')
         self.ax[0].set_ylim(0, rmax/km)
         self.ax[1].invert_yaxis()
@@ -237,7 +238,20 @@ class Expplot:
         self.ax[1].barh("phase", bar_lengths/µs, 
                         left = np.asarray(bars_begin_at)/µs,
                         color = colours)
+    def frequency(self, name: str, rx_freqs: FrequencyList, interval: TimeInterval, **kwargs):
+        """
+        Plot (receiver) frequencies
         
+        :param rx_freqs: Channels with corresponding frequencies
+        :type rx_freqs: dict[str, FrequencyList]
+
+        """
+        x, y = rx_freqs.as_line(interval)
+        print(np.asarray(x)/µs, np.asarray(y)/MHz)
+        if "color" not in kwargs:
+            kwargs["color"] = self.get_colour(name)
+        self.ax[2].plot(np.asarray(x)/µs, np.asarray(y)/MHz, **kwargs)
+        self.ax[2].yaxis.set_label("Frequency [MHz]")
             
     def add_range_label(self, r: float):
         """
