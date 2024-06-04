@@ -21,6 +21,7 @@ from warnings import warn
 from typing import Self
 
 from src.phaseshifter import PhaseShifter
+from src.frequencyshift import FrequencyList
 from src.kstconfig.nco import Nco
 from src.tlan.tarlanIntervals import IntervalList, TarlanSubcycle
 from src.tlan.tarlanError import TarlanError, TarlanWarning
@@ -179,6 +180,7 @@ class Tarlan():
         # self.subcycle_list = IntervalList("SUBCYCLE")
         self.subcycle_list = TarlanSubcycle()
         self.phaseshifter = PhaseShifter()
+        self.freq_rec = [FrequencyList() for i in range(6)]
 
         self.stream_names = ["RF", "RXPROT", "LOPROT", "CAL", "BEAM"]
         for ch in kst_channels():
@@ -187,6 +189,9 @@ class Tarlan():
         self._generate_commands()
         self._check_command_docs()
         self._loaded_FIR = False
+        self._selected_ADL = False
+        self._selected_ADR = False
+        self._selected_NCO = False
 
         # Time control
         self.TCR = 0
@@ -250,10 +255,11 @@ class Tarlan():
                 self.exec_cmd(cmd)
         self.filename = filename
 
-    def _AD2CH(self, path: int, channels: list[int]):
-        """
+    def _AD2CH(self, time: float, line: int, path: int, channels: list[int]):
+        f"""
         Routes selected receiver path (1 or 2) into selected channels
 
+        {tarlan_command_docstring}
         :param route: selected receiver path (1 or 2)
         :type route: int
         :param channels: Channels the receiver path will be routed into. May be chosen freely as this is not a real TARLAN command, but a helper.
@@ -265,23 +271,30 @@ class Tarlan():
             if ch in channels:
                 if path == 1 and len(self._lo1) == 1:
                     # If at UHF and path 2 is chosen, still lo1 is used. The split is after lo1.
-                    nco.set_lo1(self._lo1[0]/1e6)
+                    lo1 = self._lo1[0]/1e6
                 else:
-                    nco.set_lo1(self._lo1[path]/1e6)
+                    lo1 = self._lo1[path]/1e6
+                    
+                nco.set_lo1(lo1)
                 nco.set_lo2(self._lo2[path]/1e6)
+                self.freq_rec[ch][time] = nco.get_freq()*1e6
                 print(f"Channel {ch} now has center frequency {nco.get_freq()} MHz")
 
     def AD1L(self, time: float, line: int):
-        self._AD2CH(0, [1, 2, 3])
+        self._AD2CH(time, line, 0, [1, 2, 3])
+        self._selected_ADL = True
 
     def AD1R(self, time: float, line: int):
-        self._AD2CH(0, [4, 5, 6])
+        self._AD2CH(time, line, 0, [4, 5, 6])
+        self._selected_ADR = True
 
     def AD2L(self, time: float, line: int):
-        self._AD2CH(1, [1, 2, 3])
+        self._AD2CH(time, line, 1, [1, 2, 3])
+        self._selected_ADL = True
 
     def AD2R(self, time: float, line: int):
-        self._AD2CH(1, [4, 5, 6])
+        self._AD2CH(time, line, 1, [4, 5, 6])
+        self._selected_ADR = True
 
     def ALLOFF(self, time: float, line: int):
         f"""
@@ -299,6 +312,7 @@ class Tarlan():
         for ch, nco in self.chfreqs.items():
             nco.NCOSEL(nco_line)
             print(f"Channel {ch} now has center frequency {nco.get_freq()} MHz")
+        self._selected_NCO = True
 
     def STFIR(self, time: float, line: int):
         if self._loaded_FIR > 0:
