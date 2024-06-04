@@ -31,7 +31,7 @@ def test_reading():
     NCO	2	 10.1	% f13
     NCO	3	 10.4	% f12"""
     
-    with pytest.raises(AssertionError):
+    with pytest.raises(RuntimeError):
         Nco.parse_nco(badfile)
     
     # Test of bad file - wrong first line
@@ -45,7 +45,7 @@ def test_reading():
     NCO	2	 10.1	% f13
     NCO	3	 10.4	% f12"""
     
-    with pytest.raises(AssertionError):
+    with pytest.raises(RuntimeError):
         Nco.parse_nco(faultyfile)
         
     # Test of bad file - forgot comment %
@@ -59,7 +59,7 @@ def test_reading():
     NCO	2	 10.1	% f13
     NCO	3	 10.4	% f12"""
     
-    with pytest.raises(AssertionError):
+    with pytest.raises(RuntimeError):
         Nco.parse_nco(faultyfile2)
         
     # Test of bad file - Wrong number
@@ -73,7 +73,7 @@ def test_reading():
     NCO	2	 10.1	% f13
     NCO	4	 10.4	% f12"""
     
-    with pytest.raises(AssertionError):
+    with pytest.raises(RuntimeError):
         Nco.parse_nco(faultyfile3)
         
     # Test of bad file - Frequency invalisd

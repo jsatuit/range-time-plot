@@ -47,7 +47,7 @@ class Nco:
 
         :param lines: lines in the file
         :type lines: str
-        :raises AssertionError: if the format of the file is not correct.
+        :raises RuntimeError: if the format of the file is not correct.
         :raises ValueError: if frequency is not a floating-point number.
         :return: list of frequencies for this experiment
         :rtype: list[float]
@@ -65,9 +65,11 @@ class Nco:
             elems = text.split()
             if not len(elems) == 3:
                 raise RuntimeError(f"Error in loading nco file: In line {il+1}, there are not three columns, but {len(elems)}")
-            assert elems[0] == "NCO"
+            if not elems[0] == "NCO":
+                raise RuntimeError(f"Error in loading nco file: Line {il+1} does not start with NCO")
             nr = int(elems[1])
-            assert nr == len(freqs)
+            if not nr == len(freqs):
+                raise RuntimeError(f"Error in loading nco file: In line {il+1}, the wrong index number is used. It should be {len(freqs)}, not {nr}")
             # Assert that elem[2] is a floatin.point number
             # If this works, this is the fastest way ... If not, it should crash anyway.
             # https://stackoverflow.com/questions/354038/how-do-i-check-if-a-string-represents-a-number-float-or-int/23639915#23639915
