@@ -48,7 +48,7 @@ class FrequencyList(SortedDict):
 
         return frequencies
 
-    def as_line(self, interval: TimeInterval) -> tuple[list, list]:
+    def as_line(self, interval: TimeInterval | tuple[float, float] | float) -> tuple[list, list]:
         """
         Coordinates of a line connecting the phase shifts within an interval
         
@@ -66,14 +66,19 @@ class FrequencyList(SortedDict):
         and
         [0, 0, 180, 180, 0, 0, 180, ...]
         
-        (Not used at current)
-        
-        :param interval: Interval the shifts should be within
-        :type interval: TimeInterval
+        :param interval: Interval the shifts should be within. If only a number is given, this is interpreted as end of the plotting interval.
+        :type interval: TimeInterval or tuple[float, float] or float
         :return: lists of coordinates
         :rtype: tuple[list[float], list[float]]
 
         """
+        if isinstance(interval, tuple) and len(interval) == 2:
+            interval = TimeInterval(*interval)
+        elif isinstance(interval, float) or isinstance(interval, int):
+            interval = TimeInterval(self.keys()[0], interval)
+        elif not isinstance(interval, TimeInterval):
+            raise TypeError("Variable `interval` must be a `TimeInterval` or a tuple of two numbers!")
+            
         shifts = self.shifts_within(interval)
         
         x = [item for item in shifts.keys() for _ in range(2)][1:] + [interval.end]
