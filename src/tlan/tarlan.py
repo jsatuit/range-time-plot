@@ -202,7 +202,7 @@ class Tarlan():
         if chfreqs is None:
             self.chfreqs = {}
             for ch in range(1, 7):  # From 1 to 6
-                self.chfreqs[ch] = Nco(lo1=lo1/1e6, lo2=lo2/1e6)
+                self.chfreqs[ch] = Nco(lo1=lo1[1]/1e6, lo2=lo2[1]/1e6)
         else:
             self.chfreqs = chfreqs
 
