@@ -88,18 +88,16 @@ class Nco:
         """
         Set local oscillator 1 frequency.
         
-        :param lo1: Frequency [MHz]
-        :type lo1: float
+        :param float lo1: Frequency [MHz]
 
         """
         self._lo1 = lo1
 
     def set_lo2(self, lo2: float) -> None:
         """
-        Set local oscillator 1 frequency.
+        Set local oscillator 2 frequency.
         
-        :param lo1: Frequency [MHz]
-        :type lo1: float
+        :param float lo2: Frequency [MHz]
 
         """
         self._lo2 = lo2
