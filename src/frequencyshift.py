@@ -73,7 +73,7 @@ class FrequencyList(SortedDict):
 
         """
         
-        if end > self.keys()[0]:
+        if end < self.keys()[0]:
             raise ValueError("End of x axis can't be before first freqeuncy shift!")
         interval = TimeInterval(self.keys()[0], end)
         
