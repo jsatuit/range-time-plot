@@ -281,8 +281,10 @@ class Experiment:
                                  + f"subcycles! You chose to plot subcycle {s},"
                                  + " which is too large")
 
-        if len(subcycles) > 0:
+        if len(subcycles) > 1:
             title = self.name + f", subcycles {subcycles}"
+        elif len(subcycles) == 1:
+            title = self.name + f", subcycle {subcycles[0]}"
         else:
             title = self.name + "(whole cycle)"
             subcycles = list(range(1, len(self.subcycles) + 1))
