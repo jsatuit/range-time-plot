@@ -22,5 +22,5 @@ def main(path: str, subcycle: int):
     if subcycle == 0:
         Experiment.from_eiscat_kst(path).plot()
     else:
-        Experiment.from_eiscat_kst(path).subcycles[subcycle-1].plot()
+        Experiment.from_eiscat_kst(path).plot([subcycle])
     plt.show()
