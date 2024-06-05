@@ -75,8 +75,6 @@ class Expplot:
         self.ax[0].grid(which = 'major')
         self.ax[0].set_ylim(0, rmax/km)
         self.ax[1].invert_yaxis()
-        # self.ax[-1].set_xlabel("Time [µs]")
-        self.fig.set_layout_engine("constrained")
         self.fig.supxlabel("Time [µs]")
         self.plot_interval = plot_interval
         
