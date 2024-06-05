@@ -13,6 +13,5 @@ python3 -m src <path-to-.tlan-file>
 - Python 3.11 or newer
 - numpy 
 - matplotlib
-- click
 
 Tests are run with pytest
