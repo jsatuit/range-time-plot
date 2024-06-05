@@ -247,7 +247,6 @@ class Expplot:
 
         """
         x, y = rx_freqs.as_line_within(interval)
-        print(np.asarray(x)/µs, np.asarray(y)/MHz)
         if "color" not in kwargs:
             kwargs["color"] = self.get_colour(name)
         self.ax[2].plot(np.asarray(x)/µs, np.asarray(y)/MHz, **kwargs)

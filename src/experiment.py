@@ -252,8 +252,9 @@ class Experiment:
                 if len(freq_ch) > 0:
                     subcycle.rx_freqs[i] = freq_ch
                 else:
+                    pass
                     # For debugging, this might be useful to write out
-                    print("No frequencies for channel", i+1)
+                    # print("No frequencies for channel", i+1)
             exp.add_subcycle(subcycle)
 
         return exp

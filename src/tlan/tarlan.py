@@ -279,7 +279,7 @@ class Tarlan():
                 nco.set_lo2(self._lo2[path]/1e6)
                 if nco.is_ready:
                     self.freq_rec[ch][time] = nco.get_freq()*1e6
-                    print(f"Channel {ch} now has center frequency {nco.get_freq()} MHz")
+                    # print(f"Channel {ch} now has center frequency {nco.get_freq()} MHz")
 
     def AD1L(self, time: float, line: int):
         self._AD2CH(time, line, 0, [1, 2, 3])
@@ -314,7 +314,7 @@ class Tarlan():
             nco.NCOSEL(nco_line)
             # Log change
             self.freq_rec[ch][time] = nco.get_freq()*1e6
-            print(f"NCOSEL: Channel {ch} now has center frequency {nco.get_freq()} MHz")
+            # print(f"NCOSEL: Channel {ch} now has center frequency {nco.get_freq()} MHz")
         self._selected_NCO = True
 
     def STFIR(self, time: float, line: int):
