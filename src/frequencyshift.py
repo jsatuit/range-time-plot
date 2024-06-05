@@ -48,7 +48,38 @@ class FrequencyList(SortedDict):
 
         return frequencies
 
-    def as_line(self, interval: TimeInterval | tuple[float, float] | float) -> tuple[list, list]:
+    def as_line(self, end: float) -> tuple[list, list]:
+        """
+        Coordinates of a line connecting the phase shifts within an interval
+        
+        That is a list of x coordinates and a list of y coordinates which 
+        respectively describes the time and phases of the phase shifts
+        
+        Example:
+        180        x----------x     x----   etc.
+                   |          |     |
+        0   -x-----x          x-----x
+             0     6          17    25   
+        
+        gives
+        [0, 6, 6, 17, 17, 25, 25, ...]
+        and
+        [0, 0, 180, 180, 0, 0, 180, ...]
+        
+        :param interval: Interval the shifts should be within. If only a number is given, this is interpreted as end of the plotting interval.
+        :type interval: TimeInterval or tuple[float, float] or float
+        :return: lists of coordinates
+        :rtype: tuple[list[float], list[float]]
+
+        """
+        
+        if end > self.keys()[0]:
+            raise ValueError("End of x axis can't be before first freqeuncy shift!")
+        interval = TimeInterval(self.keys()[0], end)
+        
+        return self.as_line_within(interval)
+    
+    def as_line_within(self, interval: TimeInterval | tuple[float, float]) -> tuple[list, list]:
         """
         Coordinates of a line connecting the phase shifts within an interval
         
@@ -74,12 +105,9 @@ class FrequencyList(SortedDict):
         """
         if isinstance(interval, tuple) and len(interval) == 2:
             interval = TimeInterval(*interval)
-        elif isinstance(interval, float) or isinstance(interval, int):
-            if interval > self.keys()[0]:
-                interval = TimeInterval(self.keys()[0], interval)
-            else:
-                raise ValueError("End of x axis can't be before first frequncy shift!")
-        elif not isinstance(interval, TimeInterval):
+        elif isinstance(interval, TimeInterval):
+            pass
+        else:
             raise TypeError("Variable `interval` must be a `TimeInterval` or a tuple of two numbers!")
             
         shifts = self.shifts_within(interval)

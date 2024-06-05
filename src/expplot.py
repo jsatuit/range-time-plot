@@ -246,7 +246,7 @@ class Expplot:
         :type rx_freqs: dict[str, FrequencyList]
 
         """
-        x, y = rx_freqs.as_line(interval)
+        x, y = rx_freqs.as_line_within(interval)
         print(np.asarray(x)/µs, np.asarray(y)/MHz)
         if "color" not in kwargs:
             kwargs["color"] = self.get_colour(name)
