@@ -75,6 +75,7 @@ class Expplot:
         self.ax[0].grid(which = 'major')
         self.ax[0].set_ylim(0, rmax/km)
         self.ax[1].invert_yaxis()
+        self.ax[-1].set_xlabel("Time [µs]")
         self.plot_interval = plot_interval
         
         self.available_colours = list(mc.TABLEAU_COLORS)
@@ -167,8 +168,8 @@ class Expplot:
         # Plot end of pulse
         self.ax[0].plot(line2x/µs, line2y/km, **kwargs)
         
-        self.ax[0].xaxis.set_label("Time [µs]")
-        self.ax[0].yaxis.set_label("Range [km]")
+        
+        self.ax[0].set_ylabel("Range [km]")
 
         self.ax[0].yaxis.set_minor_formatter("{x:.0f}")
         self.ax[0].xaxis.set_minor_formatter("{x:.0f}")
@@ -250,7 +251,7 @@ class Expplot:
         if "color" not in kwargs:
             kwargs["color"] = self.get_colour(name)
         self.ax[2].plot(np.asarray(x)/µs, np.asarray(y)/MHz, **kwargs)
-        self.ax[2].yaxis.set_label("Frequency [MHz]")
+        self.ax[2].set_ylabel("Frequency [MHz]")
             
     def add_range_label(self, r: float):
         """
