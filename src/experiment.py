@@ -102,7 +102,7 @@ class Subcycle:
             for receive in receives:
                 if not receive.within_any(self.rx_protection):
                     plot.receive("CH"+str(ch), receive)
-                    
+
                 plot.frequency("CH"+str(ch), self.rx_freqs[ch], receive)
         plot.state("RF", self.transmits.lengths, self.transmits.begins)
         plot.phase(self.phaseshifts, self.transmits)
@@ -229,13 +229,13 @@ class Experiment:
         ncos = {}
         for ch in range(1, 7):
             if len(ncofiles[ch-1]) == 0:
-                print(f"Channel {ch-1} was not loaded into NCO. This will not be available to Tarlan.")
+                print(
+                    f"Channel {ch} was not loaded into NCO. This will not be available to Tarlan.")
                 continue
             # Load random lo frequencies because Nco needs to have something
             # Quick and dirty solution to file loading error: Ignore first slash / to get kst/exp ...
             ncos[ch] = Nco(ncofiles[ch-1][1:], lo1[0]/1e6, lo2[0]/1e6)
-            
-        
+
         tlan = Tarlan(os.path.join(directory, eros.py_get_tlan(directory)),
                       lo1, lo2, ncos)
 
@@ -251,6 +251,9 @@ class Experiment:
             for i, freq_ch in enumerate(tlan.freq_rec):
                 if len(freq_ch) > 0:
                     subcycle.rx_freqs[i] = freq_ch
+                else:
+                    # For debugging, this might be useful to write out
+                    print("No frequencies for channel", i+1)
             exp.add_subcycle(subcycle)
 
         return exp

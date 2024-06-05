@@ -116,7 +116,23 @@ class Nco:
             raise RuntimeError("A channel has not loaded controller file yet!")
         self.f_nco = self.freqs[nr]
         # print("f_nco s now ", self.f_nco)
+    @property
+    def is_ready(self) -> bool:
+        """
+        Shows if corresponding channel board has a defined frequency already.
+        
+        :rtype: bool
 
+        If channel is not ready, there are several possibilities why:
+        - There has not been loaded any .nco file for this channel yet.
+        - The command NCOSEL has not been run yet.
+        
+        The local oscillator frequencies have been decided, even if not explicitly. 
+        This is because EROS uses default oscillators. However, it is good practice to 
+        explicit tell EROS which oscillators to use.
+        """
+        return hasattr(self, "f_nco")
+        
     def get_freq(self) -> float:
         """
         Return the centre frequency of this channel.
@@ -126,4 +142,6 @@ class Nco:
         :rtype: float
 
         """
+        if not self.is_ready:
+            raise RuntimeError("NCOSEL has not been run yet!")
         return self._lo1 + self._lo2 - self.f_nco
