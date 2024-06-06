@@ -32,6 +32,11 @@ def extend(liste, string):
 class TclScope:
     def __init__(self, master = None, **var):
         self._var = var
+        if master is not None:
+            for proc_name, proc in master.py_get_procs().items():
+                print("loaded proc", proc_name)
+                setattr(self, proc_name, proc)
+        self._procs = {}  # procs that are defined in this scope
         self.__parser = TclParser()
         self.__return_value = None
         self._cmdlog = []
@@ -74,6 +79,7 @@ class TclScope:
         keyword_dict = {"if": "iftest", 
                         "return": "returnval",
                         "global": "global_var",
+                        "for": "forloop",
         }
         if words[0] in keyword_dict.keys():
             words[0] = keyword_dict[words[0]]
@@ -263,6 +269,10 @@ class TclScope:
             if "scope" in entry and recursive:
                 log.extend(entry["scope"].py_getcallings(callings))
         return log
+    
+    def py_get_procs(self):
+        print("py_get_procs")
+        return self._procs
         
     def append(self, args):
         if len(args) == 0:
@@ -324,6 +334,27 @@ class TclScope:
     
     def exec(self, args):
         print("Nice try...")
+    
+    def forloop(self, args):
+        start, test, nekst, body = args
+        
+        max_iter = 1000
+        
+        self.eval([start])
+        for i in range(max_iter):
+            if not self.expr(test) == "True":
+                break
+            self.eval([body])
+            self.eval([nekst])
+        
+    def incr(self, args):
+        varname = args[0]
+        if len(args) > 1:
+            increment = int(args[1])
+        else:
+            increment = 1        
+        
+        self._var[varname] = str(int(self._var[varname]) + increment)
         
     def global_var(self, args):
         print(f"Set or query {args} to global variables. Not implemented because",
@@ -442,7 +473,9 @@ class TclScope:
             scope(body, f"proc {name}")
             return scope.__return_value
         func = lambda x ="": execute_function(funcargs, defargs, x)
+        
         setattr(self, name, func)
+        self._procs[name] = func
         
         
             
