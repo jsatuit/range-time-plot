@@ -73,6 +73,7 @@ class TclScope:
         # Treat keywords in python
         keyword_dict = {"if": "iftest", 
                         "return": "returnval",
+                        "global": "global_var",
         }
         if words[0] in keyword_dict.keys():
             words[0] = keyword_dict[words[0]]
@@ -304,6 +305,10 @@ class TclScope:
     
     def exec(self, args):
         print("Nice try...")
+        
+    def global_var(self, args):
+        print(f"Set or query {args} to global variables. Not implemented because",
+              " implementation propably uses global variables anyway...")
         
     def iftest(self, args):
         # print(args)
