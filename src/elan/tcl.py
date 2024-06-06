@@ -264,6 +264,25 @@ class TclScope:
                 log.extend(entry["scope"].py_getcallings(callings))
         return log
         
+    def append(self, args):
+        if len(args) == 0:
+            raise ValueError("You must at least have the name of the list")
+        varname = args[0]
+        print(varname)
+        # Create list if not existing
+        if varname not in self._var:
+            self._var[varname] = []
+        var = self._var[varname]
+
+        # If variable is not a list, then make it to a list
+        if isinstance(var, str):  # that is not a list...
+            self._var[varname] = [var]
+            var = self._var[varname]
+            
+        for arg in args[1:]:
+            var.append(arg)
+        return
+        
     def eval(self, args, name =""):
         # if len(args) > 1:
         #     raise NotImplementedError("Only evaluate one command at once!")
