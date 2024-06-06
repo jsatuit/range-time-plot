@@ -201,6 +201,8 @@ class Eros(TclScope):
     def ISSOD(self, *args):return self.isradar("SOD")
     def ISUHF(self, *args):return self.isradar("UHF")
     def ISVHF(self, *args):return self.isradar("VHF")
+    def loadfile(self, *args):
+        return self.source(args)
     def loadfilter(self, args):
         line = "ionline"
         # Index of first option
