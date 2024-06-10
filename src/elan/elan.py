@@ -57,10 +57,9 @@ class Eros(TclScope):
     lo2_default = {"UHF": [128, 122], "VHF": [84, 84], "ESR": [81.25]*4}
     
     def __init__(self, radar = "", ant = "", master = None, **var):
-        super().__init__(master)
+        super().__init__(master, **var)
         # if "radar" not in var.keys():
         #     raise ValueError("Radar not specified!")
-        self._var = var
         self._loadedfiles = dict(zip(["rbin", "tbin", "filter", "fil", "nco"], 
                                      [""]*4+[[""]*6]))
         if len(radar) > 0:

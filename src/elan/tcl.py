@@ -9,11 +9,13 @@ Notes:
 There are problems with the implementation of lists. At current, tcl lists are saved as python lists, but that sometimes gives errors. Since the most important parts of library work as expected, the implementation might stay like this. 
 """
 import re
+import logging
 
 from math import sin, cos, sqrt, hypot
 
 from src.elan.tclparser import TclCommand, TclParser, TclError
 
+module_logger = logging.getLogger(__name__)
 
 def extend(liste, string):
     """
@@ -31,6 +33,7 @@ def extend(liste, string):
 
 class TclScope:
     def __init__(self, master = None, **var):
+        module_logger.info(f"Creating Tcl scope with variables {var.keys()}")
         self._var = var
         if master is not None:
             for proc_name, proc in master.py_get_procs().items():
