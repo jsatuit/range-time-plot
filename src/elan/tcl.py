@@ -124,7 +124,7 @@ class TclScope:
         """
         # print(string)
         # If not with brace
-        pattern = r'\\?\$+(?!{)[^\$,.\+\-\=/\*"\s{}()\\]*'
+        pattern = r'\\?\$+(?!{)[^\$,.\+\-\=/\*<>"\s{}()\\]*'
         # If with braces
         pattern2 = r'\\?\$+{[^}]+}'
         def replace(x):
