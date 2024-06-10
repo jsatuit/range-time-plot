@@ -34,7 +34,7 @@ class TclScope:
         self._var = var
         if master is not None:
             for proc_name, proc in master.py_get_procs().items():
-                print("loaded proc", proc_name)
+                # print("loaded proc", proc_name)
                 setattr(self, proc_name, proc)
         self._procs = {}  # procs that are defined in this scope
         self.__parser = TclParser()
@@ -271,7 +271,7 @@ class TclScope:
         return log
     
     def py_get_procs(self):
-        print("py_get_procs")
+        # print("py_get_procs")
         return self._procs
         
     def append(self, args):
