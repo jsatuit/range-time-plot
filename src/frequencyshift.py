@@ -56,11 +56,12 @@ class FrequencyList(SortedDict):
         respectively describes the time and phases of the phase shifts
         
         Example:
+        ```
         180        x----------x     x----   etc.
                    |          |     |
         0   -x-----x          x-----x
              0     6          17    25   
-        
+        ```
         gives
         [0, 6, 6, 17, 17, 25, 25, ...]
         and
@@ -87,11 +88,12 @@ class FrequencyList(SortedDict):
         respectively describes the time and phases of the phase shifts
         
         Example:
+        ```
         180        x----------x     x----   etc.
                    |          |     |
         0   -x-----x          x-----x
              0     6          17    25   
-        
+        ```
         gives
         [0, 6, 6, 17, 17, 25, 25, ...]
         and
