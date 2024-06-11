@@ -33,7 +33,9 @@ def extend(liste, string):
 
 class TclScope:
     def __init__(self, master = None, name = "console", **var):
-        module_logger.info(f"Creating Tcl scope with variables {var.keys()}")
+        module_logger.info(f"Creating Tcl scope '{name}' with variables {var.keys()}")
+        if master is not None:
+            module_logger.debug(f"Scope inherits from {master.name}")
         self._var = var
         self.name = name
         if master is not None:
@@ -139,7 +141,7 @@ class TclScope:
             # This seems also to be what Tcl does...
             if "$" in s.split(r"\$")[-1]:
                 ld = s.rfind(r"$")
-                var_string = f"{self._var[s[ld+1:]]}"
+                var_string = f"{self.py_getvar(s[ld+1:])}"
                 if into_quotes:
                     var_string = f"'{var_string}'"
                 return s[0:ld] + var_string
@@ -151,7 +153,7 @@ class TclScope:
             # Match from after first { to last }
             varname = re.findall(r"{[\s\S]+}", s)[0][1:-1]
             # print(varname)
-            var = self._var[varname]
+            var = self.py_getvar(varname)
             if isinstance(var, list):
                 var = ' '.join(var)
             var_string = f"{var}"
@@ -237,6 +239,7 @@ class TclScope:
         # print(cmds)
         for cmd in cmds:
             self._cmdlog.append(cmd)
+            module_logger.debug("Executing "+str(cmd).split("\n")[0])
             try:
                 ret = self.__execute(cmd, name)
             except StopIteration as e:
@@ -247,7 +250,7 @@ class TclScope:
                         break
                 else:
                     raise e
-        
+            module_logger.debug("Function returned "+str(ret))
         # Note that this is the return of the last command which may or may not 
         # be last command in the executed script.
         return ret
@@ -277,6 +280,13 @@ class TclScope:
     def py_get_procs(self):
         # print("py_get_procs")
         return self._procs
+    
+    def py_getvar(self, name):
+        return self._var[name]
+    
+    def py_setvar(self, name, value):
+        self._var[name] = value
+        return
         
     def append(self, args):
         if len(args) == 0:
@@ -285,13 +295,13 @@ class TclScope:
         print(varname)
         # Create list if not existing
         if varname not in self._var:
-            self._var[varname] = []
-        var = self._var[varname]
+            self.py_setvar(varname, [])
+        var = self.py_getvar(varname)
 
         # If variable is not a list, then make it to a list
         if isinstance(var, str):  # that is not a list...
-            self._var[varname] = [var]
-            var = self._var[varname]
+            self.py_setvar(varname, [var])
+            var = self.py_getvar(varname)
             
         for arg in args[1:]:
             var.append(arg)
@@ -358,7 +368,7 @@ class TclScope:
         else:
             increment = 1        
         
-        self._var[varname] = str(int(self._var[varname]) + increment)
+        self.py_setvar(varname, str(int(self.py_getvar(varname)) + increment))
         
     def global_var(self, args):
         print(f"Set or query {args} to global variables. Not implemented because",
@@ -456,7 +466,6 @@ class TclScope:
                 if len(callargs) > len(funcargs) - 1:
                     # print(callargs[len(funcargs)-1:])
                     scope.set(['args', ' '.join(callargs[len(funcargs)-1:])])
-                    # print(scope._var["args"])
                 else:
                     scope.set(['args', ''])
             for i, arg in enumerate(funcargs):
@@ -509,7 +518,7 @@ class TclScope:
             name = args[0]
             val = ""
 
-        self._var[name] = val
+        self.py_setvar(name, val)
         return val
     
     def source(self, args):
