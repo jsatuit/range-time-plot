@@ -31,6 +31,8 @@ def filefinder(filename:str, ending: str = ".elan"):
     """
     expname = os.path.splitext(os.path.split(filename)[1])[0]
 
+    if filename.startswith("/kst/exp/"):
+        filename = filename[9:]
     # Find elan file
     if not filename.endswith(ending):
         filename += ".elan"
@@ -295,7 +297,7 @@ class Eros(TclScope):
         addrs = args[1]
         if len(args) > 2:
             print("Implementation does not support more than one frequency at the time.")
-        path = filefinder(file, ".nco")
+        path = filefinder(file, ".nco")[-1]
         
         with open(path) as file:
             lines = file.read()
