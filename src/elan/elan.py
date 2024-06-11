@@ -13,14 +13,16 @@ import re
 from math import ceil
 
 from src.elan.tcl import TclScope, extend
+from src.kstconfig.nco import Nco
 
-def filefinder(filename:str):
+def filefinder(filename:str, ending: str = ".elan"):
     """
     Find file filename. 
     :param filename: experiment filename. May be absolute path (/kst/exp/manda/manda) or relative to 
         root of this repository (for example kst/exp/manda/manda). The function will 
         also look into folder /kst/exp or kst/exp if they exist.
     :type filename: str
+    :param str ending: File ending. Default is '.elan'
     :raises FileNotFoundError: If the experiment file is not found in the given 
         directory, or within (subfolders of) (/)kst/exp
     :return: directory, name of experiment, path to experiment
@@ -30,7 +32,7 @@ def filefinder(filename:str):
     expname = os.path.splitext(os.path.split(filename)[1])[0]
 
     # Find elan file
-    if not filename.endswith(".elan"):
+    if not filename.endswith(ending):
         filename += ".elan"
     paths = [
         filename,
@@ -288,6 +290,18 @@ class Eros(TclScope):
             print("Still, Manda is assumed, so rather load correct tlan first")
     
                 
+    def readfrequencyfile(self, args):
+        file = args[0]
+        addrs = args[1]
+        if len(args) > 2:
+            print("Implementation does not support more than one frequency at the time.")
+        path = filefinder(file, ".nco")
+        
+        with open(path) as file:
+            lines = file.read()
+        freqs = Nco.parse_nco(lines)
+        return freqs[addrs]
+        
         
         
     def runexperiment(self, args):
