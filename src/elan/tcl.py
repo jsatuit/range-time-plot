@@ -32,11 +32,13 @@ def extend(liste, string):
         raise KeyError(string)
 
 class TclScope:
+    tcl_globals = {}
     def __init__(self, master = None, name = "console", **var):
         module_logger.info(f"Creating Tcl scope '{name}' with variables {var.keys()}")
         if master is not None:
             module_logger.debug(f"Scope inherits from {master.name}")
         self._var = var
+        self._global_list = []
         self.name = name
         if master is not None:
             for proc_name, proc in master.py_get_procs().items():
@@ -282,10 +284,14 @@ class TclScope:
         return self._procs
     
     def py_getvar(self, name):
+        if name in self._global_list:
+            self._var[name] = TclScope.tcl_globals[name]
         return self._var[name]
     
     def py_setvar(self, name, value):
         self._var[name] = value
+        if name in self._global_list:
+            TclScope.tcl_globals[name] = self._var[name]
         return
         
     def append(self, args):
@@ -371,9 +377,9 @@ class TclScope:
         self.py_setvar(varname, str(int(self.py_getvar(varname)) + increment))
         
     def global_var(self, args):
-        print(f"Set or query {args} to global variables. Not implemented because",
-              " implementation propably uses global variables anyway...")
-        
+        for arg in args:
+            self._global_list.append(arg)
+            
     def iftest(self, args):
         # print(args)
         conditions = []
