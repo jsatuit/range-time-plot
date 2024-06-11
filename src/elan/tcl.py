@@ -32,9 +32,10 @@ def extend(liste, string):
         raise KeyError(string)
 
 class TclScope:
-    def __init__(self, master = None, **var):
+    def __init__(self, master = None, name = "console", **var):
         module_logger.info(f"Creating Tcl scope with variables {var.keys()}")
         self._var = var
+        self.name = name
         if master is not None:
             for proc_name, proc in master.py_get_procs().items():
                 # print("loaded proc", proc_name)
@@ -229,20 +230,20 @@ class TclScope:
         s_out = s_math3
         # print(s_out)
         return s_out
-    def __call__(self, s, filename=""):
-        if self._master is None:
-            filename = "console"
-        cmds = self.__parser(s, filename)
+    def __call__(self, s, name = ""):
+        if not name:
+            name = self.name
+        cmds = self.__parser(s, name)
         # print(cmds)
         for cmd in cmds:
             self._cmdlog.append(cmd)
             try:
-                ret = self.__execute(cmd, filename)
+                ret = self.__execute(cmd, name)
             except StopIteration as e:
                 # print(f"stopped executing script {filename}")
                 ret = e.value
-                if filename.lower().startswith("proc") or\
-                    filename.lower() == ["console"]:
+                if name.lower().startswith("proc") or\
+                    name.lower() == ["console"]:
                         break
                 else:
                     raise e
@@ -446,7 +447,7 @@ class TclScope:
             
         def execute_function(funcargs, defargs, callargs):
             # print(funcargs, defargs, callargs)
-            scope = type(self)(master=self, **self._var)
+            scope = type(self)(master=self, name=name, **self._var)
             self._log[-1]["scope"] = scope
             self._subscopes.append(scope)
             required_args = len(funcargs) - len(defargs)
