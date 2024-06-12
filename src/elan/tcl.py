@@ -324,7 +324,7 @@ class TclScope:
     
     def expr(self, args):
         # Arrays are not implemented
-        expression = ' '.join(args)
+        expression = ''.join(args)
         module_logger.debug("Called expr with arguments" + expression)
         sub = self.__substitute(expression, into_quotes=True)
         sub = self.substitute_expr(sub)
