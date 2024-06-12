@@ -64,8 +64,11 @@ class Eros(TclScope):
         super().__init__(master, **var)
         # if "radar" not in var.keys():
         #     raise ValueError("Radar not specified!")
-        self._loadedfiles = dict(zip(["rbin", "tbin", "filter", "fil", "nco"], 
+        if master is None:
+            self._loadedfiles = dict(zip(["rbin", "tbin", "filter", "fil", "nco"], 
                                      [""]*4+[[""]*6]))
+        else:
+            self._loadedfiles = master._loadedfiles
         if len(radar) > 0:
             assert radar in ["UHF", "VHF", "ESR", "KIR", "SOD"]
             self._var["_radar"] = radar
@@ -142,7 +145,12 @@ class Eros(TclScope):
                     tlans.append(entry.name)
                     
         #Use that tlan file that has name closest to rbin
-        tlan_name = difflib.get_close_matches(rbin, tlans, n=1)[0]
+        try:
+            tlan_name = difflib.get_close_matches(rbin, tlans, n=1)[0]
+        except IndexError as e:
+            print("rbin:", rbin) 
+            print(tlans)
+            raise e
         return tlan_name
         
     def argv(self, *args):
