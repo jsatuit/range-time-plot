@@ -198,7 +198,9 @@ class TclScope:
     def __substitute_commands(self, string: str, into_quotes: bool = False) -> str:
         s_out = ""
         for s in self.__parser.find_brackets(string):
+            module_logger.debug("Is "+s+" in brackets?")
             if len(s) > 0 and s[0] == "[" and s[-1] == "]":
+                module_logger.debug("Yes")
                 s = self(s[1:-1])
                 if into_quotes:
                     s = "'" + s + "'"
@@ -322,11 +324,12 @@ class TclScope:
     
     def expr(self, args):
         # Arrays are not implemented
-
-        expression = ''.join(args)
+        expression = ' '.join(args)
+        module_logger.debug("Called expr with arguments" + expression)
         sub = self.__substitute(expression, into_quotes=True)
         sub = self.substitute_expr(sub)
-        
+        module_logger.debug("Substituted expression to " + sub)
+
         # print(sub)
         # We are using python default interpreter, which is dangerous.
         # Therefore lambdas, double underscores, newlines and semicolons are 

@@ -173,6 +173,7 @@ class TclParser:
                       (self.env == "[]" and token == "]")) and not in_backslash and self.env_level > 1
         end_env = token in end_tokens[self.env] and \
             (self.env == " " or not in_backslash) and not decr_level
+        change_env = token == "[" and self.env == " " and not in_backslash
         end_command = self.env == " " and token in [":", "\n"]
         # print(repr(token), in_backslash, incr_level, decr_level, end_env, end_command)
 
@@ -187,7 +188,13 @@ class TclParser:
                                   start=self.wordstart, env=self.env)
             self.wordstart = 0
             self.env_level = 0
-            self.env = ""
+            if self.env == " " and token == "[":
+                self.start_env(token)
+            else:
+                self.env = ""
+        elif change_env:
+            self.handle_env(" ")
+            self.start_env(token)
         else:
             self.words[-1] += token
 
