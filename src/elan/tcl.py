@@ -83,6 +83,7 @@ class TclScope:
 
             words.append(wordsub)
 
+        module_logger.debug("Executing " + ' '.join([str(word).split("\n")[0] for word in words]))
         # Treat keywords in python
         keyword_dict = {"if": "iftest", 
                         "return": "returnval",
@@ -241,7 +242,7 @@ class TclScope:
         # print(cmds)
         for cmd in cmds:
             self._cmdlog.append(cmd)
-            module_logger.debug("Executing "+str(cmd).split("\n")[0])
+            module_logger.debug("Calling "+str(cmd).split("\n")[0])
             try:
                 ret = self.__execute(cmd, name)
             except StopIteration as e:
