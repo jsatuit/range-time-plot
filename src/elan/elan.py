@@ -183,6 +183,17 @@ class Eros(TclScope):
             print("Disabled recording of both plasma and ion line")
         else:
             raise ValueError("Wrong argument {rec}!")
+    def DISP(self, args):
+        disp_strings = []
+        disp_options = [[]]
+        for arg in args:
+            if arg.startswith("-"):
+                disp_options[-1].append(arg)
+            else:
+                disp_strings += arg
+                disp_options.append([])
+        print(disp_options)
+        print(disp_strings)
     def getstarttime(self, args):
         device = args[0].lower()[0]
         return str(self._starttimes[device])
@@ -290,7 +301,8 @@ class Eros(TclScope):
             print("warning: The experiment needs a syncronisation period of "+
                   str(needed_sync) + f"µs , but {sync_period} µs was given !")
             print("Still, Manda is assumed, so rather load correct tlan first")
-    
+    def logbook(self, args):
+        print(f"Print {args} into logbook")
                 
     def readfrequencyfile(self, args):
         file = args[0]
