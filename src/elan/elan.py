@@ -476,6 +476,9 @@ class Eros(TclScope):
                 print("Set/edit all user parameters in EROS (but not here)")
             else:
                 raise ValueError("Not more than 3 arguments to upar!")
+        elif len(args) == 1:
+            print(f"Return user parameter {args[0]}. This implementation always returns zero!")
+            return "0"
         elif len(args) == 2:
             print(f"Return user parameter {args[1]} in EROS (but not here)")
         elif len(args) == 3:
