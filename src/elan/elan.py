@@ -302,7 +302,7 @@ class Eros(TclScope):
         with open(path) as file:
             lines = file.read()
         freqs = Nco.parse_nco(lines)
-        return freqs[int(addrs)]
+        return str(freqs[int(addrs)])
         
         
         
