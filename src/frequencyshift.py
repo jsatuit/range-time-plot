@@ -25,11 +25,11 @@ class FrequencyList(SortedDict):
 
         :param interval: interval which the phases shifts should be inside of.
         :type interval: TimeInterval
-        :param tx_intervals: transmit intervals. If wanted to estimate baud 
+        :param tx_intervals: transmit intervals. If wanted to estimate baud
             lengths, these must be given, defaults to None
         :return: A list of the frequencies that occur within the interval.
         :rtype: EventList
-
+        
         """
         i0 = self.bisect_right(interval.begin) - 1
         if i0 < 0:
@@ -53,15 +53,16 @@ class FrequencyList(SortedDict):
         Coordinates of a line connecting the phase shifts within an interval
         
         That is a list of x coordinates and a list of y coordinates which 
-        respectively describes the time and phases of the phase shifts
+        respectively describes the time and phases of the phase shifts.
         
-        Example:
-        ```
-        180        x----------x     x----   etc.
-                   |          |     |
-        0   -x-----x          x-----x
-             0     6          17    25   
-        ```
+        Example::
+            
+            180        x----------x     x----   etc.
+                       |          |     |
+            0   -x-----x          x-----x
+                 0     6          17    25   
+            
+        
         gives
         [0, 6, 6, 17, 17, 25, 25, ...]
         and
@@ -87,13 +88,13 @@ class FrequencyList(SortedDict):
         That is a list of x coordinates and a list of y coordinates which 
         respectively describes the time and phases of the phase shifts
         
-        Example:
-        ```
-        180        x----------x     x----   etc.
-                   |          |     |
-        0   -x-----x          x-----x
-             0     6          17    25   
-        ```
+        Example::
+            
+            180        x----------x     x----   etc.
+                       |          |     |
+            0   -x-----x          x-----x
+                 0     6          17    25   
+            
         gives
         [0, 6, 6, 17, 17, 25, 25, ...]
         and

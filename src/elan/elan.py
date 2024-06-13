@@ -18,9 +18,10 @@ from src.kstconfig.nco import Nco
 def filefinder(filename:str, ending: str = ".elan"):
     """
     Find file filename. 
-    :param filename: experiment filename. May be absolute path (/kst/exp/manda/manda) or relative to 
-        root of this repository (for example kst/exp/manda/manda). The function will 
-        also look into folder /kst/exp or kst/exp if they exist.
+    :param filename: experiment filename. May be absolute path (/kst/exp/manda/manda) or relative to
+    root of this repository (for example kst/exp/manda/manda). The function will
+    also look into folder /kst/exp or kst/exp if they exist.
+    
     :type filename: str
     :param str ending: File ending. Default is '.elan'
     :raises FileNotFoundError: If the experiment file is not found in the given 
@@ -124,14 +125,14 @@ class Eros(TclScope):
         
         However, there are some potential problems with this:
         - There is no guarantee that the filenames are the same: There
-            could be that exp.tlan which was compiled to mohahaha.rbin (and wtf.tbin).
+        could be that exp.tlan which was compiled to mohahaha.rbin (and wtf.tbin).
         - There is also a risk that the script is updated while the binary files are not.
         - Transmit-only experiments wont be loaded. Since they would also violate 
-            rules EISCAT blue book and thereby not run, this will only happen if 
-            the experiment is not programmed properly.
+        rules EISCAT blue book and thereby not run, this will only happen if 
+        the experiment is not programmed properly.
             
         We could also have looked at .tbin file, but since the remote receivers 
-            dont transmit, the .tbin file would never be loaded.
+        dont transmit, the .tbin file would never be loaded.
         """
         rbin_path = self._loadedfiles["rbin"]
         directory, rbin = os.path.split(rbin_path)
