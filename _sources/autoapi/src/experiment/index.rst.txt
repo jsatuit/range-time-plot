@@ -1,0 +1,868 @@
+src.experiment
+==============
+
+.. py:module:: src.experiment
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   src.experiment.km
+   src.experiment.μs
+   src.experiment.c
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.experiment.Expplot
+   src.experiment.Tarlan
+   src.experiment.TimeInterval
+   src.experiment.TimeIntervalList
+   src.experiment.Eros
+   src.experiment.Nco
+   src.experiment.EventList
+   src.experiment.Subcycle
+   src.experiment.Experiment
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   src.experiment.calc_nearest_range
+   src.experiment.calc_furthest_full_range
+   src.experiment.filefinder
+
+
+Module Contents
+---------------
+
+.. py:class:: Expplot(plot_interval, rmax = 1000000.0)
+
+   An interface to matplotlib specialised for plotting experiments 
+   (transmit/receive beams)
+
+
+   .. py:method:: get_colour(name)
+
+      Get colour for desired parameter.
+
+      Assigns a new colour if needed. There is a maximum of assignable 
+      colours since matplotlibs default colours are used. These are limited.
+
+      :param name: parameter name
+      :type name: str
+      :raises RuntimeError: if a new colour is assigned but there is no new 
+          colour to take.
+      :return: colour
+      :rtype: str
+
+
+
+
+   .. py:method:: title(title)
+
+      Set supertitle to figure
+
+      :param title: Title string
+      :type title: str
+
+
+
+
+   .. py:method:: xlim(interval = None)
+
+      Set x axes limits.
+
+      :param TimeInterval | None interval: x axes limits as a TimeInterval
+
+
+
+
+   .. py:method:: add_beam(name, interval, v = c, transmit = True, **kwargs)
+
+      Plots transmit or receive beam position
+
+      :param interval: Interval of signal being transmitted/received
+      :type interval: TimeInterval
+      :param float, optional v: Velocity of beam, default light speed
+      :param bool, optional transmit: Direction of beam. True – Transmit, 
+          False – receive, defaults to True
+
+      Keyword arguments are passed further to matplotlib.
+
+
+
+
+   .. py:method:: transmit(name, interval, **kwargs)
+
+      Plots transmit beam position
+
+      :param interval: Interval of signal being transmitted
+      :type interval: TimeInterval
+
+      Keyword arguments are passed further to matplotlib.
+
+
+
+
+   .. py:method:: receive(name, interval, **kwargs)
+
+      Plots receive beam position
+
+      :param interval: Interval of signal being received
+      :type interval: TimeInterval
+
+      Keyword arguments are passed further to matplotlib.
+
+
+
+
+   .. py:method:: state(name, bar_lengths, bars_begin_at, **kwargs)
+
+      Plot setting of radar.
+
+      :param name: name of setting
+      :type name: str
+      :param bar_lengths: Lengths of bars
+      :type bar_lengths: list or numpy array
+      :param bars_begin_at: Position where bars begin
+      :type bars_begin_at: list or numpy array
+
+      Other (keyword) arguments go directly to plotting function
+
+
+
+
+   .. py:method:: phase(phaseshifts, tx_intervals)
+
+
+   .. py:method:: frequency(name, rx_freqs, interval, **kwargs)
+
+      Plot (receiver) frequencies
+
+      :param rx_freqs: Channels with corresponding frequencies
+      :type rx_freqs: dict[str, FrequencyList]
+
+
+
+
+   .. py:method:: add_range_label(r)
+
+      Adds a label to a certain range as a minor tick
+
+      :param float r: range [m]
+
+
+
+
+   .. py:method:: add_time_label(t)
+
+      Adds a label to a certain time as a minor tick
+
+      :param float t: time [s]
+
+
+
+
+.. py:function:: calc_nearest_range(tx_interval, rx_interval, baud_length, v = c)
+
+   Calculates the nearest range the experiment can measure. Since only one baud 
+   will be measured at this range, the performance at this range will be low.
+
+   :param tx_interval: Transmit interval
+   :param rx_interval: Receive interval
+   :param baud_length: baud length of experiment
+   :param v: Speed of beam, default speed of light
+   :return: Nearest range gate. 
+
+
+
+
+.. py:function:: calc_furthest_full_range(tx_interval, rx_interval, baud_length, v = c)
+
+   Calculates the furthest range the experiment measures. This is the last range
+   where the receiver «sees» the *whole* transmit passing through.
+
+   :param tx_interval: Transmit interval
+   :param rx_interval: Receive interval
+   :param baud_length: baud length of experiment
+   :param v: Speed of beam, default speed of light
+   :return: Furthest range gate. 
+
+
+.. py:class:: Tarlan(filename = '', lo1 = (812000000.0, ) * 2, lo2 = (128000000.0, 122000000.0), chfreqs = None)
+
+   Class for parsing and handling an TARLAN experiment
+
+   :param IntervalList cycle: Begin and end of experiment cycle
+   :param IntervalList subycle: Begin and end of experiment subcycles. These
+       are defined by when SETTCR <time> is called.
+   :param dict[str, IntervalList] streams: Dictionary of all on/off times of 
+       the different settings in the radar system controller, among others
+       "RF", "CH1".
+   :param float end_time: Length of tarlan program in seconds.
+
+
+   .. py:attribute:: command_docs
+
+
+   .. py:method:: _init_streams()
+
+
+   .. py:method:: from_tlan(filename = '')
+
+      Parse tlan file and run Tarlan.exec_cmd() for all commands.
+
+      :param filename: Path of tlan file to load, defaults to ""
+      :type filename: str, optional
+
+
+
+
+   .. py:method:: _AD2CH(time, line, path, channels)
+
+
+   .. py:method:: AD1L(time, line)
+
+
+   .. py:method:: AD1R(time, line)
+
+
+   .. py:method:: AD2L(time, line)
+
+
+   .. py:method:: AD2R(time, line)
+
+
+   .. py:method:: ALLOFF(time, line)
+
+
+   .. py:method:: NCOSEL(time, line, nco_line)
+
+
+   .. py:method:: STFIR(time, line)
+
+
+   .. py:method:: SETTCR(time, line)
+
+      Set reference time in time control
+
+
+
+   .. py:method:: _generate_commands()
+
+
+   .. py:method:: _check_command_docs()
+
+
+   .. py:method:: exec_cmd(cmd)
+
+      «Execute» TARLAN command / import command to experiment
+
+      :param cmd: command as pasrsed from the file.
+      :type cmd: Command
+
+
+
+
+   .. py:method:: phaseshifts(idx = 0)
+
+
+.. py:class:: TimeInterval(begin = 0.0, end = 0)
+
+   Handling one begin and end of the time the transmitter/receiver channel is on.
+
+   :param begin: Begin of interval
+   :param end: End of interval. Must be after begin
+   :raises ValueError: when begin of interval comes after end
+       
+
+
+   .. py:method:: __mul__(num)
+
+      Multiplies interval begin and end times with num.
+
+      :param num: Number to multiply with
+      :return: TimeInterval(begin*num, end*num)
+
+
+
+
+   .. py:method:: __truediv__(num)
+
+      Divides interval begin and end times with num.
+
+      :param num: Number to divide with
+      :return: TimeInterval(begin/num, end/num)
+
+
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+
+   .. py:property:: length
+      :type: float
+
+      Length/duration of interval
+
+
+
+   .. py:property:: as_tuple
+      :type: tuple[float, float]
+
+
+
+   .. py:method:: overlaps_with(other)
+
+      Checks if TimeInterval overlaps with other TimeInterval
+
+      :param other: TimeInterval to check overlap with
+      :type other: TimeInterval
+      :return: True if the intervals overlap, else False
+      :rtype: bool
+
+
+
+
+   .. py:method:: overlaps_any(other)
+
+      Checks if TimeInterval overlaps with any other TimeInterval in list
+
+      :param other: list of TimeInterval objects to check overlap with
+      :type other: list[TimeInterval]
+      :return: True if any intervals overlap, else False
+      :rtype: bool
+
+
+
+
+   .. py:method:: check_overlap(other)
+
+      Checks if TimeInterval overlaps with other TimeInterval. If so, 
+      an OverlapError is raised
+
+      :param other: TimeInterval to check overlap with
+      :type other: TimeInterval
+      :raises OverlapError: When intervals overlap
+
+
+
+
+   .. py:method:: within(other)
+
+      Return True if this interval is within the other interval. 
+
+      Intervals are allowed to share boundaries. Numerical errors are not 
+          taken into account
+          
+      :param other: Other TimeInterval
+      :type other: TimeInterval
+      :return: whwether this interval is within the other one.
+      :rtype: bool
+
+
+
+
+   .. py:method:: within_any(other)
+
+      Return True if this interval is completely within any of the intervals
+      in the list. 
+
+      Intervals are allowed to share boundaries. Numerical errors are not 
+          taken into account
+          
+      :param other: List of TimeInterval objects
+      :type other: list[TimeInterval]
+      :return: whwether this interval is within any of those in the list.
+      :rtype: bool
+
+
+
+
+.. py:class:: TimeIntervalList
+
+   Bases: :py:obj:`list`
+
+
+   A hack of base python list class for simpler calling of properties of each 
+   TimeInterval in the list.
+
+
+   .. py:method:: listof(attr)
+
+      Return list of the attribute `attr` of each TimeInterval.
+
+      See other functions for examples.
+
+
+
+   .. py:property:: lengths
+      :type: list[float]
+
+      list with length of each TimeInterval
+
+
+
+   .. py:property:: begins
+      :type: list[float]
+
+      list with begin of each TimeInterval
+
+
+
+   .. py:property:: ends
+      :type: list[float]
+
+      list with end of each TimeInterval
+
+
+
+.. py:class:: Eros(radar='', ant='', master=None, **var)
+
+   Bases: :py:obj:`src.elan.tcl.TclScope`
+
+
+   .. py:attribute:: RCs
+      :value: ['transmitter', 'receiver', 'ion line receiver', 'plasma line receiver']
+
+
+
+   .. py:attribute:: lo1_default
+
+
+   .. py:attribute:: lo2_default
+
+
+   .. py:method:: _get_time_string()
+
+
+   .. py:method:: py_get_loadedfiles()
+
+      Return a dictionary with last loaded files by this EROS instance (including subfunctions)
+
+
+
+   .. py:method:: py_get_lo(lon, MHz = True)
+
+      Return last loaded frequencies in local oscillator
+
+      :param int lon: Which local oscillator to check
+      :param bool, optional MHz: If to return frequency in MHz or not (else frequency is given in Hz), defaults to True (that is in MHz)
+      :return: Loaded frequencies in selected oscillator
+      :rtype: list[int]
+
+
+
+   .. py:method:: py_get_tlan(di='')
+
+      Guess which .tlan file was used
+
+      This is done by finding the last loaded .rbin file* and exchange ending 
+      .rbin with .tlan. This should work. 
+
+      * compiled .tlan file for reception.
+
+      However, there are some potential problems with this:
+      - There is no guarantee that the filenames are the same: There
+      could be that exp.tlan which was compiled to mohahaha.rbin (and wtf.tbin).
+      - There is also a risk that the script is updated while the binary files are not.
+      - Transmit-only experiments wont be loaded. Since they would also violate 
+      rules EISCAT blue book and thereby not run, this will only happen if 
+      the experiment is not programmed properly.
+          
+      We could also have looked at .tbin file, but since the remote receivers 
+      dont transmit, the .tbin file would never be loaded.
+
+
+
+   .. py:method:: argv(*args)
+
+
+   .. py:method:: armradar(args)
+
+
+   .. py:method:: BLOCK(args)
+
+
+   .. py:method:: callblock(args)
+
+
+   .. py:method:: disablerecording(args=[])
+
+
+   .. py:method:: DISP(args)
+
+
+   .. py:method:: getstarttime(args)
+
+
+   .. py:method:: gotoblock(args)
+
+
+   .. py:method:: isradar(args=None)
+
+
+   .. py:method:: ISESR(*args)
+
+
+   .. py:method:: ISKIR(*args)
+
+
+   .. py:method:: ISSOD(*args)
+
+
+   .. py:method:: ISUHF(*args)
+
+
+   .. py:method:: ISVHF(*args)
+
+
+   .. py:method:: loadfile(*args)
+
+
+   .. py:method:: loadfilter(args)
+
+
+   .. py:method:: _parse_args_op_rec_x_chs(args)
+
+
+   .. py:method:: loadfrequency(args)
+
+
+   .. py:method:: loadradar(args)
+
+
+   .. py:method:: logbook(args)
+
+
+   .. py:method:: readfrequencyfile(args)
+
+
+   .. py:method:: runexperiment(args)
+
+
+   .. py:method:: selectlo(args)
+
+
+   .. py:method:: setfrequency(args)
+
+
+   .. py:method:: startdata(args)
+
+
+   .. py:method:: startradar(args)
+
+
+   .. py:method:: stopdata(*args)
+
+
+   .. py:method:: stopradar(args)
+
+
+   .. py:method:: SYNC(args)
+
+
+   .. py:method:: timestamp(args)
+
+
+   .. py:method:: upar(args)
+
+
+   .. py:method:: writeexperimentfile(args)
+
+
+.. py:function:: filefinder(filename, ending = '.elan')
+
+   Find file filename. 
+   :param filename: experiment filename. May be absolute path (/kst/exp/manda/manda) or relative to
+   root of this repository (for example kst/exp/manda/manda). The function will
+   also look into folder /kst/exp or kst/exp if they exist.
+
+   :type filename: str
+   :param str ending: File ending. Default is '.elan'
+   :raises FileNotFoundError: If the experiment file is not found in the given 
+       directory, or within (subfolders of) (/)kst/exp
+   :return: directory, name of experiment, path to experiment
+   :rtype: Tuple[str, str, str]
+
+
+
+.. py:class:: Nco(filename = 'NCOPAR_VS 0.1\nNCO 0 0.0', lo1 = 812, lo2 = 128)
+
+   Parsing and handling of numerically controlled oscillator (NCO) files.
+       
+
+
+   .. py:method:: parse_nco(lines)
+      :staticmethod:
+
+
+      Parse lines from a nco file. 
+
+      Can only parse whole file at once.
+
+      :param lines: lines in the file
+      :type lines: str
+      :raises RuntimeError: if the format of the file is not correct.
+      :raises ValueError: if frequency is not a floating-point number.
+      :return: list of frequencies for this experiment
+      :rtype: list[float]
+
+
+
+
+   .. py:method:: set_freqs(freqs)
+
+
+   .. py:method:: set_lo1(lo1)
+
+      Set local oscillator 1 frequency.
+
+      :param float lo1: Frequency [MHz]
+
+
+
+
+   .. py:method:: set_lo2(lo2)
+
+      Set local oscillator 2 frequency.
+
+      :param float lo2: Frequency [MHz]
+
+
+
+
+   .. py:method:: NCOSEL(nr)
+
+      Select frequency of numerical controlled oscillator.
+
+      :param nr: Frequency number
+      :type nr: int
+
+
+
+
+   .. py:property:: is_ready
+      :type: bool
+
+      Shows if corresponding channel board has a defined frequency already.
+
+      :rtype: bool
+
+      If channel is not ready, there are several possibilities why:
+      - There has not been loaded any .nco file for this channel yet.
+      - The command NCOSEL has not been run yet.
+
+      The local oscillator frequencies have been decided, even if not explicitly. 
+      This is because EROS uses default oscillators. However, it is good practice to 
+      explicit tell EROS which oscillators to use.
+
+
+
+   .. py:method:: get_freq()
+
+      Return the centre frequency of this channel.
+
+      :raises AttributeError: if frequency has not been selected
+      :return: frequency [MHz]
+      :rtype: float
+
+
+
+
+.. py:class:: EventList(initlist=None)
+
+   Bases: :py:obj:`collections.UserList`
+
+
+   List of timed events. Inherits from UserList to be able to use base
+   list functions
+
+
+   .. py:method:: __setitem__(index, value)
+
+
+   .. py:method:: insert(index, value)
+
+      S.insert(index, value) -- insert value before index
+
+
+
+   .. py:method:: listof(attr)
+
+      Return list of the attribute `attr` of each TimeInterval.
+
+      See other functions for examples.
+
+
+
+   .. py:property:: times
+      :type: list[float]
+
+      list with the time of each TimedEvent
+
+
+
+   .. py:property:: events
+      :type: list[float]
+
+      list of all events. That are all TimeEvent.events.
+
+
+
+.. py:data:: km
+   :value: 1000.0
+
+
+   1 kilometer [m]
+
+
+.. py:data:: μs
+   :value: 1e-06
+
+
+   1 Microsecond [s]
+
+
+.. py:data:: c
+   :value: 300000000.0
+
+
+   Speed of light [m/s]
+
+
+.. py:class:: Subcycle(begin = 0, end = False)
+
+   Handling timings for transmission, receiver channels. More properties will 
+   follow?
+
+
+   .. py:property:: end
+
+
+   .. py:property:: begin
+
+
+   .. py:method:: add_time(name, time)
+
+      Adds TimeInterval to relevant attribute of Subcycle.
+
+      :param name: declares what the interval is for: Possibilities are:
+          - "transmission"/"t" - transmission
+          - "ch<some number>" - reception in channel with specified number
+      :type name: str
+      :param time: interval with on and off time of attribute
+      :type time: TimeInterval
+
+
+
+
+   .. py:method:: plot(plot=None, rangelims = False)
+
+      Plot reached ranges and transmitter/receiver states for single subcycle.
+
+      :param plot: If given Expplot, everything is plotted into given Expplot object. 
+          If None, a new plot is created, defaults to None
+      :type plot: Expplot | None, optional
+      :param bool, optional rangelims: Show nearest and furthest ranges as
+          axis ticks. default False.
+
+
+
+
+.. py:class:: Experiment(name = '')
+
+   Handling timings for transmitter and receiver channels
+
+
+   .. py:method:: add_subcycle(subcycle)
+
+
+   .. py:method:: from_tlan(filename)
+      :classmethod:
+
+
+      Load experiment file and convert to Experiment.
+
+      :param filename: Path of tlan file to load.
+      :type filename: str
+      :raises RuntimeError: If radar controller is not resetted correctly 
+          at end of file.
+      :raises RuntimeWarning: if transmitter is constantly off.
+      :return: Object containing properties of the experiment.
+      :rtype: Experiment
+
+
+
+
+   .. py:method:: from_eiscat_kst(filename, radar='UHF')
+      :classmethod:
+
+
+      Load experiment file and convert to Experiment.
+
+      This is a wrapper function for loading from tlan or from elan file.
+      Which ine is called is determined by the file ending. File name without 
+      ending is interpreted as .elan
+
+      For arguments, see from _tlan and from_elan
+
+
+
+
+   .. py:method:: from_elan(filename, radar = 'UHF')
+      :classmethod:
+
+
+      Load experiment file and convert to Experiment.
+
+      This is done by parsing the commands that would be run if the user typed
+      "runexperiment <filename> <timestec> <some args>" in an real EROS console.
+
+      :param str filename: Path of elan file to load. The filename may have 
+          the ending .elan or the ending may be be left out. If the file is 
+          not found, python will look into "/kst/exp/filename" and "kst/exp/filename"
+      :param str radar: Site to plot the experiment for. Possibles are "UHF", 
+          "VHF", "ESR", "KIR", "SOD"
+      :raises RuntimeError: If radar controller is not resetted correctly 
+          at end of tlan file.
+      :raises RuntimeWarning: if transmitter is constantly off.
+      :return: Object containing properties of the experiment.
+      :rtype: Experiment
+
+
+
+
+
+   .. py:method:: plot(subcycles = [])
+
+      Plot multiple subcycles.
+
+      Calls Subcycle.plot(plot) for every subcycle to plot
+
+      :param subcycles: List of which subcycles to plot. Subcycles are 
+          counted from one. Empty list means plot all subcycles, defaults 
+          to plotting all. 
+      :type subcycles: list, optional
+      :raises ValueError: If invalid subcycle numbers are given.
+
+
+
+

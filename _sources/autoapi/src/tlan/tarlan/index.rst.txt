@@ -1,0 +1,818 @@
+src.tlan.tarlan
+===============
+
+.. py:module:: src.tlan.tarlan
+
+.. autoapi-nested-parse::
+
+   The Transmit And Receiver LANguage (TARLAN) is the language for the radar controllers
+   at the EISCAT mainland radars, that are EISCAT UHF and VHF, including receivers
+   in Kiruna and Sodankylä.
+
+   The radar controller controls most of the physical radar equipment, that is 
+   phase shifting, beams, transmittion, reception, but not antenna steering or 
+   signal processing.
+
+   The dictionary `Tarlan.commands` gives an overview over the commands the system
+   can run. More infortmation can be found at
+   https://eiscat.se/scientist/user-documentation/radar-controllers-and-programming-for-the-kst-system/
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   src.tlan.tarlan.km
+   src.tlan.tarlan.μs
+   src.tlan.tarlan.c
+   src.tlan.tarlan.tarlan_command_docstring
+
+
+Exceptions
+----------
+
+.. autoapisummary::
+
+   src.tlan.tarlan.TarlanError
+   src.tlan.tarlan.TarlanWarning
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.tlan.tarlan.PhaseShifter
+   src.tlan.tarlan.FrequencyList
+   src.tlan.tarlan.Nco
+   src.tlan.tarlan.IntervalList
+   src.tlan.tarlan.TarlanSubcycle
+   src.tlan.tarlan.EventList
+   src.tlan.tarlan.Command
+   src.tlan.tarlan.Tarlan
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   src.tlan.tarlan.kst_channels
+   src.tlan.tarlan.do_nothing
+   src.tlan.tarlan.parse_line
+   src.tlan.tarlan.tarlan_parser
+
+
+Module Contents
+---------------
+
+.. py:class:: PhaseShifter
+
+   Simulates behaviour of phase shifter
+
+
+   .. py:method:: set_phase(time, phase)
+
+      Set phase shifter to certain phase
+
+      :param float time: Time of phase shift
+      :param float phase: Phase to set to.
+
+
+
+
+   .. py:method:: restart()
+
+      Restarts phase shifter.
+
+      Means that all saved content is deleted. Use this when data is copied, 
+      for example at ethe end of a subcycle.
+
+
+
+   .. py:method:: PHA0(time, line = 0)
+
+      Set phase shifter to 0 degree.
+
+      :param float time: Time of phase shift
+      :param int line: Line of command in tlan file. Not in use
+
+
+
+   .. py:method:: PHA180(time, line = 0)
+
+      Set phase shifter to 180 degree.
+
+      :param float time: Time of phase shift
+      :param int line: Line of command in tlan file. Not in use
+
+
+
+   .. py:property:: phase_shifts
+      List of TimedEvents contaning the phase shifts
+
+
+
+   .. py:method:: phase_shifts_within(interval, tx_intervals = None)
+
+      List of TimedEvents contaning the phase shifts within interval.
+
+      The last phase shift before the interval is also returned.
+
+      Also returns list of (estimated) baud lengths if transmit intervals are 
+      given.
+
+      :param interval: interval which the phases shifts should be inside of.
+      :type interval: TimeInterval
+      :param tx_intervals: transmit intervals. If wanted to estimate baud 
+          lengths, these must be given, defaults to None
+      :type tx_intervals: TimeIntervalList or None, optional
+      :return: A list of the phase shifts within the interval. If 
+          tx_intervals is given, also a list of baud lengths is returned.
+      :rtype: EventList[, list[float]]
+
+
+
+
+   .. py:method:: estimate_baud_length(interval)
+
+      Estimate baud length within transmit interval.
+
+      Baud length is estimated by finding the greatest common divisor of the 
+      time between the phase shifts in the transmit pulse. 
+
+      WARNING: This is NOT a perfect function and will fail in cases where the
+      pulse has phases like ++++ or ++--. but still works for cases like +++--.
+
+      In many KST experiments (f.e. beata, manda), the first baud is not used or 
+      the code is long enough such that this function works for all pulses.
+
+      :param interval: transmit interval
+      :type interval: TimeInterval
+      :return: baud length
+      :rtype: float
+
+
+
+
+   .. py:method:: as_line(interval)
+
+      Coordinates of a line connecting the phase shifts within an interval
+
+      That is a list of x coordinates and a list of y coordinates which 
+      respectively describes the time and phases of the phase shifts
+
+      Example::
+              
+          180        x----------x     x----   etc.
+                     |          |     |
+          0   -x-----x          x-----x
+               0     6          17    25   
+          
+      gives
+      [0, 6, 6, 17, 17, 25, 25, ...]
+      and
+      [0, 0, 180, 180, 0, 0, 180, ...]
+
+      (Not used at current)
+
+      :param interval: nInterval the phase shifts should be within
+      :type interval: TimeInterval
+      :return: lists of coordinates
+      :rtype: tuple[list[float], list[float]]
+
+
+
+
+.. py:class:: FrequencyList(*args, **kwargs)
+
+   Bases: :py:obj:`sortedcontainers.SortedDict`
+
+
+   Sorted dict is a sorted mutable mapping.
+
+   Sorted dict keys are maintained in sorted order. The design of sorted dict
+   is simple: sorted dict inherits from dict to store items and maintains a
+   sorted list of keys.
+
+   Sorted dict keys must be hashable and comparable. The hash and total
+   ordering of keys must not change while they are stored in the sorted dict.
+
+   Mutable mapping methods:
+
+   * :func:`SortedDict.__getitem__` (inherited from dict)
+   * :func:`SortedDict.__setitem__`
+   * :func:`SortedDict.__delitem__`
+   * :func:`SortedDict.__iter__`
+   * :func:`SortedDict.__len__` (inherited from dict)
+
+   Methods for adding items:
+
+   * :func:`SortedDict.setdefault`
+   * :func:`SortedDict.update`
+
+   Methods for removing items:
+
+   * :func:`SortedDict.clear`
+   * :func:`SortedDict.pop`
+   * :func:`SortedDict.popitem`
+
+   Methods for looking up items:
+
+   * :func:`SortedDict.__contains__` (inherited from dict)
+   * :func:`SortedDict.get` (inherited from dict)
+   * :func:`SortedDict.peekitem`
+
+   Methods for views:
+
+   * :func:`SortedDict.keys`
+   * :func:`SortedDict.items`
+   * :func:`SortedDict.values`
+
+   Methods for miscellany:
+
+   * :func:`SortedDict.copy`
+   * :func:`SortedDict.fromkeys`
+   * :func:`SortedDict.__reversed__`
+   * :func:`SortedDict.__eq__` (inherited from dict)
+   * :func:`SortedDict.__ne__` (inherited from dict)
+   * :func:`SortedDict.__repr__`
+   * :func:`SortedDict._check`
+
+   Sorted list methods available (applies to keys):
+
+   * :func:`SortedList.bisect_left`
+   * :func:`SortedList.bisect_right`
+   * :func:`SortedList.count`
+   * :func:`SortedList.index`
+   * :func:`SortedList.irange`
+   * :func:`SortedList.islice`
+   * :func:`SortedList._reset`
+
+   Additional sorted list methods available, if key-function used:
+
+   * :func:`SortedKeyList.bisect_key_left`
+   * :func:`SortedKeyList.bisect_key_right`
+   * :func:`SortedKeyList.irange_key`
+
+   Sorted dicts may only be compared for equality and inequality.
+
+
+
+   .. py:property:: frequencies
+
+
+   .. py:method:: shifts_within(interval)
+
+      List of TimedEvents contaning the frequency shifts within interval.
+
+      The frequency used when interval starts is also returned: Not only those shifts that happen after interval starts.
+
+      Also returns list of (estimated) baud lengths if transmit intervals are 
+      given.
+
+      :param interval: interval which the phases shifts should be inside of.
+      :type interval: TimeInterval
+      :param tx_intervals: transmit intervals. If wanted to estimate baud
+          lengths, these must be given, defaults to None
+      :return: A list of the frequencies that occur within the interval.
+      :rtype: EventList
+
+
+
+
+   .. py:method:: as_line(end)
+
+      Coordinates of a line connecting the phase shifts within an interval
+
+      That is a list of x coordinates and a list of y coordinates which 
+      respectively describes the time and phases of the phase shifts.
+
+      Example::
+          
+          180        x----------x     x----   etc.
+                     |          |     |
+          0   -x-----x          x-----x
+               0     6          17    25   
+          
+
+      gives
+      [0, 6, 6, 17, 17, 25, 25, ...]
+      and
+      [0, 0, 180, 180, 0, 0, 180, ...]
+
+      :param interval: Interval the shifts should be within. If only a number is given, this is interpreted as end of the plotting interval.
+      :type interval: TimeInterval or tuple[float, float] or float
+      :return: lists of coordinates
+      :rtype: tuple[list[float], list[float]]
+
+
+
+
+   .. py:method:: as_line_within(interval)
+
+      Coordinates of a line connecting the phase shifts within an interval
+
+      That is a list of x coordinates and a list of y coordinates which 
+      respectively describes the time and phases of the phase shifts
+
+      Example::
+          
+          180        x----------x     x----   etc.
+                     |          |     |
+          0   -x-----x          x-----x
+               0     6          17    25   
+          
+      gives
+      [0, 6, 6, 17, 17, 25, 25, ...]
+      and
+      [0, 0, 180, 180, 0, 0, 180, ...]
+
+      :param interval: Interval the shifts should be within. If only a number is given, this is interpreted as end of the plotting interval.
+      :type interval: TimeInterval or tuple[float, float] or float
+      :return: lists of coordinates
+      :rtype: tuple[list[float], list[float]]
+
+
+
+
+.. py:class:: Nco(filename = 'NCOPAR_VS 0.1\nNCO 0 0.0', lo1 = 812, lo2 = 128)
+
+   Parsing and handling of numerically controlled oscillator (NCO) files.
+       
+
+
+   .. py:method:: parse_nco(lines)
+      :staticmethod:
+
+
+      Parse lines from a nco file. 
+
+      Can only parse whole file at once.
+
+      :param lines: lines in the file
+      :type lines: str
+      :raises RuntimeError: if the format of the file is not correct.
+      :raises ValueError: if frequency is not a floating-point number.
+      :return: list of frequencies for this experiment
+      :rtype: list[float]
+
+
+
+
+   .. py:method:: set_freqs(freqs)
+
+
+   .. py:method:: set_lo1(lo1)
+
+      Set local oscillator 1 frequency.
+
+      :param float lo1: Frequency [MHz]
+
+
+
+
+   .. py:method:: set_lo2(lo2)
+
+      Set local oscillator 2 frequency.
+
+      :param float lo2: Frequency [MHz]
+
+
+
+
+   .. py:method:: NCOSEL(nr)
+
+      Select frequency of numerical controlled oscillator.
+
+      :param nr: Frequency number
+      :type nr: int
+
+
+
+
+   .. py:property:: is_ready
+      :type: bool
+
+      Shows if corresponding channel board has a defined frequency already.
+
+      :rtype: bool
+
+      If channel is not ready, there are several possibilities why:
+      - There has not been loaded any .nco file for this channel yet.
+      - The command NCOSEL has not been run yet.
+
+      The local oscillator frequencies have been decided, even if not explicitly. 
+      This is because EROS uses default oscillators. However, it is good practice to 
+      explicit tell EROS which oscillators to use.
+
+
+
+   .. py:method:: get_freq()
+
+      Return the centre frequency of this channel.
+
+      :raises AttributeError: if frequency has not been selected
+      :return: frequency [MHz]
+      :rtype: float
+
+
+
+
+.. py:class:: IntervalList(name)
+
+   Contain intervals for when data streams are enabled. 
+   Intervals may be open in contrast to TimeInterval, which must contain 
+   closed intervals
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+   .. py:property:: state
+      :type: bool
+
+      :raises RuntimeError: if the last stream contains more than one on and 
+          off value(should never happen, but who knows...)
+      :return: state (on/off) of data stream.
+      :rtype: bool
+
+
+
+
+   .. py:property:: is_off
+      :type: bool
+
+      If stream is turned off
+
+      :type: bool
+
+
+
+
+   .. py:property:: is_on
+      :type: bool
+
+      If stream is turned on
+
+      :type: bool
+
+
+
+
+   .. py:method:: turn_on(time, line)
+
+      Turn on data stream.
+
+      :param time: time at which to turn on the stream
+      :type time: float
+      :param line: line in the tlan file. Used for error handling only.
+      :type line: int
+      :raises TarlanError: if stream is on already
+
+
+
+
+   .. py:method:: turn_off(time, line)
+
+      Turn off data stream.
+
+      :param time: time at which to turn off the stream
+      :type time: float
+      :param line: line in the tlan file. Used for error handling only.
+      :type line: int
+      :raises TarlanError: if stream is off or if time is before time of switching on
+
+
+
+
+   .. py:property:: nstreams
+      :type: int
+
+      Number of streams
+
+      :type: int
+
+
+
+
+   .. py:method:: __len__()
+
+      Number of streams
+
+      :type: int
+
+
+
+
+   .. py:property:: intervals
+      :type: src.timeInterval.TimeIntervalList
+
+      Return the on-time of the streams as a list of TimeIntervals
+
+      :type: list[TimeInterval]
+
+
+
+
+   .. py:property:: last_turn_off
+      :type: float
+
+      Last time when the stream was turned off
+
+      :raises RuntimeError: If there stream has not been turned off yet.
+      :rtype: float
+
+
+
+
+   .. py:property:: last_turn_on
+      :type: float
+
+      Last time when the stream was turned on
+
+      :raises RuntimeError: If there stream has not been turned on yet.
+      :rtype: float
+
+
+
+
+   .. py:method:: delete_open_interval()
+
+      Delete last interval with ontime if the stream is on.
+
+
+
+.. py:class:: TarlanSubcycle
+
+   Bases: :py:obj:`IntervalList`
+
+
+   IntervalList which contains streams of each subcycle. These have to be 
+   added when stream is turned off.
+
+
+   .. py:method:: turn_off(time, line, datastreams)
+
+      Stop subcycle
+
+      :param time: time at which to turn off the stream
+      :type time: float
+      :param line: line in the tlan file. Used for error handling only.
+      :type line: int
+      :param datastreams: dictionary of stream name – stream IntervalList pairs
+      :type datastreams: dict
+      :raises TarlanError: if stream is off already
+
+
+
+
+.. py:exception:: TarlanError(msg, line_number = 0)
+
+   Bases: :py:obj:`Exception`
+
+
+   Exception raised when there are errors in parsing a tarlan file
+
+
+.. py:exception:: TarlanWarning(msg, line_number = 0)
+
+   Bases: :py:obj:`UserWarning`
+
+
+   Warning raised when tarlan file has unclear commands.
+
+
+.. py:class:: EventList(initlist=None)
+
+   Bases: :py:obj:`collections.UserList`
+
+
+   List of timed events. Inherits from UserList to be able to use base
+   list functions
+
+
+   .. py:method:: __setitem__(index, value)
+
+
+   .. py:method:: insert(index, value)
+
+      S.insert(index, value) -- insert value before index
+
+
+
+   .. py:method:: listof(attr)
+
+      Return list of the attribute `attr` of each TimeInterval.
+
+      See other functions for examples.
+
+
+
+   .. py:property:: times
+      :type: list[float]
+
+      list with the time of each TimedEvent
+
+
+
+   .. py:property:: events
+      :type: list[float]
+
+      list of all events. That are all TimeEvent.events.
+
+
+
+.. py:data:: km
+   :value: 1000.0
+
+
+   1 kilometer [m]
+
+
+.. py:data:: μs
+   :value: 1e-06
+
+
+   1 Microsecond [s]
+
+
+.. py:data:: c
+   :value: 300000000.0
+
+
+   Speed of light [m/s]
+
+
+.. py:data:: tarlan_command_docstring
+   :value: Multiline-String
+
+   .. raw:: html
+
+      <details><summary>Show Value</summary>
+
+   .. code-block:: python
+
+      """:param time: time [s]
+      :type time: float
+      :param line: line where the command is found. Used for error handling only.
+      :type line: int"""
+
+   .. raw:: html
+
+      </details>
+
+
+
+   Docstring ito be inserted to all tarlan commands.
+
+
+.. py:function:: kst_channels()
+
+   List of available channels
+
+
+.. py:function:: do_nothing(*args)
+
+   Dont delete. This function is needed for executing tarlan commands that 
+   cant be simulated/transferred or where is would not make sense to 
+   implement the function here.
+
+
+.. py:class:: Command(t, cmd, line = 0)
+
+   Tarlan command.
+
+   :param float t: Subcycle time in seconds when command is executed.
+   :param str cmd: Command as written in the .tlan file
+   :param int line: Line in tlan file. Used for error messages
+
+
+
+   .. py:method:: __lt__(other)
+
+      Return self<value.
+
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+.. py:class:: Tarlan(filename = '', lo1 = (812000000.0, ) * 2, lo2 = (128000000.0, 122000000.0), chfreqs = None)
+
+   Class for parsing and handling an TARLAN experiment
+
+   :param IntervalList cycle: Begin and end of experiment cycle
+   :param IntervalList subycle: Begin and end of experiment subcycles. These
+       are defined by when SETTCR <time> is called.
+   :param dict[str, IntervalList] streams: Dictionary of all on/off times of 
+       the different settings in the radar system controller, among others
+       "RF", "CH1".
+   :param float end_time: Length of tarlan program in seconds.
+
+
+   .. py:attribute:: command_docs
+
+
+   .. py:method:: _init_streams()
+
+
+   .. py:method:: from_tlan(filename = '')
+
+      Parse tlan file and run Tarlan.exec_cmd() for all commands.
+
+      :param filename: Path of tlan file to load, defaults to ""
+      :type filename: str, optional
+
+
+
+
+   .. py:method:: _AD2CH(time, line, path, channels)
+
+
+   .. py:method:: AD1L(time, line)
+
+
+   .. py:method:: AD1R(time, line)
+
+
+   .. py:method:: AD2L(time, line)
+
+
+   .. py:method:: AD2R(time, line)
+
+
+   .. py:method:: ALLOFF(time, line)
+
+
+   .. py:method:: NCOSEL(time, line, nco_line)
+
+
+   .. py:method:: STFIR(time, line)
+
+
+   .. py:method:: SETTCR(time, line)
+
+      Set reference time in time control
+
+
+
+   .. py:method:: _generate_commands()
+
+
+   .. py:method:: _check_command_docs()
+
+
+   .. py:method:: exec_cmd(cmd)
+
+      «Execute» TARLAN command / import command to experiment
+
+      :param cmd: command as pasrsed from the file.
+      :type cmd: Command
+
+
+
+
+   .. py:method:: phaseshifts(idx = 0)
+
+
+.. py:function:: parse_line(line, line_number = 0)
+
+   Parse single line of Tarlan code.
+
+   :param line: line of code
+   :type line: str
+   :param line_number: line number in file, used for error handling only, defaults to 0
+   :type line_number: int, optional
+   :raises TarlanError: for invalid commands
+   :return: list of Command objects
+   :rtype: list[Command]
+
+
+
+.. py:function:: tarlan_parser(filename = '')
+
+   Parse tlan file. Commands are returned in the same order as they appear in 
+   the file.
+
+   :param filename: filename, defaults to ""
+   :type filename: str
+   :return: list of Command objects
+   :rtype: list[Command]
+
+
+

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.expplot &mdash; range-time-plot 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="src.frequencyshift" href="../frequencyshift/index.html" />
+    <link rel="prev" title="src.experiment" href="../experiment/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            range-time-plot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">src</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../__main__/index.html">src.__main__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../const/index.html">src.const</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../eventlist/index.html">src.eventlist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experiment/index.html">src.experiment</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">src.expplot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../frequencyshift/index.html">src.frequencyshift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../main/index.html">src.main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../phaseshifter/index.html">src.phaseshifter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../timeInterval/index.html">src.timeInterval</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">range-time-plot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">src</a></li>
+      <li class="breadcrumb-item active">src.expplot</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/src/expplot/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-src.expplot">
+<span id="src-expplot"></span><h1>src.expplot<a class="headerlink" href="#module-src.expplot" title="Link to this heading"></a></h1>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.expplot.km" title="src.expplot.km"><code class="xref py py-obj docutils literal notranslate"><span class="pre">km</span></code></a></p></td>
+<td><p>1 kilometer [m]</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.expplot.s" title="src.expplot.μs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">μs</span></code></a></p></td>
+<td><p>1 Microsecond [s]</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.expplot.c" title="src.expplot.c"><code class="xref py py-obj docutils literal notranslate"><span class="pre">c</span></code></a></p></td>
+<td><p>Speed of light [m/s]</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.expplot.MHz" title="src.expplot.MHz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MHz</span></code></a></p></td>
+<td><p>1 Megahertz [Hz]</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TimeInterval</span></code></a></p></td>
+<td><p>Handling one begin and end of the time the transmitter/receiver channel is on.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.expplot.FrequencyList" title="src.expplot.FrequencyList"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrequencyList</span></code></a></p></td>
+<td><p>Sorted dict is a sorted mutable mapping.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.expplot.EventList" title="src.expplot.EventList"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EventList</span></code></a></p></td>
+<td><p>List of timed events. Inherits from UserList to be able to use base</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.expplot.Expplot" title="src.expplot.Expplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Expplot</span></code></a></p></td>
+<td><p>An interface to matplotlib specialised for plotting experiments</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.expplot.calc_nearest_range" title="src.expplot.calc_nearest_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_nearest_range</span></code></a>(tx_interval, rx_interval, baud_length)</p></td>
+<td><p>Calculates the nearest range the experiment can measure. Since only one baud</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.expplot.calc_furthest_full_range" title="src.expplot.calc_furthest_full_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_furthest_full_range</span></code></a>(tx_interval, rx_interval, ...)</p></td>
+<td><p>Calculates the furthest range the experiment measures. This is the last range</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">TimeInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">begin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.TimeInterval" title="Link to this definition"></a></dt>
+<dd><p>Handling one begin and end of the time the transmitter/receiver channel is on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>begin</strong> (<em>float</em>) – Begin of interval</p></li>
+<li><p><strong>end</strong> (<em>float</em>) – End of interval. Must be after begin</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – when begin of interval comes after end</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval.__mul__">
+<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.TimeInterval.__mul__" title="Link to this definition"></a></dt>
+<dd><p>Multiplies interval begin and end times with num.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num</strong> (<em>float</em>) – Number to multiply with</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>TimeInterval(begin*num, end*num)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval.__truediv__">
+<span class="sig-name descname"><span class="pre">__truediv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.TimeInterval.__truediv__" title="Link to this definition"></a></dt>
+<dd><p>Divides interval begin and end times with num.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num</strong> (<em>int</em><em> | </em><em>float</em>) – Number to divide with</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>TimeInterval(begin/num, end/num)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.TimeInterval.__repr__" title="Link to this definition"></a></dt>
+<dd><p>Return repr(self).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.TimeInterval.__eq__" title="Link to this definition"></a></dt>
+<dd><p>Return self==value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<em>Self</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval.length">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.expplot.TimeInterval.length" title="Link to this definition"></a></dt>
+<dd><p>Length/duration of interval</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval.as_tuple">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">as_tuple</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.expplot.TimeInterval.as_tuple" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval.overlaps_with">
+<span class="sig-name descname"><span class="pre">overlaps_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.TimeInterval.overlaps_with" title="Link to this definition"></a></dt>
+<dd><p>Checks if TimeInterval overlaps with other TimeInterval</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><em>TimeInterval</em></a>) – TimeInterval to check overlap with</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the intervals overlap, else False</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval.overlaps_any">
+<span class="sig-name descname"><span class="pre">overlaps_any</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.TimeInterval.overlaps_any" title="Link to this definition"></a></dt>
+<dd><p>Checks if TimeInterval overlaps with any other TimeInterval in list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<em>list</em><em>[</em><a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><em>TimeInterval</em></a><em>]</em>) – list of TimeInterval objects to check overlap with</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if any intervals overlap, else False</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval.check_overlap">
+<span class="sig-name descname"><span class="pre">check_overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.TimeInterval.check_overlap" title="Link to this definition"></a></dt>
+<dd><p>Checks if TimeInterval overlaps with other TimeInterval. If so,
+an OverlapError is raised</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><em>TimeInterval</em></a>) – TimeInterval to check overlap with</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../timeInterval/index.html#src.timeInterval.OverlapError" title="src.timeInterval.OverlapError"><strong>OverlapError</strong></a> – When intervals overlap</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval.within">
+<span class="sig-name descname"><span class="pre">within</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.TimeInterval.within" title="Link to this definition"></a></dt>
+<dd><p>Return True if this interval is within the other interval.</p>
+<dl class="simple">
+<dt>Intervals are allowed to share boundaries. Numerical errors are not</dt><dd><p>taken into account</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><em>TimeInterval</em></a>) – Other TimeInterval</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>whwether this interval is within the other one.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.TimeInterval.within_any">
+<span class="sig-name descname"><span class="pre">within_any</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.TimeInterval.within_any" title="Link to this definition"></a></dt>
+<dd><p>Return True if this interval is completely within any of the intervals
+in the list.</p>
+<dl class="simple">
+<dt>Intervals are allowed to share boundaries. Numerical errors are not</dt><dd><p>taken into account</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<em>list</em><em>[</em><a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><em>TimeInterval</em></a><em>]</em>) – List of TimeInterval objects</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>whwether this interval is within any of those in the list.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.expplot.FrequencyList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">FrequencyList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.FrequencyList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sortedcontainers.SortedDict</span></code></p>
+<p>Sorted dict is a sorted mutable mapping.</p>
+<p>Sorted dict keys are maintained in sorted order. The design of sorted dict
+is simple: sorted dict inherits from dict to store items and maintains a
+sorted list of keys.</p>
+<p>Sorted dict keys must be hashable and comparable. The hash and total
+ordering of keys must not change while they are stored in the sorted dict.</p>
+<p>Mutable mapping methods:</p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.__getitem__()</span></code> (inherited from dict)</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.__setitem__()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.__delitem__()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.__iter__()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.__len__()</span></code> (inherited from dict)</p></li>
+</ul>
+<p>Methods for adding items:</p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.setdefault()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.update()</span></code></p></li>
+</ul>
+<p>Methods for removing items:</p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.clear()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.pop()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.popitem()</span></code></p></li>
+</ul>
+<p>Methods for looking up items:</p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.__contains__()</span></code> (inherited from dict)</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.get()</span></code> (inherited from dict)</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.peekitem()</span></code></p></li>
+</ul>
+<p>Methods for views:</p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.keys()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.items()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.values()</span></code></p></li>
+</ul>
+<p>Methods for miscellany:</p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.copy()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.fromkeys()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.__reversed__()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.__eq__()</span></code> (inherited from dict)</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.__ne__()</span></code> (inherited from dict)</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict.__repr__()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedDict._check()</span></code></p></li>
+</ul>
+<p>Sorted list methods available (applies to keys):</p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedList.bisect_left()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedList.bisect_right()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedList.count()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedList.index()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedList.irange()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedList.islice()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedList._reset()</span></code></p></li>
+</ul>
+<p>Additional sorted list methods available, if key-function used:</p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedKeyList.bisect_key_left()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedKeyList.bisect_key_right()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">SortedKeyList.irange_key()</span></code></p></li>
+</ul>
+<p>Sorted dicts may only be compared for equality and inequality.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="src.expplot.FrequencyList.frequencies">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frequencies</span></span><a class="headerlink" href="#src.expplot.FrequencyList.frequencies" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.FrequencyList.shifts_within">
+<span class="sig-name descname"><span class="pre">shifts_within</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.FrequencyList.shifts_within" title="Link to this definition"></a></dt>
+<dd><p>List of TimedEvents contaning the frequency shifts within interval.</p>
+<p>The frequency used when interval starts is also returned: Not only those shifts that happen after interval starts.</p>
+<p>Also returns list of (estimated) baud lengths if transmit intervals are
+given.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval</strong> (<a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><em>TimeInterval</em></a>) – interval which the phases shifts should be inside of.</p></li>
+<li><p><strong>tx_intervals</strong> – transmit intervals. If wanted to estimate baud
+lengths, these must be given, defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of the frequencies that occur within the interval.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.expplot.EventList" title="src.expplot.EventList">EventList</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.FrequencyList.as_line">
+<span class="sig-name descname"><span class="pre">as_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.FrequencyList.as_line" title="Link to this definition"></a></dt>
+<dd><p>Coordinates of a line connecting the phase shifts within an interval</p>
+<p>That is a list of x coordinates and a list of y coordinates which
+respectively describes the time and phases of the phase shifts.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">180</span>        <span class="n">x</span><span class="o">----------</span><span class="n">x</span>     <span class="n">x</span><span class="o">----</span>   <span class="n">etc</span><span class="o">.</span>
+           <span class="o">|</span>          <span class="o">|</span>     <span class="o">|</span>
+<span class="mi">0</span>   <span class="o">-</span><span class="n">x</span><span class="o">-----</span><span class="n">x</span>          <span class="n">x</span><span class="o">-----</span><span class="n">x</span>
+     <span class="mi">0</span>     <span class="mi">6</span>          <span class="mi">17</span>    <span class="mi">25</span>
+</pre></div>
+</div>
+<p>gives
+[0, 6, 6, 17, 17, 25, 25, …]
+and
+[0, 0, 180, 180, 0, 0, 180, …]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval</strong> (<a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><em>TimeInterval</em></a><em> or </em><em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>] or </em><em>float</em>) – Interval the shifts should be within. If only a number is given, this is interpreted as end of the plotting interval.</p></li>
+<li><p><strong>end</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>lists of coordinates</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[list[float], list[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.FrequencyList.as_line_within">
+<span class="sig-name descname"><span class="pre">as_line_within</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.FrequencyList.as_line_within" title="Link to this definition"></a></dt>
+<dd><p>Coordinates of a line connecting the phase shifts within an interval</p>
+<p>That is a list of x coordinates and a list of y coordinates which
+respectively describes the time and phases of the phase shifts</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">180</span>        <span class="n">x</span><span class="o">----------</span><span class="n">x</span>     <span class="n">x</span><span class="o">----</span>   <span class="n">etc</span><span class="o">.</span>
+           <span class="o">|</span>          <span class="o">|</span>     <span class="o">|</span>
+<span class="mi">0</span>   <span class="o">-</span><span class="n">x</span><span class="o">-----</span><span class="n">x</span>          <span class="n">x</span><span class="o">-----</span><span class="n">x</span>
+     <span class="mi">0</span>     <span class="mi">6</span>          <span class="mi">17</span>    <span class="mi">25</span>
+</pre></div>
+</div>
+<p>gives
+[0, 6, 6, 17, 17, 25, 25, …]
+and
+[0, 0, 180, 180, 0, 0, 180, …]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>interval</strong> (<a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><em>TimeInterval</em></a><em> or </em><em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>] or </em><em>float</em>) – Interval the shifts should be within. If only a number is given, this is interpreted as end of the plotting interval.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>lists of coordinates</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[list[float], list[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.expplot.EventList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">EventList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initlist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.EventList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">collections.UserList</span></code></p>
+<p>List of timed events. Inherits from UserList to be able to use base
+list functions</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.EventList.__setitem__">
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.EventList.__setitem__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.EventList.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.EventList.insert" title="Link to this definition"></a></dt>
+<dd><p>S.insert(index, value) – insert value before index</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.EventList.listof">
+<span class="sig-name descname"><span class="pre">listof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.EventList.listof" title="Link to this definition"></a></dt>
+<dd><p>Return list of the attribute <cite>attr</cite> of each TimeInterval.</p>
+<p>See other functions for examples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>attr</strong> (<em>str</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.expplot.EventList.times">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.expplot.EventList.times" title="Link to this definition"></a></dt>
+<dd><p>list with the time of each TimedEvent</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.expplot.EventList.events">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">events</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.expplot.EventList.events" title="Link to this definition"></a></dt>
+<dd><p>list of all events. That are all TimeEvent.events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="src.expplot.km">
+<span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">km</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000.0</span></em><a class="headerlink" href="#src.expplot.km" title="Link to this definition"></a></dt>
+<dd><p>1 kilometer [m]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="src.expplot.s">
+<span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">μs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1e-06</span></em><a class="headerlink" href="#src.expplot.s" title="Link to this definition"></a></dt>
+<dd><p>1 Microsecond [s]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="src.expplot.c">
+<span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">c</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">300000000.0</span></em><a class="headerlink" href="#src.expplot.c" title="Link to this definition"></a></dt>
+<dd><p>Speed of light [m/s]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="src.expplot.MHz">
+<span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">MHz</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000000.0</span></em><a class="headerlink" href="#src.expplot.MHz" title="Link to this definition"></a></dt>
+<dd><p>1 Megahertz [Hz]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.expplot.calc_nearest_range">
+<span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">calc_nearest_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baud_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.calc_nearest_range" title="Link to this definition"></a></dt>
+<dd><p>Calculates the nearest range the experiment can measure. Since only one baud
+will be measured at this range, the performance at this range will be low.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx_interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>) – Transmit interval</p></li>
+<li><p><strong>rx_interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>) – Receive interval</p></li>
+<li><p><strong>baud_length</strong> (<em>float</em>) – baud length of experiment</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Speed of beam, default speed of light</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nearest range gate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.expplot.calc_furthest_full_range">
+<span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">calc_furthest_full_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baud_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.calc_furthest_full_range" title="Link to this definition"></a></dt>
+<dd><p>Calculates the furthest range the experiment measures. This is the last range
+where the receiver «sees» the <em>whole</em> transmit passing through.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx_interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>) – Transmit interval</p></li>
+<li><p><strong>rx_interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>) – Receive interval</p></li>
+<li><p><strong>baud_length</strong> (<em>float</em>) – baud length of experiment</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Speed of beam, default speed of light</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Furthest range gate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.expplot.Expplot">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">Expplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot" title="Link to this definition"></a></dt>
+<dd><p>An interface to matplotlib specialised for plotting experiments
+(transmit/receive beams)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plot_interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>)</p></li>
+<li><p><strong>rmax</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.get_colour">
+<span class="sig-name descname"><span class="pre">get_colour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.get_colour" title="Link to this definition"></a></dt>
+<dd><p>Get colour for desired parameter.</p>
+<p>Assigns a new colour if needed. There is a maximum of assignable
+colours since matplotlibs default colours are used. These are limited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – parameter name</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – if a new colour is assigned but there is no new
+colour to take.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>colour</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.title">
+<span class="sig-name descname"><span class="pre">title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.title" title="Link to this definition"></a></dt>
+<dd><p>Set supertitle to figure</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>title</strong> (<em>str</em>) – Title string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.xlim">
+<span class="sig-name descname"><span class="pre">xlim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.xlim" title="Link to this definition"></a></dt>
+<dd><p>Set x axes limits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a><em>, </em><em>None</em><em>]</em>) – x axes limits as a TimeInterval</p></li>
+<li><p><strong>interval</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.add_beam">
+<span class="sig-name descname"><span class="pre">add_beam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transmit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.add_beam" title="Link to this definition"></a></dt>
+<dd><p>Plots transmit or receive beam position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval</strong> (<a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><em>TimeInterval</em></a>) – Interval of signal being transmitted/received</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Velocity of beam, default light speed</p></li>
+<li><p><strong>transmit</strong> (<em>bool</em>) – Direction of beam. True – Transmit,
+False – receive, defaults to True</p></li>
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>v</strong></p></li>
+<li><p><strong>transmit</strong></p></li>
+</ul>
+</dd>
+</dl>
+<p>Keyword arguments are passed further to matplotlib.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.transmit">
+<span class="sig-name descname"><span class="pre">transmit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.transmit" title="Link to this definition"></a></dt>
+<dd><p>Plots transmit beam position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval</strong> (<a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><em>TimeInterval</em></a>) – Interval of signal being transmitted</p></li>
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Keyword arguments are passed further to matplotlib.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.receive">
+<span class="sig-name descname"><span class="pre">receive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.receive" title="Link to this definition"></a></dt>
+<dd><p>Plots receive beam position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval</strong> (<a class="reference internal" href="#src.expplot.TimeInterval" title="src.expplot.TimeInterval"><em>TimeInterval</em></a>) – Interval of signal being received</p></li>
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Keyword arguments are passed further to matplotlib.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.state">
+<span class="sig-name descname"><span class="pre">state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_lengths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bars_begin_at</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.state" title="Link to this definition"></a></dt>
+<dd><p>Plot setting of radar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – name of setting</p></li>
+<li><p><strong>bar_lengths</strong> (<em>list</em><em> or </em><em>numpy array</em>) – Lengths of bars</p></li>
+<li><p><strong>bars_begin_at</strong> (<em>list</em><em> or </em><em>numpy array</em>) – Position where bars begin</p></li>
+</ul>
+</dd>
+</dl>
+<p>Other (keyword) arguments go directly to plotting function</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.phase">
+<span class="sig-name descname"><span class="pre">phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phaseshifts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_intervals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.phase" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>phaseshifts</strong> (<a class="reference internal" href="../eventlist/index.html#src.eventlist.EventList" title="src.eventlist.EventList"><em>src.eventlist.EventList</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.frequency">
+<span class="sig-name descname"><span class="pre">frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_freqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.frequency" title="Link to this definition"></a></dt>
+<dd><p>Plot (receiver) frequencies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rx_freqs</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="#src.expplot.FrequencyList" title="src.expplot.FrequencyList"><em>FrequencyList</em></a><em>]</em>) – Channels with corresponding frequencies</p></li>
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.add_range_label">
+<span class="sig-name descname"><span class="pre">add_range_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.add_range_label" title="Link to this definition"></a></dt>
+<dd><p>Adds a label to a certain range as a minor tick</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>r</strong> (<em>float</em>) – range [m]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.add_time_label">
+<span class="sig-name descname"><span class="pre">add_time_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.add_time_label" title="Link to this definition"></a></dt>
+<dd><p>Adds a label to a certain time as a minor tick</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t</strong> (<em>float</em>) – time [s]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../experiment/index.html" class="btn btn-neutral float-left" title="src.experiment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../frequencyshift/index.html" class="btn btn-neutral float-right" title="src.frequencyshift" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, jsatuit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

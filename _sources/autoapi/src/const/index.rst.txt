@@ -1,0 +1,48 @@
+src.const
+=========
+
+.. py:module:: src.const
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   src.const.μs
+   src.const.km
+   src.const.MHz
+   src.const.c
+
+
+Module Contents
+---------------
+
+.. py:data:: μs
+   :value: 1e-06
+
+
+   1 Microsecond [s]
+
+
+.. py:data:: km
+   :value: 1000.0
+
+
+   1 kilometer [m]
+
+
+.. py:data:: MHz
+   :value: 1000000.0
+
+
+   1 Megahertz [Hz]
+
+
+.. py:data:: c
+   :value: 300000000.0
+
+
+   Speed of light [m/s]
+
+

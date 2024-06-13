@@ -1,0 +1,399 @@
+src.elan.elan
+=============
+
+.. py:module:: src.elan.elan
+
+.. autoapi-nested-parse::
+
+   This module includes some EROS functions to the tcl parser. Also these are badly documented here, but there is an explanation of EROS commands at https://portal.eiscat.se/jussi/eiscat/erosdoc/cmds.html
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.elan.elan.TclScope
+   src.elan.elan.Nco
+   src.elan.elan.Eros
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   src.elan.elan.extend
+   src.elan.elan.filefinder
+
+
+Module Contents
+---------------
+
+.. py:class:: TclScope(master=None, name='console', **var)
+
+   .. py:attribute:: tcl_globals
+
+
+   .. py:method:: __execute(cmd, filename='')
+
+
+   .. py:method:: __substitute_variables(string, into_quotes = False)
+
+
+   .. py:method:: __substitute_backslashes(string, which = '')
+
+
+   .. py:method:: __substitute_commands(string, into_quotes = False)
+
+
+   .. py:method:: __substitute(string, backslashes = True, variables = True, commands = True, into_quotes = False)
+
+
+   .. py:method:: substitute_expr(string)
+
+
+   .. py:method:: __call__(s, name='')
+
+
+   .. py:method:: py_getlog()
+
+
+   .. py:method:: py_getcallings(callings, recursive = True)
+
+      Return the log for executing these commands
+
+      :param callings: List of commands to include in the log
+      :type callings: list
+      :param bool recursive: Include subscopes (statements in called functions)
+      :return: list of the words in the calling of the commands in callings
+      :rtype: list
+
+
+
+
+   .. py:method:: py_get_procs()
+
+
+   .. py:method:: py_getvar(name)
+
+
+   .. py:method:: py_setvar(name, value)
+
+
+   .. py:method:: append(args)
+
+
+   .. py:method:: eval(args, name='')
+
+
+   .. py:method:: expr(args)
+
+
+   .. py:method:: exec(args)
+
+
+   .. py:method:: forloop(args)
+
+
+   .. py:method:: incr(args)
+
+
+   .. py:method:: global_var(args)
+
+
+   .. py:method:: iftest(args)
+
+
+   .. py:method:: lindex(args)
+
+
+   .. py:method:: list(args)
+
+
+   .. py:method:: llength(args)
+
+
+   .. py:method:: proc(args)
+
+
+   .. py:method:: puts(args)
+
+
+   .. py:method:: returnval(args)
+
+
+   .. py:method:: set(args)
+
+
+   .. py:method:: source(args)
+
+
+   .. py:method:: split(args)
+
+
+   .. py:method:: string(args)
+
+
+   .. py:method:: subst(*args)
+
+
+.. py:function:: extend(liste, string)
+
+   Return element of the list that starts with this string.
+
+
+.. py:class:: Nco(filename = 'NCOPAR_VS 0.1\nNCO 0 0.0', lo1 = 812, lo2 = 128)
+
+   Parsing and handling of numerically controlled oscillator (NCO) files.
+       
+
+
+   .. py:method:: parse_nco(lines)
+      :staticmethod:
+
+
+      Parse lines from a nco file. 
+
+      Can only parse whole file at once.
+
+      :param lines: lines in the file
+      :type lines: str
+      :raises RuntimeError: if the format of the file is not correct.
+      :raises ValueError: if frequency is not a floating-point number.
+      :return: list of frequencies for this experiment
+      :rtype: list[float]
+
+
+
+
+   .. py:method:: set_freqs(freqs)
+
+
+   .. py:method:: set_lo1(lo1)
+
+      Set local oscillator 1 frequency.
+
+      :param float lo1: Frequency [MHz]
+
+
+
+
+   .. py:method:: set_lo2(lo2)
+
+      Set local oscillator 2 frequency.
+
+      :param float lo2: Frequency [MHz]
+
+
+
+
+   .. py:method:: NCOSEL(nr)
+
+      Select frequency of numerical controlled oscillator.
+
+      :param nr: Frequency number
+      :type nr: int
+
+
+
+
+   .. py:property:: is_ready
+      :type: bool
+
+      Shows if corresponding channel board has a defined frequency already.
+
+      :rtype: bool
+
+      If channel is not ready, there are several possibilities why:
+      - There has not been loaded any .nco file for this channel yet.
+      - The command NCOSEL has not been run yet.
+
+      The local oscillator frequencies have been decided, even if not explicitly. 
+      This is because EROS uses default oscillators. However, it is good practice to 
+      explicit tell EROS which oscillators to use.
+
+
+
+   .. py:method:: get_freq()
+
+      Return the centre frequency of this channel.
+
+      :raises AttributeError: if frequency has not been selected
+      :return: frequency [MHz]
+      :rtype: float
+
+
+
+
+.. py:function:: filefinder(filename, ending = '.elan')
+
+   Find file filename. 
+   :param filename: experiment filename. May be absolute path (/kst/exp/manda/manda) or relative to
+   root of this repository (for example kst/exp/manda/manda). The function will
+   also look into folder /kst/exp or kst/exp if they exist.
+
+   :type filename: str
+   :param str ending: File ending. Default is '.elan'
+   :raises FileNotFoundError: If the experiment file is not found in the given 
+       directory, or within (subfolders of) (/)kst/exp
+   :return: directory, name of experiment, path to experiment
+   :rtype: Tuple[str, str, str]
+
+
+
+.. py:class:: Eros(radar='', ant='', master=None, **var)
+
+   Bases: :py:obj:`src.elan.tcl.TclScope`
+
+
+   .. py:attribute:: RCs
+      :value: ['transmitter', 'receiver', 'ion line receiver', 'plasma line receiver']
+
+
+
+   .. py:attribute:: lo1_default
+
+
+   .. py:attribute:: lo2_default
+
+
+   .. py:method:: _get_time_string()
+
+
+   .. py:method:: py_get_loadedfiles()
+
+      Return a dictionary with last loaded files by this EROS instance (including subfunctions)
+
+
+
+   .. py:method:: py_get_lo(lon, MHz = True)
+
+      Return last loaded frequencies in local oscillator
+
+      :param int lon: Which local oscillator to check
+      :param bool, optional MHz: If to return frequency in MHz or not (else frequency is given in Hz), defaults to True (that is in MHz)
+      :return: Loaded frequencies in selected oscillator
+      :rtype: list[int]
+
+
+
+   .. py:method:: py_get_tlan(di='')
+
+      Guess which .tlan file was used
+
+      This is done by finding the last loaded .rbin file* and exchange ending 
+      .rbin with .tlan. This should work. 
+
+      * compiled .tlan file for reception.
+
+      However, there are some potential problems with this:
+      - There is no guarantee that the filenames are the same: There
+      could be that exp.tlan which was compiled to mohahaha.rbin (and wtf.tbin).
+      - There is also a risk that the script is updated while the binary files are not.
+      - Transmit-only experiments wont be loaded. Since they would also violate 
+      rules EISCAT blue book and thereby not run, this will only happen if 
+      the experiment is not programmed properly.
+          
+      We could also have looked at .tbin file, but since the remote receivers 
+      dont transmit, the .tbin file would never be loaded.
+
+
+
+   .. py:method:: argv(*args)
+
+
+   .. py:method:: armradar(args)
+
+
+   .. py:method:: BLOCK(args)
+
+
+   .. py:method:: callblock(args)
+
+
+   .. py:method:: disablerecording(args=[])
+
+
+   .. py:method:: DISP(args)
+
+
+   .. py:method:: getstarttime(args)
+
+
+   .. py:method:: gotoblock(args)
+
+
+   .. py:method:: isradar(args=None)
+
+
+   .. py:method:: ISESR(*args)
+
+
+   .. py:method:: ISKIR(*args)
+
+
+   .. py:method:: ISSOD(*args)
+
+
+   .. py:method:: ISUHF(*args)
+
+
+   .. py:method:: ISVHF(*args)
+
+
+   .. py:method:: loadfile(*args)
+
+
+   .. py:method:: loadfilter(args)
+
+
+   .. py:method:: _parse_args_op_rec_x_chs(args)
+
+
+   .. py:method:: loadfrequency(args)
+
+
+   .. py:method:: loadradar(args)
+
+
+   .. py:method:: logbook(args)
+
+
+   .. py:method:: readfrequencyfile(args)
+
+
+   .. py:method:: runexperiment(args)
+
+
+   .. py:method:: selectlo(args)
+
+
+   .. py:method:: setfrequency(args)
+
+
+   .. py:method:: startdata(args)
+
+
+   .. py:method:: startradar(args)
+
+
+   .. py:method:: stopdata(*args)
+
+
+   .. py:method:: stopradar(args)
+
+
+   .. py:method:: SYNC(args)
+
+
+   .. py:method:: timestamp(args)
+
+
+   .. py:method:: upar(args)
+
+
+   .. py:method:: writeexperimentfile(args)
+
+

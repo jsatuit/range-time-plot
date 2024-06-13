@@ -1,0 +1,365 @@
+src.phaseshifter
+================
+
+.. py:module:: src.phaseshifter
+
+.. autoapi-nested-parse::
+
+   Created on Wed Apr 24 11:52:30 2024
+
+   @author: jsatuit
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.phaseshifter.TimeInterval
+   src.phaseshifter.TimeIntervalList
+   src.phaseshifter.TimedEvent
+   src.phaseshifter.EventList
+   src.phaseshifter.PhaseShifter
+
+
+Module Contents
+---------------
+
+.. py:class:: TimeInterval(begin = 0.0, end = 0)
+
+   Handling one begin and end of the time the transmitter/receiver channel is on.
+
+   :param begin: Begin of interval
+   :param end: End of interval. Must be after begin
+   :raises ValueError: when begin of interval comes after end
+       
+
+
+   .. py:method:: __mul__(num)
+
+      Multiplies interval begin and end times with num.
+
+      :param num: Number to multiply with
+      :return: TimeInterval(begin*num, end*num)
+
+
+
+
+   .. py:method:: __truediv__(num)
+
+      Divides interval begin and end times with num.
+
+      :param num: Number to divide with
+      :return: TimeInterval(begin/num, end/num)
+
+
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+
+   .. py:property:: length
+      :type: float
+
+      Length/duration of interval
+
+
+
+   .. py:property:: as_tuple
+      :type: tuple[float, float]
+
+
+
+   .. py:method:: overlaps_with(other)
+
+      Checks if TimeInterval overlaps with other TimeInterval
+
+      :param other: TimeInterval to check overlap with
+      :type other: TimeInterval
+      :return: True if the intervals overlap, else False
+      :rtype: bool
+
+
+
+
+   .. py:method:: overlaps_any(other)
+
+      Checks if TimeInterval overlaps with any other TimeInterval in list
+
+      :param other: list of TimeInterval objects to check overlap with
+      :type other: list[TimeInterval]
+      :return: True if any intervals overlap, else False
+      :rtype: bool
+
+
+
+
+   .. py:method:: check_overlap(other)
+
+      Checks if TimeInterval overlaps with other TimeInterval. If so, 
+      an OverlapError is raised
+
+      :param other: TimeInterval to check overlap with
+      :type other: TimeInterval
+      :raises OverlapError: When intervals overlap
+
+
+
+
+   .. py:method:: within(other)
+
+      Return True if this interval is within the other interval. 
+
+      Intervals are allowed to share boundaries. Numerical errors are not 
+          taken into account
+          
+      :param other: Other TimeInterval
+      :type other: TimeInterval
+      :return: whwether this interval is within the other one.
+      :rtype: bool
+
+
+
+
+   .. py:method:: within_any(other)
+
+      Return True if this interval is completely within any of the intervals
+      in the list. 
+
+      Intervals are allowed to share boundaries. Numerical errors are not 
+          taken into account
+          
+      :param other: List of TimeInterval objects
+      :type other: list[TimeInterval]
+      :return: whwether this interval is within any of those in the list.
+      :rtype: bool
+
+
+
+
+.. py:class:: TimeIntervalList
+
+   Bases: :py:obj:`list`
+
+
+   A hack of base python list class for simpler calling of properties of each 
+   TimeInterval in the list.
+
+
+   .. py:method:: listof(attr)
+
+      Return list of the attribute `attr` of each TimeInterval.
+
+      See other functions for examples.
+
+
+
+   .. py:property:: lengths
+      :type: list[float]
+
+      list with length of each TimeInterval
+
+
+
+   .. py:property:: begins
+      :type: list[float]
+
+      list with begin of each TimeInterval
+
+
+
+   .. py:property:: ends
+      :type: list[float]
+
+      list with end of each TimeInterval
+
+
+
+.. py:class:: TimedEvent(time, event)
+
+   .. py:method:: __lt__(other)
+
+      Return self<value.
+
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: EventList(initlist=None)
+
+   Bases: :py:obj:`collections.UserList`
+
+
+   List of timed events. Inherits from UserList to be able to use base
+   list functions
+
+
+   .. py:method:: __setitem__(index, value)
+
+
+   .. py:method:: insert(index, value)
+
+      S.insert(index, value) -- insert value before index
+
+
+
+   .. py:method:: listof(attr)
+
+      Return list of the attribute `attr` of each TimeInterval.
+
+      See other functions for examples.
+
+
+
+   .. py:property:: times
+      :type: list[float]
+
+      list with the time of each TimedEvent
+
+
+
+   .. py:property:: events
+      :type: list[float]
+
+      list of all events. That are all TimeEvent.events.
+
+
+
+.. py:class:: PhaseShifter
+
+   Simulates behaviour of phase shifter
+
+
+   .. py:method:: set_phase(time, phase)
+
+      Set phase shifter to certain phase
+
+      :param float time: Time of phase shift
+      :param float phase: Phase to set to.
+
+
+
+
+   .. py:method:: restart()
+
+      Restarts phase shifter.
+
+      Means that all saved content is deleted. Use this when data is copied, 
+      for example at ethe end of a subcycle.
+
+
+
+   .. py:method:: PHA0(time, line = 0)
+
+      Set phase shifter to 0 degree.
+
+      :param float time: Time of phase shift
+      :param int line: Line of command in tlan file. Not in use
+
+
+
+   .. py:method:: PHA180(time, line = 0)
+
+      Set phase shifter to 180 degree.
+
+      :param float time: Time of phase shift
+      :param int line: Line of command in tlan file. Not in use
+
+
+
+   .. py:property:: phase_shifts
+      List of TimedEvents contaning the phase shifts
+
+
+
+   .. py:method:: phase_shifts_within(interval, tx_intervals = None)
+
+      List of TimedEvents contaning the phase shifts within interval.
+
+      The last phase shift before the interval is also returned.
+
+      Also returns list of (estimated) baud lengths if transmit intervals are 
+      given.
+
+      :param interval: interval which the phases shifts should be inside of.
+      :type interval: TimeInterval
+      :param tx_intervals: transmit intervals. If wanted to estimate baud 
+          lengths, these must be given, defaults to None
+      :type tx_intervals: TimeIntervalList or None, optional
+      :return: A list of the phase shifts within the interval. If 
+          tx_intervals is given, also a list of baud lengths is returned.
+      :rtype: EventList[, list[float]]
+
+
+
+
+   .. py:method:: estimate_baud_length(interval)
+
+      Estimate baud length within transmit interval.
+
+      Baud length is estimated by finding the greatest common divisor of the 
+      time between the phase shifts in the transmit pulse. 
+
+      WARNING: This is NOT a perfect function and will fail in cases where the
+      pulse has phases like ++++ or ++--. but still works for cases like +++--.
+
+      In many KST experiments (f.e. beata, manda), the first baud is not used or 
+      the code is long enough such that this function works for all pulses.
+
+      :param interval: transmit interval
+      :type interval: TimeInterval
+      :return: baud length
+      :rtype: float
+
+
+
+
+   .. py:method:: as_line(interval)
+
+      Coordinates of a line connecting the phase shifts within an interval
+
+      That is a list of x coordinates and a list of y coordinates which 
+      respectively describes the time and phases of the phase shifts
+
+      Example::
+              
+          180        x----------x     x----   etc.
+                     |          |     |
+          0   -x-----x          x-----x
+               0     6          17    25   
+          
+      gives
+      [0, 6, 6, 17, 17, 25, 25, ...]
+      and
+      [0, 0, 180, 180, 0, 0, 180, ...]
+
+      (Not used at current)
+
+      :param interval: nInterval the phase shifts should be within
+      :type interval: TimeInterval
+      :return: lists of coordinates
+      :rtype: tuple[list[float], list[float]]
+
+
+
+

@@ -1,0 +1,535 @@
+src.expplot
+===========
+
+.. py:module:: src.expplot
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   src.expplot.km
+   src.expplot.μs
+   src.expplot.c
+   src.expplot.MHz
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.expplot.TimeInterval
+   src.expplot.FrequencyList
+   src.expplot.EventList
+   src.expplot.Expplot
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   src.expplot.calc_nearest_range
+   src.expplot.calc_furthest_full_range
+
+
+Module Contents
+---------------
+
+.. py:class:: TimeInterval(begin = 0.0, end = 0)
+
+   Handling one begin and end of the time the transmitter/receiver channel is on.
+
+   :param begin: Begin of interval
+   :param end: End of interval. Must be after begin
+   :raises ValueError: when begin of interval comes after end
+       
+
+
+   .. py:method:: __mul__(num)
+
+      Multiplies interval begin and end times with num.
+
+      :param num: Number to multiply with
+      :return: TimeInterval(begin*num, end*num)
+
+
+
+
+   .. py:method:: __truediv__(num)
+
+      Divides interval begin and end times with num.
+
+      :param num: Number to divide with
+      :return: TimeInterval(begin/num, end/num)
+
+
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+
+   .. py:property:: length
+      :type: float
+
+      Length/duration of interval
+
+
+
+   .. py:property:: as_tuple
+      :type: tuple[float, float]
+
+
+
+   .. py:method:: overlaps_with(other)
+
+      Checks if TimeInterval overlaps with other TimeInterval
+
+      :param other: TimeInterval to check overlap with
+      :type other: TimeInterval
+      :return: True if the intervals overlap, else False
+      :rtype: bool
+
+
+
+
+   .. py:method:: overlaps_any(other)
+
+      Checks if TimeInterval overlaps with any other TimeInterval in list
+
+      :param other: list of TimeInterval objects to check overlap with
+      :type other: list[TimeInterval]
+      :return: True if any intervals overlap, else False
+      :rtype: bool
+
+
+
+
+   .. py:method:: check_overlap(other)
+
+      Checks if TimeInterval overlaps with other TimeInterval. If so, 
+      an OverlapError is raised
+
+      :param other: TimeInterval to check overlap with
+      :type other: TimeInterval
+      :raises OverlapError: When intervals overlap
+
+
+
+
+   .. py:method:: within(other)
+
+      Return True if this interval is within the other interval. 
+
+      Intervals are allowed to share boundaries. Numerical errors are not 
+          taken into account
+          
+      :param other: Other TimeInterval
+      :type other: TimeInterval
+      :return: whwether this interval is within the other one.
+      :rtype: bool
+
+
+
+
+   .. py:method:: within_any(other)
+
+      Return True if this interval is completely within any of the intervals
+      in the list. 
+
+      Intervals are allowed to share boundaries. Numerical errors are not 
+          taken into account
+          
+      :param other: List of TimeInterval objects
+      :type other: list[TimeInterval]
+      :return: whwether this interval is within any of those in the list.
+      :rtype: bool
+
+
+
+
+.. py:class:: FrequencyList(*args, **kwargs)
+
+   Bases: :py:obj:`sortedcontainers.SortedDict`
+
+
+   Sorted dict is a sorted mutable mapping.
+
+   Sorted dict keys are maintained in sorted order. The design of sorted dict
+   is simple: sorted dict inherits from dict to store items and maintains a
+   sorted list of keys.
+
+   Sorted dict keys must be hashable and comparable. The hash and total
+   ordering of keys must not change while they are stored in the sorted dict.
+
+   Mutable mapping methods:
+
+   * :func:`SortedDict.__getitem__` (inherited from dict)
+   * :func:`SortedDict.__setitem__`
+   * :func:`SortedDict.__delitem__`
+   * :func:`SortedDict.__iter__`
+   * :func:`SortedDict.__len__` (inherited from dict)
+
+   Methods for adding items:
+
+   * :func:`SortedDict.setdefault`
+   * :func:`SortedDict.update`
+
+   Methods for removing items:
+
+   * :func:`SortedDict.clear`
+   * :func:`SortedDict.pop`
+   * :func:`SortedDict.popitem`
+
+   Methods for looking up items:
+
+   * :func:`SortedDict.__contains__` (inherited from dict)
+   * :func:`SortedDict.get` (inherited from dict)
+   * :func:`SortedDict.peekitem`
+
+   Methods for views:
+
+   * :func:`SortedDict.keys`
+   * :func:`SortedDict.items`
+   * :func:`SortedDict.values`
+
+   Methods for miscellany:
+
+   * :func:`SortedDict.copy`
+   * :func:`SortedDict.fromkeys`
+   * :func:`SortedDict.__reversed__`
+   * :func:`SortedDict.__eq__` (inherited from dict)
+   * :func:`SortedDict.__ne__` (inherited from dict)
+   * :func:`SortedDict.__repr__`
+   * :func:`SortedDict._check`
+
+   Sorted list methods available (applies to keys):
+
+   * :func:`SortedList.bisect_left`
+   * :func:`SortedList.bisect_right`
+   * :func:`SortedList.count`
+   * :func:`SortedList.index`
+   * :func:`SortedList.irange`
+   * :func:`SortedList.islice`
+   * :func:`SortedList._reset`
+
+   Additional sorted list methods available, if key-function used:
+
+   * :func:`SortedKeyList.bisect_key_left`
+   * :func:`SortedKeyList.bisect_key_right`
+   * :func:`SortedKeyList.irange_key`
+
+   Sorted dicts may only be compared for equality and inequality.
+
+
+
+   .. py:property:: frequencies
+
+
+   .. py:method:: shifts_within(interval)
+
+      List of TimedEvents contaning the frequency shifts within interval.
+
+      The frequency used when interval starts is also returned: Not only those shifts that happen after interval starts.
+
+      Also returns list of (estimated) baud lengths if transmit intervals are 
+      given.
+
+      :param interval: interval which the phases shifts should be inside of.
+      :type interval: TimeInterval
+      :param tx_intervals: transmit intervals. If wanted to estimate baud
+          lengths, these must be given, defaults to None
+      :return: A list of the frequencies that occur within the interval.
+      :rtype: EventList
+
+
+
+
+   .. py:method:: as_line(end)
+
+      Coordinates of a line connecting the phase shifts within an interval
+
+      That is a list of x coordinates and a list of y coordinates which 
+      respectively describes the time and phases of the phase shifts.
+
+      Example::
+          
+          180        x----------x     x----   etc.
+                     |          |     |
+          0   -x-----x          x-----x
+               0     6          17    25   
+          
+
+      gives
+      [0, 6, 6, 17, 17, 25, 25, ...]
+      and
+      [0, 0, 180, 180, 0, 0, 180, ...]
+
+      :param interval: Interval the shifts should be within. If only a number is given, this is interpreted as end of the plotting interval.
+      :type interval: TimeInterval or tuple[float, float] or float
+      :return: lists of coordinates
+      :rtype: tuple[list[float], list[float]]
+
+
+
+
+   .. py:method:: as_line_within(interval)
+
+      Coordinates of a line connecting the phase shifts within an interval
+
+      That is a list of x coordinates and a list of y coordinates which 
+      respectively describes the time and phases of the phase shifts
+
+      Example::
+          
+          180        x----------x     x----   etc.
+                     |          |     |
+          0   -x-----x          x-----x
+               0     6          17    25   
+          
+      gives
+      [0, 6, 6, 17, 17, 25, 25, ...]
+      and
+      [0, 0, 180, 180, 0, 0, 180, ...]
+
+      :param interval: Interval the shifts should be within. If only a number is given, this is interpreted as end of the plotting interval.
+      :type interval: TimeInterval or tuple[float, float] or float
+      :return: lists of coordinates
+      :rtype: tuple[list[float], list[float]]
+
+
+
+
+.. py:class:: EventList(initlist=None)
+
+   Bases: :py:obj:`collections.UserList`
+
+
+   List of timed events. Inherits from UserList to be able to use base
+   list functions
+
+
+   .. py:method:: __setitem__(index, value)
+
+
+   .. py:method:: insert(index, value)
+
+      S.insert(index, value) -- insert value before index
+
+
+
+   .. py:method:: listof(attr)
+
+      Return list of the attribute `attr` of each TimeInterval.
+
+      See other functions for examples.
+
+
+
+   .. py:property:: times
+      :type: list[float]
+
+      list with the time of each TimedEvent
+
+
+
+   .. py:property:: events
+      :type: list[float]
+
+      list of all events. That are all TimeEvent.events.
+
+
+
+.. py:data:: km
+   :value: 1000.0
+
+
+   1 kilometer [m]
+
+
+.. py:data:: μs
+   :value: 1e-06
+
+
+   1 Microsecond [s]
+
+
+.. py:data:: c
+   :value: 300000000.0
+
+
+   Speed of light [m/s]
+
+
+.. py:data:: MHz
+   :value: 1000000.0
+
+
+   1 Megahertz [Hz]
+
+
+.. py:function:: calc_nearest_range(tx_interval, rx_interval, baud_length, v = c)
+
+   Calculates the nearest range the experiment can measure. Since only one baud 
+   will be measured at this range, the performance at this range will be low.
+
+   :param tx_interval: Transmit interval
+   :param rx_interval: Receive interval
+   :param baud_length: baud length of experiment
+   :param v: Speed of beam, default speed of light
+   :return: Nearest range gate. 
+
+
+
+
+.. py:function:: calc_furthest_full_range(tx_interval, rx_interval, baud_length, v = c)
+
+   Calculates the furthest range the experiment measures. This is the last range
+   where the receiver «sees» the *whole* transmit passing through.
+
+   :param tx_interval: Transmit interval
+   :param rx_interval: Receive interval
+   :param baud_length: baud length of experiment
+   :param v: Speed of beam, default speed of light
+   :return: Furthest range gate. 
+
+
+.. py:class:: Expplot(plot_interval, rmax = 1000000.0)
+
+   An interface to matplotlib specialised for plotting experiments 
+   (transmit/receive beams)
+
+
+   .. py:method:: get_colour(name)
+
+      Get colour for desired parameter.
+
+      Assigns a new colour if needed. There is a maximum of assignable 
+      colours since matplotlibs default colours are used. These are limited.
+
+      :param name: parameter name
+      :type name: str
+      :raises RuntimeError: if a new colour is assigned but there is no new 
+          colour to take.
+      :return: colour
+      :rtype: str
+
+
+
+
+   .. py:method:: title(title)
+
+      Set supertitle to figure
+
+      :param title: Title string
+      :type title: str
+
+
+
+
+   .. py:method:: xlim(interval = None)
+
+      Set x axes limits.
+
+      :param TimeInterval | None interval: x axes limits as a TimeInterval
+
+
+
+
+   .. py:method:: add_beam(name, interval, v = c, transmit = True, **kwargs)
+
+      Plots transmit or receive beam position
+
+      :param interval: Interval of signal being transmitted/received
+      :type interval: TimeInterval
+      :param float, optional v: Velocity of beam, default light speed
+      :param bool, optional transmit: Direction of beam. True – Transmit, 
+          False – receive, defaults to True
+
+      Keyword arguments are passed further to matplotlib.
+
+
+
+
+   .. py:method:: transmit(name, interval, **kwargs)
+
+      Plots transmit beam position
+
+      :param interval: Interval of signal being transmitted
+      :type interval: TimeInterval
+
+      Keyword arguments are passed further to matplotlib.
+
+
+
+
+   .. py:method:: receive(name, interval, **kwargs)
+
+      Plots receive beam position
+
+      :param interval: Interval of signal being received
+      :type interval: TimeInterval
+
+      Keyword arguments are passed further to matplotlib.
+
+
+
+
+   .. py:method:: state(name, bar_lengths, bars_begin_at, **kwargs)
+
+      Plot setting of radar.
+
+      :param name: name of setting
+      :type name: str
+      :param bar_lengths: Lengths of bars
+      :type bar_lengths: list or numpy array
+      :param bars_begin_at: Position where bars begin
+      :type bars_begin_at: list or numpy array
+
+      Other (keyword) arguments go directly to plotting function
+
+
+
+
+   .. py:method:: phase(phaseshifts, tx_intervals)
+
+
+   .. py:method:: frequency(name, rx_freqs, interval, **kwargs)
+
+      Plot (receiver) frequencies
+
+      :param rx_freqs: Channels with corresponding frequencies
+      :type rx_freqs: dict[str, FrequencyList]
+
+
+
+
+   .. py:method:: add_range_label(r)
+
+      Adds a label to a certain range as a minor tick
+
+      :param float r: range [m]
+
+
+
+
+   .. py:method:: add_time_label(t)
+
+      Adds a label to a certain time as a minor tick
+
+      :param float t: time [s]
+
+
+
+

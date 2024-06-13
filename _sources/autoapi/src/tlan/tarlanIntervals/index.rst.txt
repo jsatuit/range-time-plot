@@ -1,0 +1,346 @@
+src.tlan.tarlanIntervals
+========================
+
+.. py:module:: src.tlan.tarlanIntervals
+
+
+Exceptions
+----------
+
+.. autoapisummary::
+
+   src.tlan.tarlanIntervals.TarlanError
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.tlan.tarlanIntervals.TimeInterval
+   src.tlan.tarlanIntervals.TimeIntervalList
+   src.tlan.tarlanIntervals.IntervalList
+   src.tlan.tarlanIntervals.TarlanSubcycle
+
+
+Module Contents
+---------------
+
+.. py:exception:: TarlanError(msg, line_number = 0)
+
+   Bases: :py:obj:`Exception`
+
+
+   Exception raised when there are errors in parsing a tarlan file
+
+
+.. py:class:: TimeInterval(begin = 0.0, end = 0)
+
+   Handling one begin and end of the time the transmitter/receiver channel is on.
+
+   :param begin: Begin of interval
+   :param end: End of interval. Must be after begin
+   :raises ValueError: when begin of interval comes after end
+       
+
+
+   .. py:method:: __mul__(num)
+
+      Multiplies interval begin and end times with num.
+
+      :param num: Number to multiply with
+      :return: TimeInterval(begin*num, end*num)
+
+
+
+
+   .. py:method:: __truediv__(num)
+
+      Divides interval begin and end times with num.
+
+      :param num: Number to divide with
+      :return: TimeInterval(begin/num, end/num)
+
+
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+
+   .. py:property:: length
+      :type: float
+
+      Length/duration of interval
+
+
+
+   .. py:property:: as_tuple
+      :type: tuple[float, float]
+
+
+
+   .. py:method:: overlaps_with(other)
+
+      Checks if TimeInterval overlaps with other TimeInterval
+
+      :param other: TimeInterval to check overlap with
+      :type other: TimeInterval
+      :return: True if the intervals overlap, else False
+      :rtype: bool
+
+
+
+
+   .. py:method:: overlaps_any(other)
+
+      Checks if TimeInterval overlaps with any other TimeInterval in list
+
+      :param other: list of TimeInterval objects to check overlap with
+      :type other: list[TimeInterval]
+      :return: True if any intervals overlap, else False
+      :rtype: bool
+
+
+
+
+   .. py:method:: check_overlap(other)
+
+      Checks if TimeInterval overlaps with other TimeInterval. If so, 
+      an OverlapError is raised
+
+      :param other: TimeInterval to check overlap with
+      :type other: TimeInterval
+      :raises OverlapError: When intervals overlap
+
+
+
+
+   .. py:method:: within(other)
+
+      Return True if this interval is within the other interval. 
+
+      Intervals are allowed to share boundaries. Numerical errors are not 
+          taken into account
+          
+      :param other: Other TimeInterval
+      :type other: TimeInterval
+      :return: whwether this interval is within the other one.
+      :rtype: bool
+
+
+
+
+   .. py:method:: within_any(other)
+
+      Return True if this interval is completely within any of the intervals
+      in the list. 
+
+      Intervals are allowed to share boundaries. Numerical errors are not 
+          taken into account
+          
+      :param other: List of TimeInterval objects
+      :type other: list[TimeInterval]
+      :return: whwether this interval is within any of those in the list.
+      :rtype: bool
+
+
+
+
+.. py:class:: TimeIntervalList
+
+   Bases: :py:obj:`list`
+
+
+   A hack of base python list class for simpler calling of properties of each 
+   TimeInterval in the list.
+
+
+   .. py:method:: listof(attr)
+
+      Return list of the attribute `attr` of each TimeInterval.
+
+      See other functions for examples.
+
+
+
+   .. py:property:: lengths
+      :type: list[float]
+
+      list with length of each TimeInterval
+
+
+
+   .. py:property:: begins
+      :type: list[float]
+
+      list with begin of each TimeInterval
+
+
+
+   .. py:property:: ends
+      :type: list[float]
+
+      list with end of each TimeInterval
+
+
+
+.. py:class:: IntervalList(name)
+
+   Contain intervals for when data streams are enabled. 
+   Intervals may be open in contrast to TimeInterval, which must contain 
+   closed intervals
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+   .. py:property:: state
+      :type: bool
+
+      :raises RuntimeError: if the last stream contains more than one on and 
+          off value(should never happen, but who knows...)
+      :return: state (on/off) of data stream.
+      :rtype: bool
+
+
+
+
+   .. py:property:: is_off
+      :type: bool
+
+      If stream is turned off
+
+      :type: bool
+
+
+
+
+   .. py:property:: is_on
+      :type: bool
+
+      If stream is turned on
+
+      :type: bool
+
+
+
+
+   .. py:method:: turn_on(time, line)
+
+      Turn on data stream.
+
+      :param time: time at which to turn on the stream
+      :type time: float
+      :param line: line in the tlan file. Used for error handling only.
+      :type line: int
+      :raises TarlanError: if stream is on already
+
+
+
+
+   .. py:method:: turn_off(time, line)
+
+      Turn off data stream.
+
+      :param time: time at which to turn off the stream
+      :type time: float
+      :param line: line in the tlan file. Used for error handling only.
+      :type line: int
+      :raises TarlanError: if stream is off or if time is before time of switching on
+
+
+
+
+   .. py:property:: nstreams
+      :type: int
+
+      Number of streams
+
+      :type: int
+
+
+
+
+   .. py:method:: __len__()
+
+      Number of streams
+
+      :type: int
+
+
+
+
+   .. py:property:: intervals
+      :type: src.timeInterval.TimeIntervalList
+
+      Return the on-time of the streams as a list of TimeIntervals
+
+      :type: list[TimeInterval]
+
+
+
+
+   .. py:property:: last_turn_off
+      :type: float
+
+      Last time when the stream was turned off
+
+      :raises RuntimeError: If there stream has not been turned off yet.
+      :rtype: float
+
+
+
+
+   .. py:property:: last_turn_on
+      :type: float
+
+      Last time when the stream was turned on
+
+      :raises RuntimeError: If there stream has not been turned on yet.
+      :rtype: float
+
+
+
+
+   .. py:method:: delete_open_interval()
+
+      Delete last interval with ontime if the stream is on.
+
+
+
+.. py:class:: TarlanSubcycle
+
+   Bases: :py:obj:`IntervalList`
+
+
+   IntervalList which contains streams of each subcycle. These have to be 
+   added when stream is turned off.
+
+
+   .. py:method:: turn_off(time, line, datastreams)
+
+      Stop subcycle
+
+      :param time: time at which to turn off the stream
+      :type time: float
+      :param line: line in the tlan file. Used for error handling only.
+      :type line: int
+      :param datastreams: dictionary of stream name – stream IntervalList pairs
+      :type datastreams: dict
+      :raises TarlanError: if stream is off already
+
+
+
+
