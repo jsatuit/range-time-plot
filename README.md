@@ -2,7 +2,7 @@
 
 Python package for showing a range-time-plot for EISCAT mainland (KST) experiments and some properties of the experiment.
 
-The program should be able to plot all standard experiments
+The program should be able to plot all standard experiments.
 
 ## Notes
 - Documentation of EISCAT experiments can be found on the [EISCAT website](https://eiscat.se/scientist/schedule/experiments/)
@@ -28,7 +28,14 @@ Start program plotting
 The plot will show as a matplotlib window.
 
 ## Examples
+- Plot all subcycles of beata experiment:
 
-- `python -m src beata/beata.elan 0`
-- `python -m src beata/beata 1`
-- `python -m src kst/exp/beata/beata-u.tlan 2`
+`python -m src beata/beata.elan 0`
+
+- Plot first subcycle of beata experiment. File ending `.elan` is appended internally.
+
+`python -m src beata/beata 1`
+
+- Plot second subcycle of beata experiment
+
+`python -m src kst/exp/beata/beata-u.tlan 2`

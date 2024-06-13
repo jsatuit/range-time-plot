@@ -26,6 +26,7 @@ extensions = [
     'sphinx.ext.viewcode',
 ]
 autoapi_dirs = ['../../src']
+autoapi_add_toctree_entry = True
 autodoc_typehints = 'description'
 autoapi_python_class_content = 'class'
 
