@@ -11,7 +11,7 @@ if __name__ == '__main__':
     sys.path.append("..") # Adds current directory to python modules path.
     
 from typing import Union
-from src.timeInterval import TimeInterval
+from src.timeInterval import TimeInterval, TimeIntervalList
 from src.frequencyshift import FrequencyList
 from src.eventlist import EventList
 from src.const import km, µs, c, MHz
@@ -64,6 +64,40 @@ def calc_furthest_full_range(tx_interval: TimeInterval, rx_interval: TimeInterva
     r = v*dt/2
     
     return r
+
+
+def plot_phases(ax: plt.Axes, phaseshifts: EventList, tx_intervals: TimeIntervalList, linename: str = "phase") -> None:
+    """
+    Plot phases of experiment as a single bar plot.
+    
+    All phases are plotted on the line specified with `linename`
+    
+    :param ax: Axes object to plot on
+    :type ax: plt.Axes
+    :param phaseshifts: List of phaseshifts
+    :type phaseshifts: EventList
+    :param tx_intervals: list of transmit intervals
+    :type tx_intervals: TimeIntervalList
+    :param linename: Name of the line to plot onto. Defaults to "phase".
+    :type linename: str
+
+    """
+    # No transmission -> No phase plot
+    if len(tx_intervals) == 0:
+        return
+    
+    bars_begin_at = [tx_intervals[0].begin] + phaseshifts.times[1:]
+    bar_lengths = np.diff(bars_begin_at + [tx_intervals[-1].end])
+    # Make sure that phases are between 0 and 360 degree
+    phases = [phase%360 for phase in phaseshifts.events]
+    
+    cmap = mpl.colormaps["twilight"]
+    
+    colours = [cmap(phase/360) for phase in phases]
+    ax.barh(linename, bar_lengths/µs, 
+                    left = np.asarray(bars_begin_at)/µs,
+                    color = colours)
+    
 class Expplot:
     """
     An interface to matplotlib specialised for plotting experiments 
@@ -222,23 +256,9 @@ class Expplot:
         self.ax[1].xaxis.set_label("Time [µs]")
         
         
-    def phase(self, phaseshifts: EventList, tx_intervals):
+    def phase(self, phaseshifts: EventList, tx_intervals: TimeIntervalList):
+        plot_phases(self.ax[1], phaseshifts, tx_intervals)
         
-        # No transmission -> No phase plot
-        if len(tx_intervals) == 0:
-            return
-        
-        bars_begin_at = [tx_intervals[0].begin] + phaseshifts.times[1:]
-        bar_lengths = np.diff(bars_begin_at + [tx_intervals[-1].end])
-        # Make sure that phases are between 0 and 360 degree
-        phases = [phase%360 for phase in phaseshifts.events]
-        
-        cmap = mpl.colormaps["twilight"]
-        
-        colours = [cmap(phase/360) for phase in phases]
-        self.ax[1].barh("phase", bar_lengths/µs, 
-                        left = np.asarray(bars_begin_at)/µs,
-                        color = colours)
     def frequency(self, name: str, rx_freqs: FrequencyList, interval: TimeInterval, **kwargs):
         """
         Plot (receiver) frequencies

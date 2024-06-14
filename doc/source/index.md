@@ -25,6 +25,8 @@ A monostatic radar is assumed, meaning volume information is not included or plo
  : Manual describing properties of the experiments that are run at most. 
 [Description of EISCAT UHF and VHF receivers](https://eiscat.se/scientist/user-documentation/receiver-documentation/)
  : Describes in detail how signal is received with UHF and VHF receivers and some of the signal processing. 
+[EROS documentation](https://portal.eiscat.se/jussi/eiscat/index.html)
+ : Describes EROS, including a list of all commands and their documentation. 
 
 # Indices and tables
 
