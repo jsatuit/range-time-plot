@@ -25,7 +25,7 @@ f_handler.setFormatter(f_format)
 logger.addHandler(c_handler)
 logger.addHandler(f_handler)
 
-def main(path: str, subcycle: int):
+def main(path: str, subcycle: int, savepath: str):
     """
     Tarlan file plotter. 
 
@@ -34,7 +34,9 @@ def main(path: str, subcycle: int):
     \f
 
     :param str path: Path to tlan file which to plot
-    :param int subcycle: Subcycle to plot. Zero means plot all.
+    :param int subcycle: Subcycle to plot. Zero means plot all. Default is 1
+    :param str savepath: Path of where to save the figure. If given, figure will 
+    not be shown, only saved. If empty, figure will be shown, not saved. Default is empty (show, not save)
 
     """
     logger.info(f"called program with arguments path={path} and subcycles {subcycle}")
@@ -43,4 +45,10 @@ def main(path: str, subcycle: int):
         Experiment.from_eiscat_kst(path).plot()
     else:
         Experiment.from_eiscat_kst(path).plot([subcycle])
-    plt.show()
+        
+    if savepath:
+        plt.savefig(savepath)
+    else:
+        plt.show()
+        
+
