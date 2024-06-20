@@ -5,7 +5,7 @@ import difflib
 
 from typing import Union
 
-from src.expplot import Expplot, calc_nearest_range, calc_furthest_full_range
+from src.expplot import Expplot, calc_nearest_range, calc_furthest_full_range, phaseshift_plot
 from src.tlan.tarlan import Tarlan
 from src.timeInterval import TimeInterval, TimeIntervalList
 from src.elan.elan import Eros, filefinder
@@ -298,3 +298,12 @@ class Experiment:
 
         for si in subcycles:
             self.subcycles[si-1].plot(plot)
+    def plot_phaseshifts(self) -> None:
+        """
+        Plots all phaseshifts in the experiment grouped by subcycle.
+
+        """
+        phaseshift_plot(self.subcycles)
+        
+        
+        

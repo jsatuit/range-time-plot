@@ -66,28 +66,34 @@ def calc_furthest_full_range(tx_interval: TimeInterval, rx_interval: TimeInterva
     return r
 
 
-def plot_phases(ax: plt.Axes, phaseshifts: EventList, tx_intervals: TimeIntervalList, linename: str = "phase") -> None:
+def plot_phases(ax: plt.Axes, phaseshifts: EventList, tx_intervals: TimeIntervalList, 
+                linename: str = "phase", relative_time: bool = False) -> None:
     """
     Plot phases of experiment as a single bar plot.
     
     All phases are plotted on the line specified with `linename`
     
-    :param ax: Axes object to plot on
-    :type ax: plt.Axes
-    :param phaseshifts: List of phaseshifts
-    :type phaseshifts: EventList
-    :param tx_intervals: list of transmit intervals
-    :type tx_intervals: TimeIntervalList
-    :param linename: Name of the line to plot onto. Defaults to "phase".
-    :type linename: str
+    :param plt.Axes ax: Axes object to plot on
+    :param EventList phaseshifts: List of phaseshifts
+    :param TransmitIntervalList tx_intervals: list of transmit intervals
+    :param str linename: Name of the line to plot onto. Defaults to "phase".
+    :param bool relative_time: Let time axis show time relative to begin of first 
+    transmission (True) or as given by the intervals (False), defaults to False.
 
     """
     # No transmission -> No phase plot
     if len(tx_intervals) == 0:
         return
     
-    bars_begin_at = [tx_intervals[0].begin] + phaseshifts.times[1:]
-    bar_lengths = np.diff(bars_begin_at + [tx_intervals[-1].end])
+    t0 = tx_intervals[0].begin
+    te = tx_intervals[-1].end
+    
+    if relative_time:
+        bars_begin_at = [0] + [(t - t0) for t in phaseshifts.times[1:]]
+        bar_lengths = np.diff(bars_begin_at + [te - t0])
+    else:
+        bars_begin_at = [t0] + phaseshifts.times[1:]
+        bar_lengths = np.diff(bars_begin_at + [te])
     # Make sure that phases are between 0 and 360 degree
     phases = [phase%360 for phase in phaseshifts.events]
     
@@ -97,7 +103,26 @@ def plot_phases(ax: plt.Axes, phaseshifts: EventList, tx_intervals: TimeInterval
     ax.barh(linename, bar_lengths/µs, 
                     left = np.asarray(bars_begin_at)/µs,
                     color = colours)
+# def phaseshift_plot(phaseshifts: list[EventList], tx_intervals: list[TimeIntervalList]):
+#     fig = plt.figure()
+#     ax = fig.subplots(1, squeeze=True)
     
+#     assert len(phaseshifts) == len(tx_intervals)
+#     for i, sc_shifts, sc_tx_iv in enumerate(zip(phaseshifts, tx_intervals)):
+#         plot_phases(ax, sc_shifts, sc_tx_iv, "subcycle " + str(i+1))
+        
+def phaseshift_plot(subcycles):
+    fig_width = 4  # Inches????? Why use imperial units? We are not in 18. century!
+    fig_height = fig_width*len(subcycles)/30
+    fig = plt.figure(figsize=(fig_width, fig_height))
+    ax = fig.subplots(1, squeeze=True)
+    
+    for i, sc in enumerate(subcycles):
+        plot_phases(ax, sc.phaseshifts, sc.transmits, "subcycle " + str(i+1), True)
+    ax.set_xlabel("Time [µs]")
+    
+        
+        
 class Expplot:
     """
     An interface to matplotlib specialised for plotting experiments 
