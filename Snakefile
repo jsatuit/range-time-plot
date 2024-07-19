@@ -1,7 +1,8 @@
 # List of all experiments that should be plot
 
-
-EXP = "cp1l cp4b cp7h".split()# + "tau1 tau2pl tau7 tau8".split() + "arc1 arc_dlayer dlayer".split() + "beata bella lace othia".split()
+# These do not work yet: tau1 tau7 tau8 arc_dlayer othia
+# This has nco file not accepted by this implementation: dlayer tau2pl 
+EXP = "cp1l cp4b cp7h".split() + " ".split() + "arc1  ".split() + "beata bella lace ".split()
 #EXP = "beata bella manda".split()
             
 rule all:

@@ -234,7 +234,7 @@ class TclScope:
         # s_math1 = re.sub(r"(\|\|)|(\&\&)", lambda x: x[0][0], s_bool)
         # double in tcl is float in python
         s_math3 = s_math2.replace("double", "float")
-        s_math4 = s_math3.replace("!", " not ")
+        s_math4 = re.sub("!(?!=)", " not ", s_math3)
         s_out = s_math4
         # print(s_out)
         return s_out
