@@ -312,7 +312,9 @@ class Eros(TclScope):
             print("Still, Manda is assumed, so rather load correct tlan first")
     def logbook(self, args):
         print(f"Print {args} into logbook")
-                
+              
+    def mount(self, args):
+        print("Mounts disk", args, ". This should not be done in an elan script!")
     def readfrequencyfile(self, args):
         file = args[0]
         addrs = args[1]
