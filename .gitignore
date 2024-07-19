@@ -160,7 +160,11 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# Snakemake
+.snakemake/
+
 # Data files (at least those that shall not be published)
 kst/
+plot/
 todo.md
 test/_tests
