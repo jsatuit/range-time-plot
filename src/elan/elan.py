@@ -318,8 +318,12 @@ class Eros(TclScope):
         addrs = args[1]
         if len(args) > 2:
             print("Implementation does not support more than one frequency at the time.")
-        path = filefinder(file, ".nco")[-1]
-        
+        try:
+            path = filefinder(file, ".nco")[-1]
+        except FileNotFoundError:
+            print(f"Tried to read frequency file {file}, but that file does not exist!")
+            print("Frequencies were not loaded!")
+            return ""
         with open(path) as file:
             lines = file.read()
         freqs = Nco.parse_nco(lines)
@@ -435,10 +439,13 @@ class Eros(TclScope):
     def stopdata(self, *args):
         print("Stop data access by stopping both correlator and recorder.")
     def stopradar(self, args):
-        if "all".startswith(args[0][1:]):
+        
+        controller = args[0][int(args[0].startswith("-")):]
+        
+        if "all".startswith(controller):
             print("Stop all radar controllers.")
         else:
-            print(f"Stop {extend(self.RCs, args[0][1:])} controller.")
+            print(f"Stop {extend(self.RCs, controller)} controller.")
     def SYNC(self, args):
         tstr = self._get_time_string()
         print(f"Called SYNC {args[0]} at {tstr}")
@@ -488,7 +495,8 @@ class Eros(TclScope):
         t = datetime.datetime.fromtimestamp(time_spec)
         return t.strftime(pf)
         
-        
+    def transferlo(self, args):
+        print("Transfers control of local oscillator (LO). LO control is not checked here.")
                 
     def upar(self, args):
         if args[0] == "alias":
