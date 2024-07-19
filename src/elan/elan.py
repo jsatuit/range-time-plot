@@ -435,7 +435,10 @@ class Eros(TclScope):
     def stopdata(self, *args):
         print("Stop data access by stopping both correlator and recorder.")
     def stopradar(self, args):
-        print(f"Stop {extend(self.RCs, args[0][1:])} controller.")
+        if "all".startswith(args[0][1:]):
+            print("Stop all radar controllers.")
+        else:
+            print(f"Stop {extend(self.RCs, args[0][1:])} controller.")
     def SYNC(self, args):
         tstr = self._get_time_string()
         print(f"Called SYNC {args[0]} at {tstr}")
