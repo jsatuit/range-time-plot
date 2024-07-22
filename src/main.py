@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import logging
+import os
 import matplotlib.pyplot as plt
 
 
@@ -41,13 +42,14 @@ def main(path: str, subcycle: int, savepath: str):
     """
     logger.info(f"called program with arguments path={path} and subcycles {subcycle}")
     print(f"Loading and plotting experiment {path}")
+    exp = Experiment.from_eiscat_kst(path)
     if subcycle == 0:
-        Experiment.from_eiscat_kst(path).plot()
+        exp.plot()
     else:
-        Experiment.from_eiscat_kst(path).plot([subcycle])
+        exp.plot([subcycle])
         
     if savepath:
-        plt.savefig(savepath)
+        plt.savefig(os.path.join(savepath, exp.name + ".png"))
     else:
         plt.show()
         
