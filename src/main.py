@@ -55,9 +55,12 @@ def main(path: str, radar: str, subcycle: int, savepath: str, phaseplot: bool = 
         f2 = exp.plot_phaseshifts()
         
     if savepath:
-        f1.fig.savefig(os.path.join(savepath, exp.name + ".png"))
+        radar_letters = {"VHF": "v", "UHF": "u"}
+        filebasis = exp.name + "-" + radar_letters[radar]
+        
+        f1.fig.savefig(os.path.join(savepath, filebasis + ".png"))
         if phaseplot:
-            f2.savefig(os.path.join(savepath, exp.name + "_phase.png"))
+            f2.savefig(os.path.join(savepath, filebasis + "_phase.png"))
     else:
         plt.show()
         
