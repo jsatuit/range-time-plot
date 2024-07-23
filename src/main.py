@@ -26,7 +26,7 @@ f_handler.setFormatter(f_format)
 logger.addHandler(c_handler)
 logger.addHandler(f_handler)
 
-def main(path: str, subcycle: int, savepath: str, phaseplot: bool = False):
+def main(path: str, radar: str, subcycle: int, savepath: str, phaseplot: bool = False):
     """
     Tarlan file plotter. 
 
@@ -35,6 +35,7 @@ def main(path: str, subcycle: int, savepath: str, phaseplot: bool = False):
     \f
 
     :param str path: Path to tlan file which to plot
+    :param str radar: Which radar to plot for. It might be that experiment doesnt exist for that radar. 
     :param int subcycle: Subcycle to plot. Zero means plot all. Default is 1
     :param str savepath: Path of where to save the figure. If given, figure will 
     not be shown, only saved. If empty, figure will be shown, not saved. Default is empty (show, not save)
@@ -43,7 +44,7 @@ def main(path: str, subcycle: int, savepath: str, phaseplot: bool = False):
     """
     logger.info(f"called program with arguments path={path} and subcycles {subcycle}")
     print(f"Loading and plotting experiment {path}")
-    exp = Experiment.from_eiscat_kst(path)
+    exp = Experiment.from_eiscat_kst(path, radar)
     
     if subcycle == 0:
         f1 = exp.plot()
