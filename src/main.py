@@ -26,7 +26,7 @@ f_handler.setFormatter(f_format)
 logger.addHandler(c_handler)
 logger.addHandler(f_handler)
 
-def main(path: str, subcycle: int, savepath: str):
+def main(path: str, subcycle: int, savepath: str, phaseplot: bool = False):
     """
     Tarlan file plotter. 
 
@@ -38,18 +38,25 @@ def main(path: str, subcycle: int, savepath: str):
     :param int subcycle: Subcycle to plot. Zero means plot all. Default is 1
     :param str savepath: Path of where to save the figure. If given, figure will 
     not be shown, only saved. If empty, figure will be shown, not saved. Default is empty (show, not save)
+    :param bool phaseplot: Plot phases of experiment? Phases of all subcycles will be plotted. Default is False.
 
     """
     logger.info(f"called program with arguments path={path} and subcycles {subcycle}")
     print(f"Loading and plotting experiment {path}")
     exp = Experiment.from_eiscat_kst(path)
+    
     if subcycle == 0:
-        exp.plot()
+        f1 = exp.plot()
     else:
-        exp.plot([subcycle])
+        f1 = exp.plot([subcycle])
+        
+    if phaseplot:
+        f2 = exp.plot_phaseshifts()
         
     if savepath:
-        plt.savefig(os.path.join(savepath, exp.name + ".png"))
+        f1.fig.savefig(os.path.join(savepath, exp.name + ".png"))
+        if phaseplot:
+            f2.savefig(os.path.join(savepath, exp.name + "_phase.png"))
     else:
         plt.show()
         

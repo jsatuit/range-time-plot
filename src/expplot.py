@@ -121,7 +121,7 @@ def phaseshift_plot(subcycles):
         plot_phases(ax, sc.phaseshifts, sc.transmits, "subcycle " + str(i+1), True)
     ax.set_xlabel("Time [µs]")
     
-        
+    return fig
         
 class Expplot:
     """

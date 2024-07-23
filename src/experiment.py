@@ -298,12 +298,14 @@ class Experiment:
 
         for si in subcycles:
             self.subcycles[si-1].plot(plot)
+            
+        return plot
     def plot_phaseshifts(self) -> None:
         """
         Plots all phaseshifts in the experiment grouped by subcycle.
 
         """
-        phaseshift_plot(self.subcycles)
+        return phaseshift_plot(self.subcycles)
         
         
         
