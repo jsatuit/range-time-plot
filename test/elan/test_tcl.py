@@ -371,3 +371,9 @@ def test_tutorial12(capsys):
     >   1, 2, many, and many""")
     stdouttest(sh, capsys, script, printout) 
     
+def test_info():
+    sh = TclScope() 
+    assert sh("info exists a") == "0"
+    sh("set a 10")
+    assert sh("info exists a") == "1"
+    

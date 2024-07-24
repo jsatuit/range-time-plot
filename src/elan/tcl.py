@@ -414,6 +414,14 @@ class TclScope:
             if ret in ["True", "1", "yes", "true"]:
                 self.eval([expressions[i]], f"if {cond[i]}")
                 break
+    def info(self, args):
+        # Not complete
+        print(args)
+        if args[0] == "exists":
+            if args[1] in self._var.keys():
+                return "1"
+            else:
+                return "0"
     def lindex(self, args):
         liste = args[0]
         index = int(args[1])
