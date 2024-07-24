@@ -266,8 +266,6 @@ class TclParser:
                     brackets.append(str(word))
                     bracket_pos.append(word.start - 1)  # Python counts from 0 as opposed to humans
                     bracket_pos.append(word.start + len(word.word) + 1)  # include bracket
-                    # pos.append(word.start - 1)
-                    # endpos.append(word.start + len(word.word))
                     
         # Divide the input script/string into substrings
         strings = []
@@ -276,13 +274,6 @@ class TclParser:
                 string = script[bracket_pos[i-1]:bracket_pos[i]]
                 strings.append(string)
             strings.append(script[bracket_pos[i]:])
-            # for i in range(len(brackets)):
-            #     if i == 0:
-            #         strings.append(script[0:pos[i]-1])
-            #     else:
-            #         strings.append(script[pos[i-1]+len(brackets[i])-1:pos[i]-1])
-            #     strings.append(brackets[i])
-            # strings.append(script[pos[-1]+len(brackets[i])-1:])
         else:
             strings.append(script)
         return strings
