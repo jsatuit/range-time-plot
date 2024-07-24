@@ -211,12 +211,14 @@ class TclScope:
     def __substitute(self, string: str, backslashes: bool = True,
                      variables: str = True, commands: str = True,
                      into_quotes: bool = False) -> str:
+        module_logger.debug("Will substitute: "+ string)
         if commands:
             string = self.__substitute_commands(string, into_quotes)
         if variables:
             string = self.__substitute_variables(string, into_quotes)
         if backslashes:
             string = self.__substitute_backslashes(string)
+        module_logger.debug("Substituted to: "+ string)
         return string
     
     def substitute_expr(self, string: str) -> str:

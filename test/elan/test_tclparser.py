@@ -38,3 +38,7 @@ def test_parser():
     assert p("gotoblock ${SCAN_PAT} $EXPSTART $EXPNAME $HEIGHT") == \
         [TclCommand(Word('gotoblock'), Word('${SCAN_PAT}'), Word('$EXPSTART'), 
                     Word('$EXPNAME'), Word('$HEIGHT'))]
+def test_bracket_finding():
+    p = TclParser()
+    
+    p.find_brackets('["a"]&&["b"]') == ['["a"]', '&&', '["b"]']

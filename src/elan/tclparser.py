@@ -252,25 +252,37 @@ class TclParser:
         return words
 
     def find_brackets(self, script):
+        
+        # First find brackets in the script/input string and their start position
         brackets = []
-        pos = []
+        bracket_pos = [0]  # Not nessesarily a bracket at start, but all strings start at the start.
+        # pos = []
+        # endpos = []
         
         commands = self(script)
         for cmd in commands:
             for word in cmd.words:
                 if word.env == "[]":
                     brackets.append(str(word))
-                    pos.append(word.start)
+                    bracket_pos.append(word.start - 1)  # Python counts from 0 as opposed to humans
+                    bracket_pos.append(word.start + len(word.word) + 1)  # include bracket
+                    # pos.append(word.start - 1)
+                    # endpos.append(word.start + len(word.word))
                     
+        # Divide the input script/string into substrings
         strings = []
         if len(brackets) > 0:
-            for i in range(len(brackets)):
-                if i == 0:
-                    strings.append(script[0:pos[i]-1])
-                else:
-                    strings.append(script[pos[i-1]+len(brackets[i])-1:pos[i]-1])
-                strings.append(brackets[i])
-            strings.append(script[pos[-1]+len(brackets[i])-1:])
+            for i in range(1, len(bracket_pos)):
+                string = script[bracket_pos[i-1]:bracket_pos[i]]
+                strings.append(string)
+            strings.append(script[bracket_pos[i]:])
+            # for i in range(len(brackets)):
+            #     if i == 0:
+            #         strings.append(script[0:pos[i]-1])
+            #     else:
+            #         strings.append(script[pos[i-1]+len(brackets[i])-1:pos[i]-1])
+            #     strings.append(brackets[i])
+            # strings.append(script[pos[-1]+len(brackets[i])-1:])
         else:
             strings.append(script)
         return strings
