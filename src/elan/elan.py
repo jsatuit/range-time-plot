@@ -380,7 +380,7 @@ class Eros(TclScope):
         
         s = "Select local oscillator frequencies: "
         if len(args) == 3:
-            lon = int(args[0])
+            lon = int(args[0][-1])
             assert lon in [1, 2]
             s += f"Oscillator {args[0]}, "
         elif self.ISUHF() == "True":
