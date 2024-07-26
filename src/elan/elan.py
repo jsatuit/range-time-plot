@@ -410,6 +410,18 @@ class Eros(TclScope):
         v = f"{verbose}{l}{t}".capitalize()
         s = f"{v} {c}frequencies in channels {', '.join(chs)} to {freq} MHz{u}."
         print(s)
+    def setpanelpath(self, args):
+        if self.ISVHF == "True":
+            if len(args) == 0:
+                print("Query panel path")
+            elif args[0].lower() == "split":
+                print("Send data from panel I and II to ADC 1 and from III and IV to ADC 2")
+            elif args[0].lower() == "allA":
+                print("Send data from all panels to ADC 1")
+            elif args[0].lower() == "allB":
+                print("Send data from all panels to ADC 2")
+            else:
+                print("Did not understand panel path", args[0])
     def startdata(self, args):
         print("Start both correlator and recorder.")
         if args[0] in ["ion", "-ion", "pla", "-pla"]:
