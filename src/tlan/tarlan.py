@@ -180,7 +180,9 @@ class Tarlan():
         # self.subcycle_list = IntervalList("SUBCYCLE")
         self.subcycle_list = TarlanSubcycle()
         self.phaseshifter = PhaseShifter()
-        self.freq_rec = [FrequencyList() for i in range(6)]
+        self.freq_rec = {}
+        for ch in range(1, 7):
+            self.freq_rec[ch] = FrequencyList()
 
         self.stream_names = ["RF", "RXPROT", "LOPROT", "CAL", "BEAM"]
         for ch in kst_channels():
@@ -311,6 +313,7 @@ class Tarlan():
 
     def NCOSEL(self, time: float, line: int, nco_line: int):
         for ch, nco in self.chfreqs.items():
+            print(ch, nco)
             nco.NCOSEL(nco_line)
             # Log change
             self.freq_rec[ch][time] = nco.get_freq()*1e6
