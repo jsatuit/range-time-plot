@@ -7,13 +7,18 @@ This module includes some EROS functions to the tcl parser. Also these are badly
 
 import datetime
 import difflib
+import logging
 import os
 import re
+
 
 from math import ceil
 
 from src.elan.tcl import TclScope, extend
 from src.kstconfig.nco import Nco
+
+module_logger = logging.getLogger(__name__)
+
 
 def filefinder(filename:str, ending: str = ".elan"):
     """
@@ -85,7 +90,9 @@ class Eros(TclScope):
             
             self._var["_lo1"] = Eros.lo1_default[radar]
             self._var["_lo2"] = Eros.lo2_default[radar]
-                
+            
+        module_logger.debug(f"Starting up Eros for {radar} radar")
+        
         self.__argv = []
         self._starttimes = {
             "e": -1,

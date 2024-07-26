@@ -193,7 +193,7 @@ class Experiment:
         if filename.endswith(".tlan"):
             return Experiment.from_tlan(filename)
         else:
-            return Experiment.from_elan(filename)
+            return Experiment.from_elan(filename, radar)
 
     @classmethod
     def from_elan(cls, filename: str, radar: str = 'UHF'):
