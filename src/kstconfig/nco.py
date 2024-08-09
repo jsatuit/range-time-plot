@@ -54,7 +54,7 @@ class Nco:
 
         """
         lines = lines.split("\n")
-        freqs = []
+        freqs = {}
         # First line MUST be NCOPAR_VS	0.1
         if not lines[0].split() == ["NCOPAR_VS", "0.1"]:
             raise RuntimeError(f"First line must be 'NCOPAR_VS 0.1', not {lines[0]}")
@@ -68,8 +68,8 @@ class Nco:
             if not elems[0] == "NCO":
                 raise RuntimeError(f"Error in loading nco file: Line {il+1} does not start with NCO")
             nr = int(elems[1])
-            if not nr == len(freqs):
-                raise RuntimeError(f"Error in loading nco file: In line {il+1}, the wrong index number is used. It should be {len(freqs)}, not {nr}")
+            # if not nr == len(freqs):
+            #     raise RuntimeError(f"Error in loading nco file: In line {il+1}, the wrong index number is used. It should be {len(freqs)}, not {nr}")
             # Assert that elem[2] is a floatin.point number
             # If this works, this is the fastest way ... If not, it should crash anyway.
             # https://stackoverflow.com/questions/354038/how-do-i-check-if-a-string-represents-a-number-float-or-int/23639915#23639915
@@ -79,7 +79,7 @@ class Nco:
                 msg = f"{elems[2]} in line{il+2} is not a valid number!"
                 raise ValueError(msg)
 
-            freqs.append(freq)
+            freqs[nr] = freq
         return freqs
     def set_freqs(self, freqs: list[float]) -> None:
         self.freqs = freqs

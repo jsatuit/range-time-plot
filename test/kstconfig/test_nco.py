@@ -19,10 +19,10 @@ def test_reading():
     NCO	0	 10.4	% f12
     NCO	1	 10.1	% f13
     NCO	2	 10.1	% f13
-    NCO	3	 10.4	% f12"""
+    NCO	5	 10.4	% f12"""
     
     freq = Nco.parse_nco(file)
-    assert freq == [10.4, 10.1, 10.1, 10.4]
+    assert list(freq.values()) == [10.4, 10.1, 10.1, 10.4]
     
     
     # Test of bad file - missing first line
@@ -62,19 +62,7 @@ def test_reading():
     with pytest.raises(RuntimeError):
         Nco.parse_nco(faultyfile2)
         
-    # Test of bad file - Wrong number
-    faultyfile3 = """NCOPAR_VS       0.1
-    %======================================
-    % cp1l_ch1
-    % LO1=812.0 MHz LO2=128.0 MHz
-    %======================================
-    NCO	0	 10.4	% f12
-    NCO	1	 10.1	% f13
-    NCO	2	 10.1	% f13
-    NCO	4	 10.4	% f12"""
-    
-    with pytest.raises(RuntimeError):
-        Nco.parse_nco(faultyfile3)
+    # Faultyfile 3 is not faulty anymore...
         
     # Test of bad file - Frequency invalisd
     faultyfile4 = """NCOPAR_VS       0.1
@@ -89,6 +77,7 @@ def test_reading():
     
     with pytest.raises(ValueError):
         Nco.parse_nco(faultyfile4)
+            
         
 def test_nco():
     # Test manda
@@ -105,7 +94,7 @@ def test_nco():
     assert ch1.freqs[0] == 8.5
     with pytest.raises(RuntimeError):
         ch1.get_freq()
-    with pytest.raises(IndexError):
+    with pytest.raises(KeyError):
         ch1.NCOSEL(1)
     ch1.NCOSEL(0)
     assert ch1.get_freq() == 927.5

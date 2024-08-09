@@ -286,6 +286,7 @@ class Eros(TclScope):
         v = f"{verbose}{l}{t}".capitalize()
         s = f"{v} {c}frequencies from file {file} {u} into channels {', '.join(chs)}"
         print(s)
+        module_logger.info(s)
     
     def loadradar(self, args):
         print(f"Load {extend(self.RCs, args[0])} controller")
@@ -336,6 +337,7 @@ class Eros(TclScope):
         with open(path) as file:
             lines = file.read()
         freqs = Nco.parse_nco(lines)
+        module_logger.debug(f"Loaded frequencies {freqs}")
         return str(freqs[int(addrs)])
         
         
