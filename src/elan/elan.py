@@ -167,7 +167,7 @@ class Eros(TclScope):
         RCNAME = args[0]
         print(f"Set {RCNAME} controller start address and registers and set the",
               "controller waiting for a start pulse.")
-    def BLOCK(self, args):
+    def block(self, args):
         tstr = self._get_time_string()
         print(f"Enters BLOCK {args[0]} at {tstr} UTC")
         return self.proc(args)
@@ -181,12 +181,12 @@ class Eros(TclScope):
         self._loadedfiles = {**self._loadedfiles, **self._log[-1]["scope"]._loadedfiles}
         return ret
     def disablerecording(self, args = []):
-        if self.ISESR() == "True" or len(args) == 0:
+        if self.isesr() == "True" or len(args) == 0:
             rec = "ion"
         else:
             rec = args[0]
             
-        if self.ISESR() == "False":
+        if self.isesr() == "False":
             if rec == "pla":
                 return
             else:
@@ -199,7 +199,7 @@ class Eros(TclScope):
             print("Disabled recording of both plasma and ion line")
         else:
             raise ValueError("Wrong argument {rec}!")
-    def DISP(self, args):
+    def disp(self, args):
         disp_strings = []
         disp_options = [[]]
         for arg in args:
@@ -226,11 +226,11 @@ class Eros(TclScope):
             if self._var["_radar"] == arg:
                 return str(True)
         return str(False)
-    def ISESR(self, *args):return self.isradar("ESR")
-    def ISKIR(self, *args):return self.isradar("KIR")
-    def ISSOD(self, *args):return self.isradar("SOD")
-    def ISUHF(self, *args):return self.isradar("UHF")
-    def ISVHF(self, *args):return self.isradar("VHF")
+    def isesr(self, *args):return self.isradar("ESR")
+    def iskir(self, *args):return self.isradar("KIR")
+    def issod(self, *args):return self.isradar("SOD")
+    def isuhf(self, *args):return self.isradar("UHF")
+    def isvhf(self, *args):return self.isradar("VHF")
     def loadfile(self, *args):
         return self.source(args)
     def loadfilter(self, args):
@@ -281,8 +281,8 @@ class Eros(TclScope):
         verbose = "verbose "*("v" in options)
         l = "load"*("t" not in options)
         t = "test"*("t" in options)
-        c = "and correct "*("e" in options or self.ISESR()=="True")
-        u = "uncorrected"*("u" in options or not self.ISESR()=="True")
+        c = "and correct "*("e" in options or self.isesr()=="True")
+        u = "uncorrected"*("u" in options or not self.isesr()=="True")
         v = f"{verbose}{l}{t}".capitalize()
         s = f"{v} {c}frequencies from file {file} {u} into channels {', '.join(chs)}"
         print(s)
@@ -369,11 +369,11 @@ class Eros(TclScope):
                           "P3", "U42", "42U", "U42m", 
                           "P4", "D42", "42U", "U42m"], [1]*5 + [2]*5 + [3]*4 + [4]*4
                          ))
-        if self.ISUHF() == "True":
+        if self.isuhf() == "True":
             pathnr = pathsUHF[path]
-        elif self.ISVHF() == "True":
+        elif self.isvhf() == "True":
             pathnr = pathsVHF[path]
-        elif self.ISESR() == "True":
+        elif self.isesr() == "True":
             pathnr = pathsESR[path]
         else:
             raise RuntimeError("You are at no radar ???")
@@ -385,9 +385,9 @@ class Eros(TclScope):
             lon = int(args[0][-1])
             assert lon in [1, 2]
             s += f"Oscillator {args[0]}, "
-        elif self.ISUHF() == "True":
+        elif self.isuhf() == "True":
             lon = 2  # At UHF, only lo2 can be configured
-        elif self.ISESR() == "True":
+        elif self.isesr() == "True":
             lon = 1  # At ESR, only lo1 can be configured
         else:
             raise ValueError("At VHF, the local oscillafor must be specified!")
@@ -407,13 +407,13 @@ class Eros(TclScope):
         verbose = "verbose "*("v" in options)
         l = "load"*("t" not in options)
         t = "test"*("t" in options)
-        c = "and correct "*("e" in options or self.ISESR()=="True")
-        u = " uncorrected"*("u" in options or not self.ISESR()=="True")
+        c = "and correct "*("e" in options or self.isesr()=="True")
+        u = " uncorrected"*("u" in options or not self.isesr()=="True")
         v = f"{verbose}{l}{t}".capitalize()
         s = f"{v} {c}frequencies in channels {', '.join(chs)} to {freq} MHz{u}."
         print(s)
     def setpanelpath(self, args):
-        if self.ISVHF == "True":
+        if self.isvhf == "True":
             if len(args) == 0:
                 print("Query panel path")
             elif args[0].lower() == "split":
@@ -433,10 +433,10 @@ class Eros(TclScope):
             rec = "ion"
         CorrFile, Expid, Iper = args[0:3]
             
-        if self.ISESR() == "False" and rec.endswith("pla"):
+        if self.isesr() == "False" and rec.endswith("pla"):
             return
         
-        if self.ISESR() == "True":
+        if self.isesr() == "True":
             if len(args) < 4:
                 raise ValueError("Must specify antenna (32m or 42m)!")
             else:
@@ -469,7 +469,7 @@ class Eros(TclScope):
             print("Stop all radar controllers.")
         else:
             print(f"Stop {extend(self.RCs, controller)} controller.")
-    def SYNC(self, args):
+    def sync(self, args):
         tstr = self._get_time_string()
         print(f"Called SYNC {args[0]} at {tstr}")
     def timestamp(self, args):

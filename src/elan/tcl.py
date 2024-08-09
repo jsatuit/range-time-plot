@@ -90,17 +90,19 @@ class TclScope:
                         "global": "global_var",
                         "for": "forloop",
         }
-        if words[0] in keyword_dict.keys():
-            words[0] = keyword_dict[words[0]]
+        
+        cmdname = words[0].lower()
+        if cmdname in keyword_dict.keys():
+            cmdname = keyword_dict[cmdname]
         
         # Check that function exists
-        if not hasattr(self, words[0]):
+        if not hasattr(self, cmdname):
             msg = f"Function '{words[0]}' is not known in Tcl scope!"
             raise TclError(msg, cmd, 0)
         
         self._log.append({"words": words})
         
-        func = getattr(self, words[0])
+        func = getattr(self, cmdname)
         if len(words) == 1:
             # Function calling without argument
             result = func()
