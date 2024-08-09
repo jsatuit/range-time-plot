@@ -1,0 +1,22 @@
+src.__main__
+============
+
+.. py:module:: src.__main__
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   src.__main__.parser
+   src.__main__.args
+
+
+Module Contents
+---------------
+
+.. py:data:: parser
+
+.. py:data:: args
+
