@@ -1,16 +1,25 @@
 # List of all experiments that should be plot
-
-EXP = "cp1l cp4b cp7h".split() + "tau1 tau2pl tau7 tau8".split() + "arc1 arc_dlayer dlayer".split() + "beata bella lace othia".split()
-#EXP = "beata bella manda".split()
+EXP_COMMON = "cp4b cp7h".split() + "tau1".split() + "arc_dlayer".split() + "beata bella lace othia".split()
+EXP_UHF = EXP_COMMON + "cp1l arc1 dlayer tau2pl".split()
+EXP_VHF = EXP_COMMON + "tau7 tau8".split()
             
 rule all:
-    input: 
-        expand("kst/exp/{name}/{name}.elan", name=EXP),
-        expand("plot/{name}.png", name=EXP)
+    input:
+        expand("kst/exp/{name}/{name}.elan", name=EXP_UHF),
+        expand("plot/{name}-u.png", name=EXP_UHF),
+        expand("kst/exp/{name}/{name}.elan", name=EXP_VHF),
+        expand("plot/{name}-v.png", name=EXP_VHF)
      
-rule make_plot:
+rule make_plot_uhf:
     input: "kst/exp/{name}/{name}.elan"
-    output: 'plot/{name}.png'
+    output: 'plot/{name}-u.png'
     log: 'logs/make_plot_{name}.log'
-    shell: 'python -m src {input} 1 {output}'
+    shell: 'python -m src {input} UHF 1 plot'
+    
+rule make_plot_vhf:
+    input: "kst/exp/{name}/{name}.elan"
+    output: 'plot/{name}-v.png'
+    log: 'logs/make_plot_{name}.log'
+    shell: 'python -m src {input} VHF 1 plot'
+    
     
