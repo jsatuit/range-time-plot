@@ -1,0 +1,158 @@
+src.elan.tclparser
+==================
+
+.. py:module:: src.elan.tclparser
+
+.. autoapi-nested-parse::
+
+   This module contains tcl parsing functions. These are badly documented here to speed up developing time. 
+
+   The class TclParser parses a tcl script/line into TclCommand objects. These are used/executed by TclScope.  
+
+
+
+Exceptions
+----------
+
+.. autoapisummary::
+
+   src.elan.tclparser.TclError
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.elan.tclparser.Word
+   src.elan.tclparser.TclCommand
+   src.elan.tclparser.TclParser
+
+
+Module Contents
+---------------
+
+.. py:class:: Word(word, line=0, filename='', start = 0, env = '')
+
+   .. py:attribute:: word
+
+
+   .. py:attribute:: line
+
+
+   .. py:attribute:: filename
+
+
+   .. py:attribute:: start
+
+
+   .. py:attribute:: env
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+
+   .. py:method:: endswith(*args)
+
+
+.. py:class:: TclCommand(*words, line = 0, filename = 'Console', char1 = 0, char2 = 0)
+
+   .. py:attribute:: words
+
+
+   .. py:attribute:: line
+
+
+   .. py:attribute:: filename
+
+
+   .. py:attribute:: char1
+
+
+   .. py:attribute:: char2
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+
+.. py:exception:: TclError(msg, cmd, i_word = None)
+
+   Bases: :py:obj:`Exception`
+
+
+   Common base class for all non-exit exceptions.
+
+
+   .. py:attribute:: msg
+
+
+   .. py:attribute:: cmd
+
+
+   .. py:attribute:: i_word
+
+
+   .. py:attribute:: errmsg
+
+
+   .. py:method:: cmd2str(cmd, i_word)
+      :staticmethod:
+
+
+
+.. py:class:: TclParser
+
+   .. py:method:: reset()
+
+
+   .. py:method:: __call__(script, name = '', filename = 'Console', startline = 1)
+
+
+   .. py:method:: handle_env(token)
+
+
+   .. py:method:: raise_error(msg)
+
+
+   .. py:method:: start_env(token)
+
+
+   .. py:method:: command_ends()
+
+
+   .. py:method:: get_words(script)
+
+
+   .. py:method:: find_brackets(script)
+
+
