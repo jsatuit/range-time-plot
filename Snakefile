@@ -1,5 +1,5 @@
 # List of all experiments that should be plot
-EXP_COMMON = "cp4b cp7h".split() + "tau1".split() + "arc_dlayer".split() + "beata bella lace othia".split()
+EXP_COMMON = "cp4b cp7h".split() + "tau1".split() + "arc_dlayer".split() + "beata bella lace manda othia".split()
 EXP_UHF = EXP_COMMON + "cp1l arc1 dlayer tau2pl".split()
 EXP_VHF = EXP_COMMON + "tau7 tau8".split()
             

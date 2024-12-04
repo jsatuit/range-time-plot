@@ -9,7 +9,7 @@ The program should be able to plot all standard experiments.
 - **Experiment files are not included** in this repository. To be able to run this program, you must have some. 
 - In most cases, the program should divides experiment cycle correctly into subcycles. In some cases, the program may divide into subcycles in a wrong way because of assumptions on time structure of the .tlan file. This program presumes that experiment cycle is divided into subcycles by the command SETTCR as long as the following number is not zero. Using SETTCR to divide experiment into subcycles is not nessesary or obligatory. Therefore, there may be experiments that are shown with strange subcycle divison.
 - Some plots of the discontinued experiment `cp1l` are empty. This is correct behaviour. The experiment starts with an empty subcycle and every fourth subcycle is without transmission or reception. 
-
+- The frequencies in VHF experiments are wrong. They are correct for UHF experiments.
 
 # Install and run
 Download program and install dependencies in a virtual environment
@@ -30,12 +30,17 @@ The plot will show as a matplotlib window.
 ## Examples
 - Plot all subcycles of beata experiment:
 
-`python -m src beata/beata.elan 0`
+`python -m src beata/beata.elan UHF 0`
 
 - Plot first subcycle of beata experiment. File ending `.elan` is appended internally.
 
-`python -m src beata/beata 1`
+`python -m src beata/beata UHF 1`
 
-- Plot second subcycle of beata experiment
+- Plot first subcycle of beata experiment and show the transmitted code.
+
+`python -m src beata/beata UHF 1 --phase`
+
+- Plot second subcycle of beata experiment. 
+[!Warning] This does not work at the moment!
 
 `python -m src kst/exp/beata/beata-u.tlan 2`
