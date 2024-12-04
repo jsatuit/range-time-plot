@@ -1,0 +1,205 @@
+src.elan.tcl
+============
+
+.. py:module:: src.elan.tcl
+
+.. autoapi-nested-parse::
+
+   This module contains tcl parsing functions. These are badly documented here to speed up developing time. 
+
+   TclScope is the main class that executes functions.  
+
+   Notes:
+   There are problems with the implementation of lists. At current, tcl lists are saved as python lists, but that sometimes gives errors. Since the most important parts of library work as expected, the implementation might stay like this. 
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   src.elan.tcl.module_logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.elan.tcl.TclScope
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   src.elan.tcl.extend
+
+
+Module Contents
+---------------
+
+.. py:data:: module_logger
+
+.. py:function:: extend(liste, string)
+
+   Return element of the list that starts with this string.
+
+
+.. py:class:: TclScope(master=None, name='console', **var)
+
+   .. py:attribute:: tcl_globals
+
+
+   .. py:attribute:: _var
+
+
+   .. py:attribute:: _global_list
+      :value: []
+
+
+
+   .. py:attribute:: name
+      :value: 'console'
+
+
+
+   .. py:attribute:: _procs
+
+
+   .. py:attribute:: __parser
+
+
+   .. py:attribute:: __return_value
+      :value: None
+
+
+
+   .. py:attribute:: _cmdlog
+      :value: []
+
+
+
+   .. py:attribute:: _log
+      :value: []
+
+
+
+   .. py:attribute:: _master
+      :value: None
+
+
+
+   .. py:attribute:: _subscopes
+      :value: []
+
+
+
+   .. py:method:: __execute(cmd, filename='')
+
+
+   .. py:method:: __substitute_variables(string, into_quotes = False)
+
+
+   .. py:method:: __substitute_backslashes(string, which = '')
+
+
+   .. py:method:: __substitute_commands(string, into_quotes = False)
+
+
+   .. py:method:: __substitute(string, backslashes = True, variables = True, commands = True, into_quotes = False)
+
+
+   .. py:method:: substitute_expr(string)
+
+
+   .. py:method:: __call__(s, name='')
+
+
+   .. py:method:: py_getlog()
+
+
+   .. py:method:: py_getcallings(callings, recursive = True)
+
+      Return the log for executing these commands
+
+      :param callings: List of commands to include in the log
+      :type callings: list
+      :param bool recursive: Include subscopes (statements in called functions)
+      :return: list of the words in the calling of the commands in callings
+      :rtype: list
+
+
+
+
+   .. py:method:: py_get_procs()
+
+
+   .. py:method:: py_getvar(name)
+
+
+   .. py:method:: py_setvar(name, value)
+
+
+   .. py:method:: append(args)
+
+
+   .. py:method:: eval(args, name='')
+
+
+   .. py:method:: expr(args)
+
+
+   .. py:method:: exec(args)
+
+
+   .. py:method:: forloop(args)
+
+
+   .. py:method:: incr(args)
+
+
+   .. py:method:: global_var(args)
+
+
+   .. py:method:: iftest(args)
+
+
+   .. py:method:: info(args)
+
+
+   .. py:method:: lindex(args)
+
+
+   .. py:method:: list(args)
+
+
+   .. py:method:: llength(args)
+
+
+   .. py:method:: proc(args)
+
+
+   .. py:method:: puts(args)
+
+
+   .. py:method:: returnval(args)
+
+
+   .. py:method:: set(args)
+
+
+   .. py:method:: source(args)
+
+
+   .. py:method:: split(args)
+
+
+   .. py:method:: string(args)
+
+
+   .. py:method:: subst(*args)
+
+

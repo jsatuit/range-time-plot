@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.kstconfig.nco &mdash; range-time-plot 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="src.main" href="../../main/index.html" />
+    <link rel="prev" title="src.kstconfig" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            range-time-plot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">User guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">src</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../__main__/index.html">src.__main__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../const/index.html">src.const</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../elan/index.html">src.elan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eventlist/index.html">src.eventlist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experiment/index.html">src.experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../expplot/index.html">src.expplot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../frequencyshift/index.html">src.frequencyshift</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html">src.kstconfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../main/index.html">src.main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../phaseshifter/index.html">src.phaseshifter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../timeInterval/index.html">src.timeInterval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../tlan/index.html">src.tlan</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">range-time-plot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">src</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">src.kstconfig</a></li>
+      <li class="breadcrumb-item active">src.kstconfig.nco</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/src/kstconfig/nco/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-src.kstconfig.nco">
+<span id="src-kstconfig-nco"></span><h1>src.kstconfig.nco<a class="headerlink" href="#module-src.kstconfig.nco" title="Link to this heading"></a></h1>
+<p>Handling .nco files.</p>
+<p>At EISCAT, these are loaded by the numerical controlled oscillator. These shift frequency of the signal
+that comes into a channel. When reading these files, one should be aware of that when the signal comes into the channels, its frequency already is shifted twice.</p>
+<p>See also [Jussis EISCAT portal]
+(<a class="reference external" href="https://portal.eiscat.se/jussi/eiscat/erosdoc/uhf_radar.html">https://portal.eiscat.se/jussi/eiscat/erosdoc/uhf_radar.html</a>)</p>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.kstconfig.nco.Nco" title="src.kstconfig.nco.Nco"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Nco</span></code></a></p></td>
+<td><p>Parsing and handling of numerically controlled oscillator (NCO) files.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.kstconfig.nco.Nco">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.kstconfig.nco.</span></span><span class="sig-name descname"><span class="pre">Nco</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NCOPAR_VS</span> <span class="pre">0.1\nNCO</span> <span class="pre">0</span> <span class="pre">0.0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lo1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">812</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lo2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.kstconfig.nco.Nco" title="Link to this definition"></a></dt>
+<dd><p>Parsing and handling of numerically controlled oscillator (NCO) files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>)</p></li>
+<li><p><strong>lo1</strong> (<em>float</em>)</p></li>
+<li><p><strong>lo2</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.kstconfig.nco.Nco._lo1">
+<span class="sig-name descname"><span class="pre">_lo1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">812</span></em><a class="headerlink" href="#src.kstconfig.nco.Nco._lo1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.kstconfig.nco.Nco._lo2">
+<span class="sig-name descname"><span class="pre">_lo2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">128</span></em><a class="headerlink" href="#src.kstconfig.nco.Nco._lo2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.kstconfig.nco.Nco.parse_nco">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_nco</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.kstconfig.nco.Nco.parse_nco" title="Link to this definition"></a></dt>
+<dd><p>Parse lines from a nco file.</p>
+<p>Can only parse whole file at once.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lines</strong> (<em>str</em>) – lines in the file</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – if the format of the file is not correct.</p></li>
+<li><p><strong>ValueError</strong> – if frequency is not a floating-point number.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of frequencies for this experiment</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.kstconfig.nco.Nco.set_freqs">
+<span class="sig-name descname"><span class="pre">set_freqs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freqs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.kstconfig.nco.Nco.set_freqs" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>freqs</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.kstconfig.nco.Nco.set_lo1">
+<span class="sig-name descname"><span class="pre">set_lo1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lo1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.kstconfig.nco.Nco.set_lo1" title="Link to this definition"></a></dt>
+<dd><p>Set local oscillator 1 frequency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lo1</strong> (<em>float</em>) – Frequency [MHz]</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.kstconfig.nco.Nco.set_lo2">
+<span class="sig-name descname"><span class="pre">set_lo2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lo2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.kstconfig.nco.Nco.set_lo2" title="Link to this definition"></a></dt>
+<dd><p>Set local oscillator 2 frequency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lo2</strong> (<em>float</em>) – Frequency [MHz]</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.kstconfig.nco.Nco.NCOSEL">
+<span class="sig-name descname"><span class="pre">NCOSEL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.kstconfig.nco.Nco.NCOSEL" title="Link to this definition"></a></dt>
+<dd><p>Select frequency of numerical controlled oscillator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nr</strong> (<em>int</em>) – Frequency number</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.kstconfig.nco.Nco.is_ready">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_ready</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#src.kstconfig.nco.Nco.is_ready" title="Link to this definition"></a></dt>
+<dd><p>Shows if corresponding channel board has a defined frequency already.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p>If channel is not ready, there are several possibilities why:
+- There has not been loaded any .nco file for this channel yet.
+- The command NCOSEL has not been run yet.</p>
+<p>The local oscillator frequencies have been decided, even if not explicitly.
+This is because EROS uses default oscillators. However, it is good practice to
+explicit tell EROS which oscillators to use.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.kstconfig.nco.Nco.get_freq">
+<span class="sig-name descname"><span class="pre">get_freq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.kstconfig.nco.Nco.get_freq" title="Link to this definition"></a></dt>
+<dd><p>Return the centre frequency of this channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AttributeError</strong> – if frequency has not been selected</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>frequency [MHz]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="src.kstconfig" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../main/index.html" class="btn btn-neutral float-right" title="src.main" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, jsatuit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+src.frequencyshift
+==================
+
+.. py:module:: src.frequencyshift
+
+.. autoapi-nested-parse::
+
+   Created on Mon Jun  3 14:14:31 2024
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.frequencyshift.FrequencyList
+
+
+Module Contents
+---------------
+
+.. py:class:: FrequencyList(*args, **kwargs)
+
+   Bases: :py:obj:`sortedcontainers.SortedDict`
+
+
+   Sorted dict is a sorted mutable mapping.
+
+   Sorted dict keys are maintained in sorted order. The design of sorted dict
+   is simple: sorted dict inherits from dict to store items and maintains a
+   sorted list of keys.
+
+   Sorted dict keys must be hashable and comparable. The hash and total
+   ordering of keys must not change while they are stored in the sorted dict.
+
+   Mutable mapping methods:
+
+   * :func:`SortedDict.__getitem__` (inherited from dict)
+   * :func:`SortedDict.__setitem__`
+   * :func:`SortedDict.__delitem__`
+   * :func:`SortedDict.__iter__`
+   * :func:`SortedDict.__len__` (inherited from dict)
+
+   Methods for adding items:
+
+   * :func:`SortedDict.setdefault`
+   * :func:`SortedDict.update`
+
+   Methods for removing items:
+
+   * :func:`SortedDict.clear`
+   * :func:`SortedDict.pop`
+   * :func:`SortedDict.popitem`
+
+   Methods for looking up items:
+
+   * :func:`SortedDict.__contains__` (inherited from dict)
+   * :func:`SortedDict.get` (inherited from dict)
+   * :func:`SortedDict.peekitem`
+
+   Methods for views:
+
+   * :func:`SortedDict.keys`
+   * :func:`SortedDict.items`
+   * :func:`SortedDict.values`
+
+   Methods for miscellany:
+
+   * :func:`SortedDict.copy`
+   * :func:`SortedDict.fromkeys`
+   * :func:`SortedDict.__reversed__`
+   * :func:`SortedDict.__eq__` (inherited from dict)
+   * :func:`SortedDict.__ne__` (inherited from dict)
+   * :func:`SortedDict.__repr__`
+   * :func:`SortedDict._check`
+
+   Sorted list methods available (applies to keys):
+
+   * :func:`SortedList.bisect_left`
+   * :func:`SortedList.bisect_right`
+   * :func:`SortedList.count`
+   * :func:`SortedList.index`
+   * :func:`SortedList.irange`
+   * :func:`SortedList.islice`
+   * :func:`SortedList._reset`
+
+   Additional sorted list methods available, if key-function used:
+
+   * :func:`SortedKeyList.bisect_key_left`
+   * :func:`SortedKeyList.bisect_key_right`
+   * :func:`SortedKeyList.irange_key`
+
+   Sorted dicts may only be compared for equality and inequality.
+
+
+
+   .. py:property:: frequencies
+
+
+   .. py:method:: shifts_within(interval)
+
+      List of TimedEvents contaning the frequency shifts within interval.
+
+      The frequency used when interval starts is also returned: Not only those shifts that happen after interval starts.
+
+      Also returns list of (estimated) baud lengths if transmit intervals are 
+      given.
+
+      :param interval: interval which the phases shifts should be inside of.
+      :type interval: TimeInterval
+      :param tx_intervals: transmit intervals. If wanted to estimate baud
+          lengths, these must be given, defaults to None
+      :return: A list of the frequencies that occur within the interval.
+      :rtype: EventList
+
+
+
+
+   .. py:method:: as_line(end)
+
+      Coordinates of a line connecting the phase shifts within an interval
+
+      That is a list of x coordinates and a list of y coordinates which 
+      respectively describes the time and phases of the phase shifts.
+
+      Example::
+          
+          180        x----------x     x----   etc.
+                     |          |     |
+          0   -x-----x          x-----x
+               0     6          17    25   
+          
+
+      gives
+      [0, 6, 6, 17, 17, 25, 25, ...]
+      and
+      [0, 0, 180, 180, 0, 0, 180, ...]
+
+      :param interval: Interval the shifts should be within. If only a number is given, this is interpreted as end of the plotting interval.
+      :type interval: TimeInterval or tuple[float, float] or float
+      :return: lists of coordinates
+      :rtype: tuple[list[float], list[float]]
+
+
+
+
+   .. py:method:: as_line_within(interval)
+
+      Coordinates of a line connecting the phase shifts within an interval
+
+      That is a list of x coordinates and a list of y coordinates which 
+      respectively describes the time and phases of the phase shifts
+
+      Example::
+          
+          180        x----------x     x----   etc.
+                     |          |     |
+          0   -x-----x          x-----x
+               0     6          17    25   
+          
+      gives
+      [0, 6, 6, 17, 17, 25, 25, ...]
+      and
+      [0, 0, 180, 180, 0, 0, 180, ...]
+
+      :param interval: Interval the shifts should be within. If only a number is given, this is interpreted as end of the plotting interval.
+      :type interval: TimeInterval or tuple[float, float] or float
+      :return: lists of coordinates
+      :rtype: tuple[list[float], list[float]]
+
+
+
+

@@ -1,0 +1,216 @@
+src.expplot
+===========
+
+.. py:module:: src.expplot
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.expplot.Expplot
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   src.expplot.calc_nearest_range
+   src.expplot.calc_furthest_full_range
+   src.expplot.plot_phases
+   src.expplot.phaseshift_plot
+
+
+Module Contents
+---------------
+
+.. py:function:: calc_nearest_range(tx_interval, rx_interval, baud_length, v = c)
+
+   Calculates the nearest range the experiment can measure. Since only one baud 
+   will be measured at this range, the performance at this range will be low.
+
+   :param tx_interval: Transmit interval
+   :param rx_interval: Receive interval
+   :param baud_length: baud length of experiment
+   :param v: Speed of beam, default speed of light
+   :return: Nearest range gate. 
+
+
+
+
+.. py:function:: calc_furthest_full_range(tx_interval, rx_interval, baud_length, v = c)
+
+   Calculates the furthest range the experiment measures. This is the last range
+   where the receiver «sees» the *whole* transmit passing through.
+
+   :param tx_interval: Transmit interval
+   :param rx_interval: Receive interval
+   :param baud_length: baud length of experiment
+   :param v: Speed of beam, default speed of light
+   :return: Furthest range gate. 
+
+
+.. py:function:: plot_phases(ax, phaseshifts, tx_intervals, linename = 'phase', relative_time = False)
+
+   Plot phases of experiment as a single bar plot.
+
+   All phases are plotted on the line specified with `linename`
+
+   :param plt.Axes ax: Axes object to plot on
+   :param EventList phaseshifts: List of phaseshifts
+   :param TransmitIntervalList tx_intervals: list of transmit intervals
+   :param str linename: Name of the line to plot onto. Defaults to "phase".
+   :param bool relative_time: Let time axis show time relative to begin of first 
+   transmission (True) or as given by the intervals (False), defaults to False.
+
+
+
+.. py:function:: phaseshift_plot(subcycles)
+
+.. py:class:: Expplot(plot_interval, rmax = 1000000.0)
+
+   An interface to matplotlib specialised for plotting experiments 
+   (transmit/receive beams)
+
+
+   .. py:attribute:: fig
+
+
+   .. py:attribute:: ax
+
+
+   .. py:attribute:: plot_interval
+
+
+   .. py:attribute:: available_colours
+      :value: ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink',...
+
+
+
+   .. py:attribute:: cols
+
+
+   .. py:method:: get_colour(name)
+
+      Get colour for desired parameter.
+
+      Assigns a new colour if needed. There is a maximum of assignable 
+      colours since matplotlibs default colours are used. These are limited.
+
+      :param name: parameter name
+      :type name: str
+      :raises RuntimeError: if a new colour is assigned but there is no new 
+          colour to take.
+      :return: colour
+      :rtype: str
+
+
+
+
+   .. py:method:: title(title)
+
+      Set supertitle to figure
+
+      :param title: Title string
+      :type title: str
+
+
+
+
+   .. py:method:: xlim(interval = None)
+
+      Set x axes limits.
+
+      :param TimeInterval | None interval: x axes limits as a TimeInterval
+
+
+
+
+   .. py:method:: add_beam(name, interval, v = c, transmit = True, **kwargs)
+
+      Plots transmit or receive beam position
+
+      :param interval: Interval of signal being transmitted/received
+      :type interval: TimeInterval
+      :param float, optional v: Velocity of beam, default light speed
+      :param bool, optional transmit: Direction of beam. True – Transmit, 
+          False – receive, defaults to True
+
+      Keyword arguments are passed further to matplotlib.
+
+
+
+
+   .. py:method:: transmit(name, interval, **kwargs)
+
+      Plots transmit beam position
+
+      :param interval: Interval of signal being transmitted
+      :type interval: TimeInterval
+
+      Keyword arguments are passed further to matplotlib.
+
+
+
+
+   .. py:method:: receive(name, interval, **kwargs)
+
+      Plots receive beam position
+
+      :param interval: Interval of signal being received
+      :type interval: TimeInterval
+
+      Keyword arguments are passed further to matplotlib.
+
+
+
+
+   .. py:method:: state(name, bar_lengths, bars_begin_at, **kwargs)
+
+      Plot setting of radar.
+
+      :param name: name of setting
+      :type name: str
+      :param bar_lengths: Lengths of bars
+      :type bar_lengths: list or numpy array
+      :param bars_begin_at: Position where bars begin
+      :type bars_begin_at: list or numpy array
+
+      Other (keyword) arguments go directly to plotting function
+
+
+
+
+   .. py:method:: phase(phaseshifts, tx_intervals)
+
+
+   .. py:method:: frequency(name, rx_freqs, interval, **kwargs)
+
+      Plot (receiver) frequencies
+
+      :param rx_freqs: Channels with corresponding frequencies
+      :type rx_freqs: dict[str, FrequencyList]
+
+
+
+
+   .. py:method:: add_range_label(r)
+
+      Adds a label to a certain range as a minor tick
+
+      :param float r: range [m]
+
+
+
+
+   .. py:method:: add_time_label(t)
+
+      Adds a label to a certain time as a minor tick
+
+      :param float t: time [s]
+
+
+
+

@@ -1,0 +1,57 @@
+src.main
+========
+
+.. py:module:: src.main
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   src.main.logger
+   src.main.c_handler
+   src.main.f_handler
+   src.main.c_format
+   src.main.f_format
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   src.main.main
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+.. py:data:: c_handler
+
+.. py:data:: f_handler
+
+.. py:data:: c_format
+
+.. py:data:: f_format
+
+.. py:function:: main(path, radar, subcycle, savepath, phaseplot = False)
+
+   Tarlan file plotter. 
+
+   Plots EISCAT KST experiment specified with a .tlan file
+
+
+
+
+   :param str path: Path to tlan file which to plot
+   :param str radar: Which radar to plot for. It might be that experiment doesnt exist for that radar. 
+   :param int subcycle: Subcycle to plot. Zero means plot all. Default is 1
+   :param str savepath: Path of where to save the figure. If given, figure will 
+   not be shown, only saved. If empty, figure will be shown, not saved. Default is empty (show, not save)
+   :param bool phaseplot: Plot phases of experiment? Phases of all subcycles will be plotted. Default is False.
+
+
+

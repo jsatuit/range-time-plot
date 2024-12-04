@@ -1,0 +1,34 @@
+src.tlan.tarlanError
+====================
+
+.. py:module:: src.tlan.tarlanError
+
+
+Exceptions
+----------
+
+.. autoapisummary::
+
+   src.tlan.tarlanError.TarlanError
+   src.tlan.tarlanError.TarlanWarning
+
+
+Module Contents
+---------------
+
+.. py:exception:: TarlanError(msg, line_number = 0)
+
+   Bases: :py:obj:`Exception`
+
+
+   Exception raised when there are errors in parsing a tarlan file
+
+
+.. py:exception:: TarlanWarning(msg, line_number = 0)
+
+   Bases: :py:obj:`UserWarning`
+
+
+   Warning raised when tarlan file has unclear commands.
+
+

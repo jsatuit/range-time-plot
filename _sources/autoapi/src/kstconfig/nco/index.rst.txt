@@ -1,0 +1,122 @@
+src.kstconfig.nco
+=================
+
+.. py:module:: src.kstconfig.nco
+
+.. autoapi-nested-parse::
+
+   Handling .nco files.
+
+   At EISCAT, these are loaded by the numerical controlled oscillator. These shift frequency of the signal 
+   that comes into a channel. When reading these files, one should be aware of that when the signal comes into the channels, its frequency already is shifted twice.
+
+   See also [Jussis EISCAT portal]
+   (https://portal.eiscat.se/jussi/eiscat/erosdoc/uhf_radar.html)
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.kstconfig.nco.Nco
+
+
+Module Contents
+---------------
+
+.. py:class:: Nco(filename = 'NCOPAR_VS 0.1\nNCO 0 0.0', lo1 = 812, lo2 = 128)
+
+   Parsing and handling of numerically controlled oscillator (NCO) files.
+       
+
+
+   .. py:attribute:: _lo1
+      :value: 812
+
+
+
+   .. py:attribute:: _lo2
+      :value: 128
+
+
+
+   .. py:method:: parse_nco(lines)
+      :staticmethod:
+
+
+      Parse lines from a nco file. 
+
+      Can only parse whole file at once.
+
+      :param lines: lines in the file
+      :type lines: str
+      :raises RuntimeError: if the format of the file is not correct.
+      :raises ValueError: if frequency is not a floating-point number.
+      :return: list of frequencies for this experiment
+      :rtype: list[float]
+
+
+
+
+   .. py:method:: set_freqs(freqs)
+
+
+   .. py:method:: set_lo1(lo1)
+
+      Set local oscillator 1 frequency.
+
+      :param float lo1: Frequency [MHz]
+
+
+
+
+   .. py:method:: set_lo2(lo2)
+
+      Set local oscillator 2 frequency.
+
+      :param float lo2: Frequency [MHz]
+
+
+
+
+   .. py:method:: NCOSEL(nr)
+
+      Select frequency of numerical controlled oscillator.
+
+      :param nr: Frequency number
+      :type nr: int
+
+
+
+
+   .. py:property:: is_ready
+      :type: bool
+
+
+      Shows if corresponding channel board has a defined frequency already.
+
+      :rtype: bool
+
+      If channel is not ready, there are several possibilities why:
+      - There has not been loaded any .nco file for this channel yet.
+      - The command NCOSEL has not been run yet.
+
+      The local oscillator frequencies have been decided, even if not explicitly. 
+      This is because EROS uses default oscillators. However, it is good practice to 
+      explicit tell EROS which oscillators to use.
+
+
+
+   .. py:method:: get_freq()
+
+      Return the centre frequency of this channel.
+
+      :raises AttributeError: if frequency has not been selected
+      :return: frequency [MHz]
+      :rtype: float
+
+
+
+

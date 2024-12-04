@@ -1,0 +1,227 @@
+src.elan.elan
+=============
+
+.. py:module:: src.elan.elan
+
+.. autoapi-nested-parse::
+
+   This module includes some EROS functions to the tcl parser. Also these are badly documented here, but there is an explanation of EROS commands at https://portal.eiscat.se/jussi/eiscat/erosdoc/cmds.html
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   src.elan.elan.module_logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.elan.elan.Eros
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   src.elan.elan.filefinder
+
+
+Module Contents
+---------------
+
+.. py:data:: module_logger
+
+.. py:function:: filefinder(filename, ending = '.elan')
+
+   Find file filename. 
+   :param filename: experiment filename. May be absolute path (/kst/exp/manda/manda) or relative to
+   root of this repository (for example kst/exp/manda/manda). The function will
+   also look into folder /kst/exp or kst/exp if they exist.
+
+   :type filename: str
+   :param str ending: File ending. Default is '.elan'
+   :raises FileNotFoundError: If the experiment file is not found in the given 
+       directory, or within (subfolders of) (/)kst/exp
+   :return: directory, name of experiment, path to experiment
+   :rtype: Tuple[str, str, str]
+
+
+
+.. py:class:: Eros(radar='', ant='', master=None, **var)
+
+   Bases: :py:obj:`src.elan.tcl.TclScope`
+
+
+   .. py:attribute:: RCs
+      :value: ['transmitter', 'receiver', 'ion line receiver', 'plasma line receiver']
+
+
+
+   .. py:attribute:: lo1_default
+
+
+   .. py:attribute:: lo2_default
+
+
+   .. py:attribute:: __argv
+      :value: []
+
+
+
+   .. py:attribute:: _starttimes
+
+
+   .. py:method:: _get_time_string()
+
+
+   .. py:method:: py_get_loadedfiles()
+
+      Return a dictionary with last loaded files by this EROS instance (including subfunctions)
+
+
+
+   .. py:method:: py_get_lo(lon, MHz = True)
+
+      Return last loaded frequencies in local oscillator
+
+      :param int lon: Which local oscillator to check
+      :param bool, optional MHz: If to return frequency in MHz or not (else frequency is given in Hz), defaults to True (that is in MHz)
+      :return: Loaded frequencies in selected oscillator
+      :rtype: list[int]
+
+
+
+   .. py:method:: py_get_tlan(di='')
+
+      Guess which .tlan file was used
+
+      This is done by finding the last loaded .rbin file* and exchange ending 
+      .rbin with .tlan. This should work. 
+
+      * compiled .tlan file for reception.
+
+      However, there are some potential problems with this:
+      - There is no guarantee that the filenames are the same: There
+      could be that exp.tlan which was compiled to mohahaha.rbin (and wtf.tbin).
+      - There is also a risk that the script is updated while the binary files are not.
+      - Transmit-only experiments wont be loaded. Since they would also violate 
+      rules EISCAT blue book and thereby not run, this will only happen if 
+      the experiment is not programmed properly.
+          
+      We could also have looked at .tbin file, but since the remote receivers 
+      dont transmit, the .tbin file would never be loaded.
+
+
+
+   .. py:method:: argv(*args)
+
+
+   .. py:method:: armradar(args)
+
+
+   .. py:method:: block(args)
+
+
+   .. py:method:: callblock(args)
+
+
+   .. py:method:: disablerecording(args=[])
+
+
+   .. py:method:: disp(args)
+
+
+   .. py:method:: getstarttime(args)
+
+
+   .. py:method:: gotoblock(args)
+
+
+   .. py:method:: isradar(args=None)
+
+
+   .. py:method:: isesr(*args)
+
+
+   .. py:method:: iskir(*args)
+
+
+   .. py:method:: issod(*args)
+
+
+   .. py:method:: isuhf(*args)
+
+
+   .. py:method:: isvhf(*args)
+
+
+   .. py:method:: loadfile(*args)
+
+
+   .. py:method:: loadfilter(args)
+
+
+   .. py:method:: _parse_args_op_rec_x_chs(args)
+
+
+   .. py:method:: loadfrequency(args)
+
+
+   .. py:method:: loadradar(args)
+
+
+   .. py:method:: logbook(args)
+
+
+   .. py:method:: mount(args)
+
+
+   .. py:method:: readfrequencyfile(args)
+
+
+   .. py:method:: runexperiment(args)
+
+
+   .. py:method:: selectlo(args)
+
+
+   .. py:method:: setfrequency(args)
+
+
+   .. py:method:: setpanelpath(args)
+
+
+   .. py:method:: startdata(args)
+
+
+   .. py:method:: startradar(args)
+
+
+   .. py:method:: stopdata(*args)
+
+
+   .. py:method:: stopradar(args)
+
+
+   .. py:method:: sync(args)
+
+
+   .. py:method:: timestamp(args)
+
+
+   .. py:method:: transferlo(args)
+
+
+   .. py:method:: upar(args)
+
+
+   .. py:method:: writeexperimentfile(args)
+
+

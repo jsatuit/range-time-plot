@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.experiment &mdash; range-time-plot 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="src.expplot" href="../expplot/index.html" />
+    <link rel="prev" title="src.eventlist" href="../eventlist/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            range-time-plot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">src</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../__main__/index.html">src.__main__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../const/index.html">src.const</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../elan/index.html">src.elan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../eventlist/index.html">src.eventlist</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">src.experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../expplot/index.html">src.expplot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../frequencyshift/index.html">src.frequencyshift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../kstconfig/index.html">src.kstconfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../main/index.html">src.main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../phaseshifter/index.html">src.phaseshifter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../timeInterval/index.html">src.timeInterval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tlan/index.html">src.tlan</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">range-time-plot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">src</a></li>
+      <li class="breadcrumb-item active">src.experiment</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/src/experiment/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-src.experiment">
+<span id="src-experiment"></span><h1>src.experiment<a class="headerlink" href="#module-src.experiment" title="Link to this heading"></a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.experiment.Subcycle" title="src.experiment.Subcycle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Subcycle</span></code></a></p></td>
+<td><p>Handling timings for transmission, receiver channels. More properties will</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.experiment.Experiment" title="src.experiment.Experiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Experiment</span></code></a></p></td>
+<td><p>Handling timings for transmitter and receiver channels</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.experiment.Subcycle">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.experiment.</span></span><span class="sig-name descname"><span class="pre">Subcycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">begin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.experiment.Subcycle" title="Link to this definition"></a></dt>
+<dd><p>Handling timings for transmission, receiver channels. More properties will
+follow?</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>begin</strong> (<em>float</em>)</p></li>
+<li><p><strong>end</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>bool</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.transmits">
+<span class="sig-name descname"><span class="pre">transmits</span></span><a class="headerlink" href="#src.experiment.Subcycle.transmits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.receive">
+<span class="sig-name descname"><span class="pre">receive</span></span><a class="headerlink" href="#src.experiment.Subcycle.receive" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.rx_protection">
+<span class="sig-name descname"><span class="pre">rx_protection</span></span><a class="headerlink" href="#src.experiment.Subcycle.rx_protection" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.rx_freqs">
+<span class="sig-name descname"><span class="pre">rx_freqs</span></span><a class="headerlink" href="#src.experiment.Subcycle.rx_freqs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.prop">
+<span class="sig-name descname"><span class="pre">prop</span></span><a class="headerlink" href="#src.experiment.Subcycle.prop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.baudlengths">
+<span class="sig-name descname"><span class="pre">baudlengths</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#src.experiment.Subcycle.baudlengths" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.phaseshifts">
+<span class="sig-name descname"><span class="pre">phaseshifts</span></span><a class="headerlink" href="#src.experiment.Subcycle.phaseshifts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Subcycle._begin">
+<span class="sig-name descname"><span class="pre">_begin</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#src.experiment.Subcycle._begin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Subcycle._end">
+<span class="sig-name descname"><span class="pre">_end</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#src.experiment.Subcycle._end" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#src.experiment.Subcycle.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.end">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">end</span></span><a class="headerlink" href="#src.experiment.Subcycle.end" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.begin">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">begin</span></span><a class="headerlink" href="#src.experiment.Subcycle.begin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.add_time">
+<span class="sig-name descname"><span class="pre">add_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.experiment.Subcycle.add_time" title="Link to this definition"></a></dt>
+<dd><p>Adds TimeInterval to relevant attribute of Subcycle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – declares what the interval is for: Possibilities are:
+- “transmission”/”t” - transmission
+- “ch&lt;some number&gt;” - reception in channel with specified number</p></li>
+<li><p><strong>time</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>TimeInterval</em></a>) – interval with on and off time of attribute</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.experiment.Subcycle.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rangelims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.experiment.Subcycle.plot" title="Link to this definition"></a></dt>
+<dd><p>Plot reached ranges and transmitter/receiver states for single subcycle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plot</strong> (<a class="reference internal" href="../expplot/index.html#src.expplot.Expplot" title="src.expplot.Expplot"><em>Expplot</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – If given Expplot, everything is plotted into given Expplot object.
+If None, a new plot is created, defaults to None</p></li>
+<li><p><strong>rangelims</strong> (<em>bool</em>) – Show nearest and furthest ranges as
+axis ticks. default False.</p></li>
+<li><p><strong>rangelims</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.experiment.Experiment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.experiment.</span></span><span class="sig-name descname"><span class="pre">Experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.experiment.Experiment" title="Link to this definition"></a></dt>
+<dd><p>Handling timings for transmitter and receiver channels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>)</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Experiment.subcycles">
+<span class="sig-name descname"><span class="pre">subcycles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#src.experiment.Experiment.subcycles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.experiment.Experiment.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#src.experiment.Experiment.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.experiment.Experiment.add_subcycle">
+<span class="sig-name descname"><span class="pre">add_subcycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subcycle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.experiment.Experiment.add_subcycle" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>subcycle</strong> (<a class="reference internal" href="#src.experiment.Subcycle" title="src.experiment.Subcycle"><em>Subcycle</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.experiment.Experiment.from_tlan">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_tlan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.experiment.Experiment.from_tlan" title="Link to this definition"></a></dt>
+<dd><p>Load experiment file and convert to Experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Path of tlan file to load.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – If radar controller is not resetted correctly
+at end of file.</p></li>
+<li><p><strong>RuntimeWarning</strong> – if transmitter is constantly off.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Object containing properties of the experiment.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#src.experiment.Experiment" title="src.experiment.Experiment">Experiment</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.experiment.Experiment.from_eiscat_kst">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_eiscat_kst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'UHF'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.experiment.Experiment.from_eiscat_kst" title="Link to this definition"></a></dt>
+<dd><p>Load experiment file and convert to Experiment.</p>
+<p>This is a wrapper function for loading from tlan or from elan file.
+Which ine is called is determined by the file ending. File name without
+ending is interpreted as .elan</p>
+<p>For arguments, see from _tlan and from_elan</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.experiment.Experiment.from_elan">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_elan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'UHF'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.experiment.Experiment.from_elan" title="Link to this definition"></a></dt>
+<dd><p>Load experiment file and convert to Experiment.</p>
+<p>This is done by parsing the commands that would be run if the user typed
+“runexperiment &lt;filename&gt; &lt;timestec&gt; &lt;some args&gt;” in an real EROS console.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Path of elan file to load. The filename may have
+the ending .elan or the ending may be be left out. If the file is
+not found, python will look into “/kst/exp/filename” and “kst/exp/filename”</p></li>
+<li><p><strong>radar</strong> (<em>str</em>) – Site to plot the experiment for. Possibles are “UHF”,
+“VHF”, “ESR”, “KIR”, “SOD”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – If radar controller is not resetted correctly
+at end of tlan file.</p></li>
+<li><p><strong>RuntimeWarning</strong> – if transmitter is constantly off.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Object containing properties of the experiment.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#src.experiment.Experiment" title="src.experiment.Experiment">Experiment</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.experiment.Experiment.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subcycles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.experiment.Experiment.plot" title="Link to this definition"></a></dt>
+<dd><p>Plot multiple subcycles.</p>
+<p>Calls Subcycle.plot(plot) for every subcycle to plot</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>subcycles</strong> (<em>list</em><em>, </em><em>optional</em>) – List of which subcycles to plot. Subcycles are
+counted from one. Empty list means plot all subcycles, defaults
+to plotting all.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If invalid subcycle numbers are given.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.experiment.Experiment.plot_phaseshifts">
+<span class="sig-name descname"><span class="pre">plot_phaseshifts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.experiment.Experiment.plot_phaseshifts" title="Link to this definition"></a></dt>
+<dd><p>Plots all phaseshifts in the experiment grouped by subcycle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../eventlist/index.html" class="btn btn-neutral float-left" title="src.eventlist" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../expplot/index.html" class="btn btn-neutral float-right" title="src.expplot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, jsatuit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

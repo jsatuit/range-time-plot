@@ -1,0 +1,278 @@
+src.tlan.tarlan
+===============
+
+.. py:module:: src.tlan.tarlan
+
+.. autoapi-nested-parse::
+
+   The Transmit And Receiver LANguage (TARLAN) is the language for the radar controllers
+   at the EISCAT mainland radars, that are EISCAT UHF and VHF, including receivers
+   in Kiruna and Sodankylä.
+
+   The radar controller controls most of the physical radar equipment, that is 
+   phase shifting, beams, transmittion, reception, but not antenna steering or 
+   signal processing.
+
+   The dictionary `Tarlan.commands` gives an overview over the commands the system
+   can run. More infortmation can be found at
+   https://eiscat.se/scientist/user-documentation/radar-controllers-and-programming-for-the-kst-system/
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   src.tlan.tarlan.tarlan_command_docstring
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.tlan.tarlan.Command
+   src.tlan.tarlan.Tarlan
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   src.tlan.tarlan.kst_channels
+   src.tlan.tarlan.do_nothing
+   src.tlan.tarlan.parse_line
+   src.tlan.tarlan.tarlan_parser
+
+
+Module Contents
+---------------
+
+.. py:data:: tarlan_command_docstring
+   :value: Multiline-String
+
+   .. raw:: html
+
+      <details><summary>Show Value</summary>
+
+   .. code-block:: python
+
+      """:param time: time [s]
+      :type time: float
+      :param line: line where the command is found. Used for error handling only.
+      :type line: int"""
+
+   .. raw:: html
+
+      </details>
+
+
+
+   Docstring ito be inserted to all tarlan commands.
+
+
+.. py:function:: kst_channels()
+
+   List of available channels
+
+
+.. py:function:: do_nothing(*args)
+
+   Dont delete. This function is needed for executing tarlan commands that 
+   cant be simulated/transferred or where is would not make sense to 
+   implement the function here.
+
+
+.. py:class:: Command(t, cmd, line = 0)
+
+   Tarlan command.
+
+   :param float t: Subcycle time in seconds when command is executed.
+   :param str cmd: Command as written in the .tlan file
+   :param int line: Line in tlan file. Used for error messages
+
+
+
+   .. py:attribute:: t
+
+
+   .. py:attribute:: cmd
+
+
+   .. py:attribute:: line
+      :value: 0
+
+
+
+   .. py:method:: __lt__(other)
+
+
+   .. py:method:: __repr__()
+
+
+   .. py:method:: __str__()
+
+
+.. py:class:: Tarlan(filename = '', lo1 = (812000000.0, ) * 2, lo2 = (128000000.0, 122000000.0), chfreqs = None)
+
+   Class for parsing and handling an TARLAN experiment
+
+   :param IntervalList cycle: Begin and end of experiment cycle
+   :param IntervalList subycle: Begin and end of experiment subcycles. These
+       are defined by when SETTCR <time> is called.
+   :param dict[str, IntervalList] streams: Dictionary of all on/off times of 
+       the different settings in the radar system controller, among others
+       "RF", "CH1".
+   :param float end_time: Length of tarlan program in seconds.
+
+
+   .. py:attribute:: command_docs
+
+
+   .. py:attribute:: cycle
+
+
+   .. py:attribute:: subcycle_list
+
+
+   .. py:attribute:: phaseshifter
+
+
+   .. py:attribute:: freq_rec
+
+
+   .. py:attribute:: stream_names
+      :value: ['RF', 'RXPROT', 'LOPROT', 'CAL', 'BEAM']
+
+
+
+   .. py:attribute:: _loaded_FIR
+      :value: False
+
+
+
+   .. py:attribute:: _selected_ADL
+      :value: False
+
+
+
+   .. py:attribute:: _selected_ADR
+      :value: False
+
+
+
+   .. py:attribute:: _selected_NCO
+      :value: False
+
+
+
+   .. py:attribute:: TCR
+      :value: 0
+
+
+
+   .. py:attribute:: end_time
+      :value: 0
+
+
+
+   .. py:attribute:: _lo1
+      :value: (812000000.0, 812000000.0)
+
+
+
+   .. py:attribute:: _lo2
+      :value: (128000000.0, 122000000.0)
+
+
+
+   .. py:method:: _init_streams()
+
+
+   .. py:method:: from_tlan(filename = '')
+
+      Parse tlan file and run Tarlan.exec_cmd() for all commands.
+
+      :param filename: Path of tlan file to load, defaults to ""
+      :type filename: str, optional
+
+
+
+
+   .. py:method:: _AD2CH(time, line, path, channels)
+
+
+   .. py:method:: AD1L(time, line)
+
+
+   .. py:method:: AD1R(time, line)
+
+
+   .. py:method:: AD2L(time, line)
+
+
+   .. py:method:: AD2R(time, line)
+
+
+   .. py:method:: ALLOFF(time, line)
+
+
+   .. py:method:: NCOSEL(time, line, nco_line)
+
+
+   .. py:method:: STFIR(time, line)
+
+
+   .. py:method:: SETTCR(time, line)
+
+      Set reference time in time control
+
+
+
+   .. py:method:: _generate_commands()
+
+
+   .. py:method:: _check_command_docs()
+
+
+   .. py:method:: exec_cmd(cmd)
+
+      «Execute» TARLAN command / import command to experiment
+
+      :param cmd: command as pasrsed from the file.
+      :type cmd: Command
+
+
+
+
+   .. py:method:: phaseshifts(idx = 0)
+
+
+.. py:function:: parse_line(line, line_number = 0)
+
+   Parse single line of Tarlan code.
+
+   :param line: line of code
+   :type line: str
+   :param line_number: line number in file, used for error handling only, defaults to 0
+   :type line_number: int, optional
+   :raises TarlanError: for invalid commands
+   :return: list of Command objects
+   :rtype: list[Command]
+
+
+
+.. py:function:: tarlan_parser(filename = '')
+
+   Parse tlan file. Commands are returned in the same order as they appear in 
+   the file.
+
+   :param filename: filename, defaults to ""
+   :type filename: str
+   :return: list of Command objects
+   :rtype: list[Command]
+
+
+

@@ -1,0 +1,575 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.tlan.tarlan &mdash; range-time-plot 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="src.tlan.tarlanError" href="../tarlanError/index.html" />
+    <link rel="prev" title="src.tlan" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            range-time-plot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">User guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">src</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../__main__/index.html">src.__main__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../const/index.html">src.const</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../elan/index.html">src.elan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eventlist/index.html">src.eventlist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experiment/index.html">src.experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../expplot/index.html">src.expplot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../frequencyshift/index.html">src.frequencyshift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../kstconfig/index.html">src.kstconfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../main/index.html">src.main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../phaseshifter/index.html">src.phaseshifter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../timeInterval/index.html">src.timeInterval</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html">src.tlan</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">range-time-plot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">src</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">src.tlan</a></li>
+      <li class="breadcrumb-item active">src.tlan.tarlan</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/src/tlan/tarlan/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-src.tlan.tarlan">
+<span id="src-tlan-tarlan"></span><h1>src.tlan.tarlan<a class="headerlink" href="#module-src.tlan.tarlan" title="Link to this heading"></a></h1>
+<p>The Transmit And Receiver LANguage (TARLAN) is the language for the radar controllers
+at the EISCAT mainland radars, that are EISCAT UHF and VHF, including receivers
+in Kiruna and Sodankylä.</p>
+<p>The radar controller controls most of the physical radar equipment, that is
+phase shifting, beams, transmittion, reception, but not antenna steering or
+signal processing.</p>
+<p>The dictionary <cite>Tarlan.commands</cite> gives an overview over the commands the system
+can run. More infortmation can be found at
+<a class="reference external" href="https://eiscat.se/scientist/user-documentation/radar-controllers-and-programming-for-the-kst-system/">https://eiscat.se/scientist/user-documentation/radar-controllers-and-programming-for-the-kst-system/</a></p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.tlan.tarlan.tarlan_command_docstring" title="src.tlan.tarlan.tarlan_command_docstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tarlan_command_docstring</span></code></a></p></td>
+<td><p>Docstring ito be inserted to all tarlan commands.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.tlan.tarlan.Command" title="src.tlan.tarlan.Command"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Command</span></code></a></p></td>
+<td><p>Tarlan command.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.tlan.tarlan.Tarlan" title="src.tlan.tarlan.Tarlan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tarlan</span></code></a></p></td>
+<td><p>Class for parsing and handling an TARLAN experiment</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.tlan.tarlan.kst_channels" title="src.tlan.tarlan.kst_channels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kst_channels</span></code></a>()</p></td>
+<td><p>List of available channels</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.tlan.tarlan.do_nothing" title="src.tlan.tarlan.do_nothing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">do_nothing</span></code></a>(*args)</p></td>
+<td><p>Dont delete. This function is needed for executing tarlan commands that</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.tlan.tarlan.parse_line" title="src.tlan.tarlan.parse_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_line</span></code></a>(line[, line_number])</p></td>
+<td><p>Parse single line of Tarlan code.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.tlan.tarlan.tarlan_parser" title="src.tlan.tarlan.tarlan_parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tarlan_parser</span></code></a>([filename])</p></td>
+<td><p>Parse tlan file. Commands are returned in the same order as they appear in</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="src.tlan.tarlan.tarlan_command_docstring">
+<span class="sig-prename descclassname"><span class="pre">src.tlan.tarlan.</span></span><span class="sig-name descname"><span class="pre">tarlan_command_docstring</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Multiline-String</span></em><a class="headerlink" href="#src.tlan.tarlan.tarlan_command_docstring" title="Link to this definition"></a></dt>
+<dd><details><summary>Show Value</summary><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;:param time: time [s]</span>
+<span class="sd">:type time: float</span>
+<span class="sd">:param line: line where the command is found. Used for error handling only.</span>
+<span class="sd">:type line: int&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</details><p>Docstring ito be inserted to all tarlan commands.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.tlan.tarlan.kst_channels">
+<span class="sig-prename descclassname"><span class="pre">src.tlan.tarlan.</span></span><span class="sig-name descname"><span class="pre">kst_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.kst_channels" title="Link to this definition"></a></dt>
+<dd><p>List of available channels</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.tlan.tarlan.do_nothing">
+<span class="sig-prename descclassname"><span class="pre">src.tlan.tarlan.</span></span><span class="sig-name descname"><span class="pre">do_nothing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.do_nothing" title="Link to this definition"></a></dt>
+<dd><p>Dont delete. This function is needed for executing tarlan commands that
+cant be simulated/transferred or where is would not make sense to
+implement the function here.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Command">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.tlan.tarlan.</span></span><span class="sig-name descname"><span class="pre">Command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Command" title="Link to this definition"></a></dt>
+<dd><p>Tarlan command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>float</em>) – Subcycle time in seconds when command is executed.</p></li>
+<li><p><strong>cmd</strong> (<em>str</em>) – Command as written in the .tlan file</p></li>
+<li><p><strong>line</strong> (<em>int</em>) – Line in tlan file. Used for error messages</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Command.t">
+<span class="sig-name descname"><span class="pre">t</span></span><a class="headerlink" href="#src.tlan.tarlan.Command.t" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Command.cmd">
+<span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#src.tlan.tarlan.Command.cmd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Command.line">
+<span class="sig-name descname"><span class="pre">line</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#src.tlan.tarlan.Command.line" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Command.__lt__">
+<span class="sig-name descname"><span class="pre">__lt__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Command.__lt__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<em>Self</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Command.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Command.__repr__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Command.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Command.__str__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.tlan.tarlan.</span></span><span class="sig-name descname"><span class="pre">Tarlan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lo1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(812000000.0,)</span> <span class="pre">*</span> <span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lo2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(128000000.0,</span> <span class="pre">122000000.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chfreqs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan" title="Link to this definition"></a></dt>
+<dd><p>Class for parsing and handling an TARLAN experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cycle</strong> (<a class="reference internal" href="../tarlanIntervals/index.html#src.tlan.tarlanIntervals.IntervalList" title="src.tlan.tarlanIntervals.IntervalList"><em>IntervalList</em></a>) – Begin and end of experiment cycle</p></li>
+<li><p><strong>subycle</strong> (<a class="reference internal" href="../tarlanIntervals/index.html#src.tlan.tarlanIntervals.IntervalList" title="src.tlan.tarlanIntervals.IntervalList"><em>IntervalList</em></a>) – Begin and end of experiment subcycles. These
+are defined by when SETTCR &lt;time&gt; is called.</p></li>
+<li><p><strong>streams</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="../tarlanIntervals/index.html#src.tlan.tarlanIntervals.IntervalList" title="src.tlan.tarlanIntervals.IntervalList"><em>IntervalList</em></a><em>]</em>) – Dictionary of all on/off times of
+the different settings in the radar system controller, among others
+“RF”, “CH1”.</p></li>
+<li><p><strong>end_time</strong> (<em>float</em>) – Length of tarlan program in seconds.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>)</p></li>
+<li><p><strong>lo1</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>)</p></li>
+<li><p><strong>lo2</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>)</p></li>
+<li><p><strong>chfreqs</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><a class="reference internal" href="../../kstconfig/nco/index.html#src.kstconfig.nco.Nco" title="src.kstconfig.nco.Nco"><em>src.kstconfig.nco.Nco</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.command_docs">
+<span class="sig-name descname"><span class="pre">command_docs</span></span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.command_docs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.cycle">
+<span class="sig-name descname"><span class="pre">cycle</span></span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.cycle" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.subcycle_list">
+<span class="sig-name descname"><span class="pre">subcycle_list</span></span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.subcycle_list" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.phaseshifter">
+<span class="sig-name descname"><span class="pre">phaseshifter</span></span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.phaseshifter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.freq_rec">
+<span class="sig-name descname"><span class="pre">freq_rec</span></span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.freq_rec" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.stream_names">
+<span class="sig-name descname"><span class="pre">stream_names</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['RF',</span> <span class="pre">'RXPROT',</span> <span class="pre">'LOPROT',</span> <span class="pre">'CAL',</span> <span class="pre">'BEAM']</span></em><a class="headerlink" href="#src.tlan.tarlan.Tarlan.stream_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan._loaded_FIR">
+<span class="sig-name descname"><span class="pre">_loaded_FIR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#src.tlan.tarlan.Tarlan._loaded_FIR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan._selected_ADL">
+<span class="sig-name descname"><span class="pre">_selected_ADL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#src.tlan.tarlan.Tarlan._selected_ADL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan._selected_ADR">
+<span class="sig-name descname"><span class="pre">_selected_ADR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#src.tlan.tarlan.Tarlan._selected_ADR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan._selected_NCO">
+<span class="sig-name descname"><span class="pre">_selected_NCO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#src.tlan.tarlan.Tarlan._selected_NCO" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.TCR">
+<span class="sig-name descname"><span class="pre">TCR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#src.tlan.tarlan.Tarlan.TCR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.end_time">
+<span class="sig-name descname"><span class="pre">end_time</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#src.tlan.tarlan.Tarlan.end_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan._lo1">
+<span class="sig-name descname"><span class="pre">_lo1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(812000000.0,</span> <span class="pre">812000000.0)</span></em><a class="headerlink" href="#src.tlan.tarlan.Tarlan._lo1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan._lo2">
+<span class="sig-name descname"><span class="pre">_lo2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(128000000.0,</span> <span class="pre">122000000.0)</span></em><a class="headerlink" href="#src.tlan.tarlan.Tarlan._lo2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan._init_streams">
+<span class="sig-name descname"><span class="pre">_init_streams</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan._init_streams" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.from_tlan">
+<span class="sig-name descname"><span class="pre">from_tlan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.from_tlan" title="Link to this definition"></a></dt>
+<dd><p>Parse tlan file and run Tarlan.exec_cmd() for all commands.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em><em>, </em><em>optional</em>) – Path of tlan file to load, defaults to “”</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan._AD2CH">
+<span class="sig-name descname"><span class="pre">_AD2CH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan._AD2CH" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>)</p></li>
+<li><p><strong>line</strong> (<em>int</em>)</p></li>
+<li><p><strong>path</strong> (<em>int</em>)</p></li>
+<li><p><strong>channels</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.AD1L">
+<span class="sig-name descname"><span class="pre">AD1L</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.AD1L" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>)</p></li>
+<li><p><strong>line</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.AD1R">
+<span class="sig-name descname"><span class="pre">AD1R</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.AD1R" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>)</p></li>
+<li><p><strong>line</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.AD2L">
+<span class="sig-name descname"><span class="pre">AD2L</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.AD2L" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>)</p></li>
+<li><p><strong>line</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.AD2R">
+<span class="sig-name descname"><span class="pre">AD2R</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.AD2R" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>)</p></li>
+<li><p><strong>line</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.ALLOFF">
+<span class="sig-name descname"><span class="pre">ALLOFF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.ALLOFF" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>)</p></li>
+<li><p><strong>line</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.NCOSEL">
+<span class="sig-name descname"><span class="pre">NCOSEL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nco_line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.NCOSEL" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>)</p></li>
+<li><p><strong>line</strong> (<em>int</em>)</p></li>
+<li><p><strong>nco_line</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.STFIR">
+<span class="sig-name descname"><span class="pre">STFIR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.STFIR" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>)</p></li>
+<li><p><strong>line</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.SETTCR">
+<span class="sig-name descname"><span class="pre">SETTCR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.SETTCR" title="Link to this definition"></a></dt>
+<dd><p>Set reference time in time control</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>)</p></li>
+<li><p><strong>line</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan._generate_commands">
+<span class="sig-name descname"><span class="pre">_generate_commands</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan._generate_commands" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan._check_command_docs">
+<span class="sig-name descname"><span class="pre">_check_command_docs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan._check_command_docs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.exec_cmd">
+<span class="sig-name descname"><span class="pre">exec_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.exec_cmd" title="Link to this definition"></a></dt>
+<dd><p>«Execute» TARLAN command / import command to experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cmd</strong> (<a class="reference internal" href="#src.tlan.tarlan.Command" title="src.tlan.tarlan.Command"><em>Command</em></a>) – command as pasrsed from the file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.tlan.tarlan.Tarlan.phaseshifts">
+<span class="sig-name descname"><span class="pre">phaseshifts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.Tarlan.phaseshifts" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>idx</strong> (<em>int</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[<a class="reference internal" href="../../eventlist/index.html#src.eventlist.EventList" title="src.eventlist.EventList">src.eventlist.EventList</a>, list[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.tlan.tarlan.parse_line">
+<span class="sig-prename descclassname"><span class="pre">src.tlan.tarlan.</span></span><span class="sig-name descname"><span class="pre">parse_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.parse_line" title="Link to this definition"></a></dt>
+<dd><p>Parse single line of Tarlan code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>line</strong> (<em>str</em>) – line of code</p></li>
+<li><p><strong>line_number</strong> (<em>int</em><em>, </em><em>optional</em>) – line number in file, used for error handling only, defaults to 0</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../tarlanError/index.html#src.tlan.tarlanError.TarlanError" title="src.tlan.tarlanError.TarlanError"><strong>TarlanError</strong></a> – for invalid commands</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of Command objects</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="#src.tlan.tarlan.Command" title="src.tlan.tarlan.Command">Command</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.tlan.tarlan.tarlan_parser">
+<span class="sig-prename descclassname"><span class="pre">src.tlan.tarlan.</span></span><span class="sig-name descname"><span class="pre">tarlan_parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tlan.tarlan.tarlan_parser" title="Link to this definition"></a></dt>
+<dd><p>Parse tlan file. Commands are returned in the same order as they appear in
+the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – filename, defaults to “”</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of Command objects</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="#src.tlan.tarlan.Command" title="src.tlan.tarlan.Command">Command</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="src.tlan" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../tarlanError/index.html" class="btn btn-neutral float-right" title="src.tlan.tarlanError" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, jsatuit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

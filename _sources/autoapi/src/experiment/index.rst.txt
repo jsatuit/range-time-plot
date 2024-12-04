@@ -1,0 +1,191 @@
+src.experiment
+==============
+
+.. py:module:: src.experiment
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.experiment.Subcycle
+   src.experiment.Experiment
+
+
+Module Contents
+---------------
+
+.. py:class:: Subcycle(begin = 0, end = False)
+
+   Handling timings for transmission, receiver channels. More properties will 
+   follow?
+
+
+   .. py:attribute:: transmits
+
+
+   .. py:attribute:: receive
+
+
+   .. py:attribute:: rx_protection
+
+
+   .. py:attribute:: rx_freqs
+
+
+   .. py:attribute:: prop
+
+
+   .. py:attribute:: baudlengths
+      :value: []
+
+
+
+   .. py:attribute:: phaseshifts
+
+
+   .. py:attribute:: _begin
+      :value: 0
+
+
+
+   .. py:attribute:: _end
+      :value: False
+
+
+
+   .. py:attribute:: name
+      :value: ''
+
+
+
+   .. py:property:: end
+
+
+   .. py:property:: begin
+
+
+   .. py:method:: add_time(name, time)
+
+      Adds TimeInterval to relevant attribute of Subcycle.
+
+      :param name: declares what the interval is for: Possibilities are:
+          - "transmission"/"t" - transmission
+          - "ch<some number>" - reception in channel with specified number
+      :type name: str
+      :param time: interval with on and off time of attribute
+      :type time: TimeInterval
+
+
+
+
+   .. py:method:: plot(plot=None, rangelims = False)
+
+      Plot reached ranges and transmitter/receiver states for single subcycle.
+
+      :param plot: If given Expplot, everything is plotted into given Expplot object. 
+          If None, a new plot is created, defaults to None
+      :type plot: Expplot | None, optional
+      :param bool, optional rangelims: Show nearest and furthest ranges as
+          axis ticks. default False.
+
+
+
+
+.. py:class:: Experiment(name = '')
+
+   Handling timings for transmitter and receiver channels
+
+
+   .. py:attribute:: subcycles
+      :value: []
+
+
+
+   .. py:attribute:: name
+      :value: ''
+
+
+
+   .. py:method:: add_subcycle(subcycle)
+
+
+   .. py:method:: from_tlan(filename)
+      :classmethod:
+
+
+      Load experiment file and convert to Experiment.
+
+      :param filename: Path of tlan file to load.
+      :type filename: str
+      :raises RuntimeError: If radar controller is not resetted correctly 
+          at end of file.
+      :raises RuntimeWarning: if transmitter is constantly off.
+      :return: Object containing properties of the experiment.
+      :rtype: Experiment
+
+
+
+
+   .. py:method:: from_eiscat_kst(filename, radar='UHF')
+      :classmethod:
+
+
+      Load experiment file and convert to Experiment.
+
+      This is a wrapper function for loading from tlan or from elan file.
+      Which ine is called is determined by the file ending. File name without 
+      ending is interpreted as .elan
+
+      For arguments, see from _tlan and from_elan
+
+
+
+
+   .. py:method:: from_elan(filename, radar = 'UHF')
+      :classmethod:
+
+
+      Load experiment file and convert to Experiment.
+
+      This is done by parsing the commands that would be run if the user typed
+      "runexperiment <filename> <timestec> <some args>" in an real EROS console.
+
+      :param str filename: Path of elan file to load. The filename may have 
+          the ending .elan or the ending may be be left out. If the file is 
+          not found, python will look into "/kst/exp/filename" and "kst/exp/filename"
+      :param str radar: Site to plot the experiment for. Possibles are "UHF", 
+          "VHF", "ESR", "KIR", "SOD"
+      :raises RuntimeError: If radar controller is not resetted correctly 
+          at end of tlan file.
+      :raises RuntimeWarning: if transmitter is constantly off.
+      :return: Object containing properties of the experiment.
+      :rtype: Experiment
+
+
+
+
+
+   .. py:method:: plot(subcycles = [])
+
+      Plot multiple subcycles.
+
+      Calls Subcycle.plot(plot) for every subcycle to plot
+
+      :param subcycles: List of which subcycles to plot. Subcycles are 
+          counted from one. Empty list means plot all subcycles, defaults 
+          to plotting all. 
+      :type subcycles: list, optional
+      :raises ValueError: If invalid subcycle numbers are given.
+
+
+
+
+   .. py:method:: plot_phaseshifts()
+
+      Plots all phaseshifts in the experiment grouped by subcycle.
+
+
+
+

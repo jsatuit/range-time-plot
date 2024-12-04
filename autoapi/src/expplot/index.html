@@ -1,0 +1,442 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.expplot &mdash; range-time-plot 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="src.frequencyshift" href="../frequencyshift/index.html" />
+    <link rel="prev" title="src.experiment" href="../experiment/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            range-time-plot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">src</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../__main__/index.html">src.__main__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../const/index.html">src.const</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../elan/index.html">src.elan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../eventlist/index.html">src.eventlist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experiment/index.html">src.experiment</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">src.expplot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../frequencyshift/index.html">src.frequencyshift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../kstconfig/index.html">src.kstconfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../main/index.html">src.main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../phaseshifter/index.html">src.phaseshifter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../timeInterval/index.html">src.timeInterval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tlan/index.html">src.tlan</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">range-time-plot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">src</a></li>
+      <li class="breadcrumb-item active">src.expplot</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/src/expplot/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-src.expplot">
+<span id="src-expplot"></span><h1>src.expplot<a class="headerlink" href="#module-src.expplot" title="Link to this heading"></a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.expplot.Expplot" title="src.expplot.Expplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Expplot</span></code></a></p></td>
+<td><p>An interface to matplotlib specialised for plotting experiments</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.expplot.calc_nearest_range" title="src.expplot.calc_nearest_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_nearest_range</span></code></a>(tx_interval, rx_interval, baud_length)</p></td>
+<td><p>Calculates the nearest range the experiment can measure. Since only one baud</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.expplot.calc_furthest_full_range" title="src.expplot.calc_furthest_full_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_furthest_full_range</span></code></a>(tx_interval, rx_interval, ...)</p></td>
+<td><p>Calculates the furthest range the experiment measures. This is the last range</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.expplot.plot_phases" title="src.expplot.plot_phases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_phases</span></code></a>(ax, phaseshifts, tx_intervals[, linename, ...])</p></td>
+<td><p>Plot phases of experiment as a single bar plot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.expplot.phaseshift_plot" title="src.expplot.phaseshift_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phaseshift_plot</span></code></a>(subcycles)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.expplot.calc_nearest_range">
+<span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">calc_nearest_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baud_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.calc_nearest_range" title="Link to this definition"></a></dt>
+<dd><p>Calculates the nearest range the experiment can measure. Since only one baud
+will be measured at this range, the performance at this range will be low.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx_interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>) – Transmit interval</p></li>
+<li><p><strong>rx_interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>) – Receive interval</p></li>
+<li><p><strong>baud_length</strong> (<em>float</em>) – baud length of experiment</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Speed of beam, default speed of light</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nearest range gate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.expplot.calc_furthest_full_range">
+<span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">calc_furthest_full_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baud_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.calc_furthest_full_range" title="Link to this definition"></a></dt>
+<dd><p>Calculates the furthest range the experiment measures. This is the last range
+where the receiver «sees» the <em>whole</em> transmit passing through.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx_interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>) – Transmit interval</p></li>
+<li><p><strong>rx_interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>) – Receive interval</p></li>
+<li><p><strong>baud_length</strong> (<em>float</em>) – baud length of experiment</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Speed of beam, default speed of light</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Furthest range gate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.expplot.plot_phases">
+<span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">plot_phases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phaseshifts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'phase'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.plot_phases" title="Link to this definition"></a></dt>
+<dd><p>Plot phases of experiment as a single bar plot.</p>
+<p>All phases are plotted on the line specified with <cite>linename</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>plt.Axes</em>) – Axes object to plot on</p></li>
+<li><p><strong>phaseshifts</strong> (<a class="reference internal" href="../eventlist/index.html#src.eventlist.EventList" title="src.eventlist.EventList"><em>EventList</em></a>) – List of phaseshifts</p></li>
+<li><p><strong>tx_intervals</strong> (<em>TransmitIntervalList</em>) – list of transmit intervals</p></li>
+<li><p><strong>linename</strong> (<em>str</em>) – Name of the line to plot onto. Defaults to “phase”.</p></li>
+<li><p><strong>relative_time</strong> (<em>bool</em>) – Let time axis show time relative to begin of first</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<p>transmission (True) or as given by the intervals (False), defaults to False.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.expplot.phaseshift_plot">
+<span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">phaseshift_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subcycles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.phaseshift_plot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.expplot.Expplot">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.expplot.</span></span><span class="sig-name descname"><span class="pre">Expplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot" title="Link to this definition"></a></dt>
+<dd><p>An interface to matplotlib specialised for plotting experiments
+(transmit/receive beams)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plot_interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>)</p></li>
+<li><p><strong>rmax</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.expplot.Expplot.fig">
+<span class="sig-name descname"><span class="pre">fig</span></span><a class="headerlink" href="#src.expplot.Expplot.fig" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.expplot.Expplot.ax">
+<span class="sig-name descname"><span class="pre">ax</span></span><a class="headerlink" href="#src.expplot.Expplot.ax" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.expplot.Expplot.plot_interval">
+<span class="sig-name descname"><span class="pre">plot_interval</span></span><a class="headerlink" href="#src.expplot.Expplot.plot_interval" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.expplot.Expplot.available_colours">
+<span class="sig-name descname"><span class="pre">available_colours</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['tab:blue',</span> <span class="pre">'tab:orange',</span> <span class="pre">'tab:green',</span> <span class="pre">'tab:red',</span> <span class="pre">'tab:purple',</span> <span class="pre">'tab:brown',</span> <span class="pre">'tab:pink',...</span></em><a class="headerlink" href="#src.expplot.Expplot.available_colours" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.expplot.Expplot.cols">
+<span class="sig-name descname"><span class="pre">cols</span></span><a class="headerlink" href="#src.expplot.Expplot.cols" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.get_colour">
+<span class="sig-name descname"><span class="pre">get_colour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.get_colour" title="Link to this definition"></a></dt>
+<dd><p>Get colour for desired parameter.</p>
+<p>Assigns a new colour if needed. There is a maximum of assignable
+colours since matplotlibs default colours are used. These are limited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – parameter name</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – if a new colour is assigned but there is no new
+colour to take.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>colour</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.title">
+<span class="sig-name descname"><span class="pre">title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.title" title="Link to this definition"></a></dt>
+<dd><p>Set supertitle to figure</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>title</strong> (<em>str</em>) – Title string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.xlim">
+<span class="sig-name descname"><span class="pre">xlim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.xlim" title="Link to this definition"></a></dt>
+<dd><p>Set x axes limits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a><em>, </em><em>None</em><em>]</em>) – x axes limits as a TimeInterval</p></li>
+<li><p><strong>interval</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.add_beam">
+<span class="sig-name descname"><span class="pre">add_beam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transmit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.add_beam" title="Link to this definition"></a></dt>
+<dd><p>Plots transmit or receive beam position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>TimeInterval</em></a>) – Interval of signal being transmitted/received</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Velocity of beam, default light speed</p></li>
+<li><p><strong>transmit</strong> (<em>bool</em>) – Direction of beam. True – Transmit,
+False – receive, defaults to True</p></li>
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>v</strong></p></li>
+<li><p><strong>transmit</strong></p></li>
+</ul>
+</dd>
+</dl>
+<p>Keyword arguments are passed further to matplotlib.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.transmit">
+<span class="sig-name descname"><span class="pre">transmit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.transmit" title="Link to this definition"></a></dt>
+<dd><p>Plots transmit beam position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>TimeInterval</em></a>) – Interval of signal being transmitted</p></li>
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Keyword arguments are passed further to matplotlib.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.receive">
+<span class="sig-name descname"><span class="pre">receive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.receive" title="Link to this definition"></a></dt>
+<dd><p>Plots receive beam position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>TimeInterval</em></a>) – Interval of signal being received</p></li>
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Keyword arguments are passed further to matplotlib.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.state">
+<span class="sig-name descname"><span class="pre">state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_lengths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bars_begin_at</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.state" title="Link to this definition"></a></dt>
+<dd><p>Plot setting of radar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – name of setting</p></li>
+<li><p><strong>bar_lengths</strong> (<em>list</em><em> or </em><em>numpy array</em>) – Lengths of bars</p></li>
+<li><p><strong>bars_begin_at</strong> (<em>list</em><em> or </em><em>numpy array</em>) – Position where bars begin</p></li>
+</ul>
+</dd>
+</dl>
+<p>Other (keyword) arguments go directly to plotting function</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.phase">
+<span class="sig-name descname"><span class="pre">phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phaseshifts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_intervals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.phase" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phaseshifts</strong> (<a class="reference internal" href="../eventlist/index.html#src.eventlist.EventList" title="src.eventlist.EventList"><em>src.eventlist.EventList</em></a>)</p></li>
+<li><p><strong>tx_intervals</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeIntervalList" title="src.timeInterval.TimeIntervalList"><em>src.timeInterval.TimeIntervalList</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.frequency">
+<span class="sig-name descname"><span class="pre">frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_freqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.frequency" title="Link to this definition"></a></dt>
+<dd><p>Plot (receiver) frequencies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rx_freqs</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="../frequencyshift/index.html#src.frequencyshift.FrequencyList" title="src.frequencyshift.FrequencyList"><em>FrequencyList</em></a><em>]</em>) – Channels with corresponding frequencies</p></li>
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>interval</strong> (<a class="reference internal" href="../timeInterval/index.html#src.timeInterval.TimeInterval" title="src.timeInterval.TimeInterval"><em>src.timeInterval.TimeInterval</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.add_range_label">
+<span class="sig-name descname"><span class="pre">add_range_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.add_range_label" title="Link to this definition"></a></dt>
+<dd><p>Adds a label to a certain range as a minor tick</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>r</strong> (<em>float</em>) – range [m]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.expplot.Expplot.add_time_label">
+<span class="sig-name descname"><span class="pre">add_time_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.expplot.Expplot.add_time_label" title="Link to this definition"></a></dt>
+<dd><p>Adds a label to a certain time as a minor tick</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t</strong> (<em>float</em>) – time [s]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../experiment/index.html" class="btn btn-neutral float-left" title="src.experiment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../frequencyshift/index.html" class="btn btn-neutral float-right" title="src.frequencyshift" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, jsatuit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+src.tlan.tarlanIntervals
+========================
+
+.. py:module:: src.tlan.tarlanIntervals
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.tlan.tarlanIntervals.IntervalList
+   src.tlan.tarlanIntervals.TarlanSubcycle
+
+
+Module Contents
+---------------
+
+.. py:class:: IntervalList(name)
+
+   Contain intervals for when data streams are enabled. 
+   Intervals may be open in contrast to TimeInterval, which must contain 
+   closed intervals
+
+
+   .. py:attribute:: name
+
+
+   .. py:attribute:: _streams
+      :value: []
+
+
+
+   .. py:method:: __repr__()
+
+
+   .. py:property:: state
+      :type: bool
+
+
+      :raises RuntimeError: if the last stream contains more than one on and 
+          off value(should never happen, but who knows...)
+      :return: state (on/off) of data stream.
+      :rtype: bool
+
+
+
+
+   .. py:property:: is_off
+      :type: bool
+
+
+      If stream is turned off
+
+      :type: bool
+
+
+
+
+   .. py:property:: is_on
+      :type: bool
+
+
+      If stream is turned on
+
+      :type: bool
+
+
+
+
+   .. py:method:: turn_on(time, line)
+
+      Turn on data stream.
+
+      :param time: time at which to turn on the stream
+      :type time: float
+      :param line: line in the tlan file. Used for error handling only.
+      :type line: int
+      :raises TarlanError: if stream is on already
+
+
+
+
+   .. py:method:: turn_off(time, line)
+
+      Turn off data stream.
+
+      :param time: time at which to turn off the stream
+      :type time: float
+      :param line: line in the tlan file. Used for error handling only.
+      :type line: int
+      :raises TarlanError: if stream is off or if time is before time of switching on
+
+
+
+
+   .. py:property:: nstreams
+      :type: int
+
+
+      Number of streams
+
+      :type: int
+
+
+
+
+   .. py:method:: __len__()
+
+      Number of streams
+
+      :type: int
+
+
+
+
+   .. py:property:: intervals
+      :type: src.timeInterval.TimeIntervalList
+
+
+      Return the on-time of the streams as a list of TimeIntervals
+
+      :type: list[TimeInterval]
+
+
+
+
+   .. py:property:: last_turn_off
+      :type: float
+
+
+      Last time when the stream was turned off
+
+      :raises RuntimeError: If there stream has not been turned off yet.
+      :rtype: float
+
+
+
+
+   .. py:property:: last_turn_on
+      :type: float
+
+
+      Last time when the stream was turned on
+
+      :raises RuntimeError: If there stream has not been turned on yet.
+      :rtype: float
+
+
+
+
+   .. py:method:: delete_open_interval()
+
+      Delete last interval with ontime if the stream is on.
+
+
+
+.. py:class:: TarlanSubcycle
+
+   Bases: :py:obj:`IntervalList`
+
+
+   IntervalList which contains streams of each subcycle. These have to be 
+   added when stream is turned off.
+
+
+   .. py:attribute:: data_intervals
+      :value: []
+
+
+
+   .. py:method:: turn_off(time, line, datastreams)
+
+      Stop subcycle
+
+      :param time: time at which to turn off the stream
+      :type time: float
+      :param line: line in the tlan file. Used for error handling only.
+      :type line: int
+      :param datastreams: dictionary of stream name – stream IntervalList pairs
+      :type datastreams: dict
+      :raises TarlanError: if stream is off already
+
+
+
+

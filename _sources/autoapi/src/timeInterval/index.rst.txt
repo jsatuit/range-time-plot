@@ -1,0 +1,208 @@
+src.timeInterval
+================
+
+.. py:module:: src.timeInterval
+
+.. autoapi-nested-parse::
+
+   Created on Fri Apr  5 14:05:51 2024
+
+   @author: jsatuit
+
+
+
+Exceptions
+----------
+
+.. autoapisummary::
+
+   src.timeInterval.OverlapError
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.timeInterval.TimeInterval
+   src.timeInterval.TimeIntervalList
+
+
+Module Contents
+---------------
+
+.. py:exception:: OverlapError(*args)
+
+   Bases: :py:obj:`Exception`
+
+
+   Exception raised when transmit and receive TimeIntervals overlap.
+
+
+.. py:class:: TimeInterval(begin = 0.0, end = 0)
+
+   Handling one begin and end of the time the transmitter/receiver channel is on.
+
+   :param begin: Begin of interval
+   :param end: End of interval. Must be after begin
+   :raises ValueError: when begin of interval comes after end
+       
+
+
+   .. py:attribute:: begin
+      :value: 0.0
+
+
+
+   .. py:attribute:: end
+      :value: 0
+
+
+
+   .. py:method:: __mul__(num)
+
+      Multiplies interval begin and end times with num.
+
+      :param num: Number to multiply with
+      :return: TimeInterval(begin*num, end*num)
+
+
+
+
+   .. py:method:: __truediv__(num)
+
+      Divides interval begin and end times with num.
+
+      :param num: Number to divide with
+      :return: TimeInterval(begin/num, end/num)
+
+
+
+
+   .. py:method:: __repr__()
+
+
+   .. py:method:: __eq__(other)
+
+
+   .. py:property:: length
+      :type: float
+
+
+      Length/duration of interval
+
+
+
+   .. py:property:: as_tuple
+      :type: tuple[float, float]
+
+
+
+   .. py:method:: overlaps_with(other)
+
+      Checks if TimeInterval overlaps with other TimeInterval
+
+      :param other: TimeInterval to check overlap with
+      :type other: TimeInterval
+      :return: True if the intervals overlap, else False
+      :rtype: bool
+
+
+
+
+   .. py:method:: overlaps_any(other)
+
+      Checks if TimeInterval overlaps with any other TimeInterval in list
+
+      :param other: list of TimeInterval objects to check overlap with
+      :type other: list[TimeInterval]
+      :return: True if any intervals overlap, else False
+      :rtype: bool
+
+
+
+
+   .. py:method:: check_overlap(other)
+
+      Checks if TimeInterval overlaps with other TimeInterval. If so, 
+      an OverlapError is raised
+
+      :param other: TimeInterval to check overlap with
+      :type other: TimeInterval
+      :raises OverlapError: When intervals overlap
+
+
+
+
+   .. py:method:: within(other)
+
+      Return True if this interval is within the other interval. 
+
+      Intervals are allowed to share boundaries. Numerical errors are not 
+          taken into account
+          
+      :param other: Other TimeInterval
+      :type other: TimeInterval
+      :return: whwether this interval is within the other one.
+      :rtype: bool
+
+
+
+
+   .. py:method:: within_any(other)
+
+      Return True if this interval is completely within any of the intervals
+      in the list. 
+
+      Intervals are allowed to share boundaries. Numerical errors are not 
+          taken into account
+          
+      :param other: List of TimeInterval objects
+      :type other: list[TimeInterval]
+      :return: whwether this interval is within any of those in the list.
+      :rtype: bool
+
+
+
+
+.. py:class:: TimeIntervalList
+
+   Bases: :py:obj:`list`
+
+
+   A hack of base python list class for simpler calling of properties of each 
+   TimeInterval in the list.
+
+
+   .. py:method:: listof(attr)
+
+      Return list of the attribute `attr` of each TimeInterval.
+
+      See other functions for examples.
+
+
+
+   .. py:property:: lengths
+      :type: list[float]
+
+
+      list with length of each TimeInterval
+
+
+
+   .. py:property:: begins
+      :type: list[float]
+
+
+      list with begin of each TimeInterval
+
+
+
+   .. py:property:: ends
+      :type: list[float]
+
+
+      list with end of each TimeInterval
+
+
+

@@ -1,0 +1,153 @@
+src.phaseshifter
+================
+
+.. py:module:: src.phaseshifter
+
+.. autoapi-nested-parse::
+
+   Created on Wed Apr 24 11:52:30 2024
+
+   @author: jsatuit
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.phaseshifter.PhaseShifter
+
+
+Module Contents
+---------------
+
+.. py:class:: PhaseShifter
+
+   Simulates behaviour of phase shifter
+
+
+   .. py:attribute:: _phase_shifts
+      :value: []
+
+
+
+   .. py:attribute:: _phases
+      :value: []
+
+
+
+   .. py:method:: set_phase(time, phase)
+
+      Set phase shifter to certain phase
+
+      :param float time: Time of phase shift
+      :param float phase: Phase to set to.
+
+
+
+
+   .. py:method:: restart()
+
+      Restarts phase shifter.
+
+      Means that all saved content is deleted. Use this when data is copied, 
+      for example at ethe end of a subcycle.
+
+
+
+   .. py:method:: PHA0(time, line = 0)
+
+      Set phase shifter to 0 degree.
+
+      :param float time: Time of phase shift
+      :param int line: Line of command in tlan file. Not in use
+
+
+
+   .. py:method:: PHA180(time, line = 0)
+
+      Set phase shifter to 180 degree.
+
+      :param float time: Time of phase shift
+      :param int line: Line of command in tlan file. Not in use
+
+
+
+   .. py:property:: phase_shifts
+
+      List of TimedEvents contaning the phase shifts
+
+
+
+   .. py:method:: phase_shifts_within(interval, tx_intervals = None)
+
+      List of TimedEvents contaning the phase shifts within interval.
+
+      The last phase shift before the interval is also returned.
+
+      Also returns list of (estimated) baud lengths if transmit intervals are 
+      given.
+
+      :param interval: interval which the phases shifts should be inside of.
+      :type interval: TimeInterval
+      :param tx_intervals: transmit intervals. If wanted to estimate baud 
+          lengths, these must be given, defaults to None
+      :type tx_intervals: TimeIntervalList or None, optional
+      :return: A list of the phase shifts within the interval. If 
+          tx_intervals is given, also a list of baud lengths is returned.
+      :rtype: EventList[, list[float]]
+
+
+
+
+   .. py:method:: estimate_baud_length(interval)
+
+      Estimate baud length within transmit interval.
+
+      Baud length is estimated by finding the greatest common divisor of the 
+      time between the phase shifts in the transmit pulse. 
+
+      WARNING: This is NOT a perfect function and will fail in cases where the
+      pulse has phases like ++++ or ++--. but still works for cases like +++--.
+
+      In many KST experiments (f.e. beata, manda), the first baud is not used or 
+      the code is long enough such that this function works for all pulses.
+
+      :param interval: transmit interval
+      :type interval: TimeInterval
+      :return: baud length
+      :rtype: float
+
+
+
+
+   .. py:method:: as_line(interval)
+
+      Coordinates of a line connecting the phase shifts within an interval
+
+      That is a list of x coordinates and a list of y coordinates which 
+      respectively describes the time and phases of the phase shifts
+
+      Example::
+              
+          180        x----------x     x----   etc.
+                     |          |     |
+          0   -x-----x          x-----x
+               0     6          17    25   
+          
+      gives
+      [0, 6, 6, 17, 17, 25, 25, ...]
+      and
+      [0, 0, 180, 180, 0, 0, 180, ...]
+
+      (Not used at current)
+
+      :param interval: nInterval the phase shifts should be within
+      :type interval: TimeInterval
+      :return: lists of coordinates
+      :rtype: tuple[list[float], list[float]]
+
+
+
+

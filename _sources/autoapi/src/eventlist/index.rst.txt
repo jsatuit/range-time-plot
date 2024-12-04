@@ -1,0 +1,84 @@
+src.eventlist
+=============
+
+.. py:module:: src.eventlist
+
+.. autoapi-nested-parse::
+
+   Created on Wed Apr 24 09:52:47 2024
+
+   @author: jsatuit
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   src.eventlist.TimedEvent
+   src.eventlist.EventList
+
+
+Module Contents
+---------------
+
+.. py:class:: TimedEvent(time, event)
+
+   .. py:attribute:: time
+
+
+   .. py:attribute:: event
+
+
+   .. py:method:: __lt__(other)
+
+
+   .. py:method:: __str__()
+
+
+   .. py:method:: __repr__()
+
+
+.. py:class:: EventList(initlist=None)
+
+   Bases: :py:obj:`collections.UserList`
+
+
+   List of timed events. Inherits from UserList to be able to use base
+   list functions
+
+
+   .. py:method:: __setitem__(index, value)
+
+
+   .. py:method:: insert(index, value)
+
+      S.insert(index, value) -- insert value before index
+
+
+
+   .. py:method:: listof(attr)
+
+      Return list of the attribute `attr` of each TimeInterval.
+
+      See other functions for examples.
+
+
+
+   .. py:property:: times
+      :type: list[float]
+
+
+      list with the time of each TimedEvent
+
+
+
+   .. py:property:: events
+      :type: list[float]
+
+
+      list of all events. That are all TimeEvent.events.
+
+
+
